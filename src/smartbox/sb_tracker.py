@@ -10,15 +10,15 @@ class SmartBoxTracker:
         self.NS_PIN = 0
         self.scale = 6.144/32767
 
-
         self.limits = {self.NS_PIN:[0,6.0], self.EW_PIN:[0,12.0]}
         self.ns_motor = Motor(26,20)
 		self.ew_motor = Motor(21,16)
         self.motors = {self.NS_PIN:self.ns_motor, self.EW_PIN:self.ew_motor}
+        self.actuator_names = {self.NS_PIN: "North-South", self.EW_PIN: "East-West"}
+        
         self.actuator_conversions = {
         	self.NS_PIN: [-1.335, 6.917],
         	self.EW_PIN: [-2.67, 13.83]}
-        self.actuator_names = {self.NS_PIN: "North-South", self.EW_PIN: "East-West"}
         self.actuator_directions = {
         	self.NS_PIN: ["North", "South"], 
         	self.EW_PIN: ["East", "West"]}
