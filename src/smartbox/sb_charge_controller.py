@@ -56,7 +56,7 @@ registers = {
 
 class SmartBoxChargeController:
     def __init__(self):
-        self.server = modbus_rtu.RtuMaster(serial.Serial(port='/dev/tty.usbserial-DO00156H', baudrate=9600, bytesize=8, parity='N', stopbits=2, xonxoff=0))
+        self.server = modbus_rtu.RtuMaster(serial.Serial(port=PORT, baudrate=9600, bytesize=8, parity='N', stopbits=2, xonxoff=0))
         self.server.set_timeout(5.0)
         self.server.set_verbose(True)
         self.start_addr=0x0008
@@ -101,20 +101,20 @@ class SmartBoxChargeController:
 
     def _get_register_value_(self, address):
         try:
-            result = master.1, cst.READ_HOLDING_REGISTERS, starting_address=address, \
+            result =self.server.execute(1, cst.READ_HOLDING_REGISTERS, starting_address=address, \
                 quantity_of_x= 1)
             return result[0]
         except modbus_tk.modbus.ModbusError as exc:
-            logger.error("%s- Code=%d", exc, exc.get_exception_code())
+            print("%s- Code=%d", exc, exc.get_exception_code())
         return None
 
     def _get_all_register_values_(self):
         try:
-            result = master.1, cst.READ_HOLDING_REGISTERS, starting_address=0x0008, \
+            result = self.server.execute(1, cst.READ_HOLDING_REGISTERS, starting_address=0x0008, \
                 quantity_of_x= 0x0034 - self.start_addr + 1)
             return result
         except modbus_tk.modbus.ModbusError as exc:
-            logger.error("%s- Code=%d", exc, exc.get_exception_code())
+            print("%s- Code=%d", exc, exc.get_exception_code())
         return None
 
 
