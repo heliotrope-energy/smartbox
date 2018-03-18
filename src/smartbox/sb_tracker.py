@@ -163,7 +163,7 @@ class SmartBoxTracker:
 
 	def _move_axis_to_linear_position_(self, direction_pin, pos):
 		min_limit, max_limit = self.limits[direction_pin]
-		current_position = self.get_position(direction_pin)
+		current_position = self._get_position_(direction_pin)
 		actuator = self.actuators[direction_pin]
 
 		if pos < min_limit:
@@ -172,7 +172,7 @@ class SmartBoxTracker:
 			pos = max_limit
 
 		while abs(current_position - pos) > self.TOLERANCE: 
-			current_position = self.get_position(direction_pin)
+			current_position = self._get_position_(direction_pin)
 			print("Current Pos {}\nDesired pos {}".format(current_position, pos))
 			
 			direction_pin = current_position > pos
