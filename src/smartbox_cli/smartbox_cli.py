@@ -48,6 +48,9 @@ def move_west(stdscr):
 	stdscr.refresh()
 	tracker.move_west()
 
+def stow(stdscr):
+	tracker.stow()
+
 def stop(stdscr):
 	stdscr.addstr(0, 70, "Stop")
 	stdscr.refresh()
@@ -107,13 +110,13 @@ def draw_screen(stdscr):
 	stdscr.refresh()
 
 def get_key(stdscr):
+	curses.halfdelay(1)
 	try:
 		return stdscr.getkey()
 	except:
 		return "None"
 
 def main(stdscr):
-	curses.halfdelay(1)
 	draw_screen(stdscr)
 	key_press = get_key(stdscr)
 	while key_press != "q":
@@ -129,6 +132,7 @@ KEY_BINDINGS = [
 	["w or left arrow", "Move panel west"],
 	["p", "Move panel actuators to linear position"],
 	["a", "Move panel to angular position"],
+	["f", "Move panel to a flat orientation"]
 ]
 
 FUNCTION_BINDINGS = {
@@ -142,7 +146,8 @@ FUNCTION_BINDINGS = {
 	"KEY_LEFT": move_west,
 	"p": move_to_linear_position,
 	"a": move_to_angular_position,
-	" ": stop
+	" ": stop,
+	"f": stow
 }
 
 if __name__ == "__main__":
