@@ -1,4 +1,5 @@
 from gpiozero import Motor, CPUTemperature
+from threading import Thread
 import Adafruit_ADS1x15
 
 class SmartBoxTracker:
@@ -22,6 +23,9 @@ class SmartBoxTracker:
 		self.actuator_directions = {
 			self.NS_PIN: ["North", "South"], 
 			self.EW_PIN: ["East", "West"]}
+
+		self.ew_thread = None
+		self.ns_thread = None
 
 	def get_ns_position(self):
 		"""
@@ -81,8 +85,16 @@ class SmartBoxTracker:
 				ns_pos: The north-south position in inches from full-retraction
 				ew_pos: The east-west position in inches from full-retraction
 		"""
-		self._move_axis_to_linear_position_(self.EW_PIN, ew_pos)
-		self._move_axis_to_linear_position_(self.NS_PIN, ns_pos)
+		self.ew_thread = \
+			Thread(target = self._move_axis_to_linear_position_, \
+				args = (self.EW_PIN, ew_pos))
+		
+		self.ns_thread = \
+			Thread(target = self._move_axis_to_linear_position_, \
+				args = (self.EW_PIN, ew_pos))
+		
+		self.ew_thread.start()
+		self.ns_thread.start()
 
 	def move_panel_to_angular_position(self, ns_angle, ew_angle):
 		"""
@@ -146,6 +158,7 @@ class SmartBoxTracker:
 		"""
 			Stops the movement of both axes
 		"""
+		self.moving_canceled = True
 		self.stop_ns()
 		self.stop_ew()
 
@@ -162,6 +175,7 @@ class SmartBoxTracker:
 		return inches
 
 	def _move_axis_to_linear_position_(self, direction_pin, pos):
+		self.moving_canceled = False
 		min_limit, max_limit = self.limits[direction_pin]
 		current_position = self._get_position_(direction_pin)
 		actuator = self.actuators[direction_pin]
@@ -171,12 +185,17 @@ class SmartBoxTracker:
 		if pos > max_limit:
 			pos = max_limit
 
-		while abs(current_position - pos) > self.TOLERANCE: 
+		while abs(current_position - pos) > self.TOLERANCE:
+			if self.moving_canceled:
+				actuator.stop() 
+				return
 			current_position = self._get_position_(direction_pin)
-			direction_pin = current_position > pos
-			self._move_axis_(direction_pin, direction_pin)
+			forward_or_backward = current_position > pos
+			self._move_axis_(direction_pin, forward_or_backward)
 
 		actuator.stop()
+
+		
 
 	def _move_axis_(self, direction_pin, forward_or_backward):
 		actuator = self.actuators[direction_pin]
