@@ -106,13 +106,20 @@ def draw_screen(stdscr):
 	display_info(stdscr)
 	stdscr.refresh()
 
+def get_key(stdscr):
+	try:
+		return stdscr.getkey()
+	except:
+		return "None"
+
 def main(stdscr):
+	curses.halfdelay(1)
 	draw_screen(stdscr)
-	key_press = stdscr.getkey()
+	key_press = get_key(stdscr)
 	while key_press != "q":
 		draw_screen(stdscr)
 		handle_key(stdscr, key_press)
-		key_press = stdscr.getkey()
+		key_press = get_key(stdscr)
 
 KEY_BINDINGS = [
 	["q", "Quit"],
