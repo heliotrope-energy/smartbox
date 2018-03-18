@@ -173,8 +173,6 @@ class SmartBoxTracker:
 
 		while abs(current_position - pos) > self.TOLERANCE: 
 			current_position = self._get_position_(direction_pin)
-			print("Current Pos {}\nDesired pos {}".format(current_position, pos))
-			
 			direction_pin = current_position > pos
 			self._move_axis_(direction_pin, direction_pin)
 
@@ -184,13 +182,10 @@ class SmartBoxTracker:
 		actuator = self.actuators[direction_pin]
 		forward_dir, backward_dir = self.actuator_directions[direction_pin]
 		if forward_or_backward:
-			print("Moving {}".format(forward_dir))
 			actuator.forward(speed = 1)
 		else:
-			print("Moving {}".format(backward_dir))
 			actuator.backward(speed = 1)
 
 	def _stop_axis_(self, direction_pin):
-		print("Stopping {} actuator".format(self.actuator_names[direction_pin]))
 		self.actuators[direction_pin].stop()
 
