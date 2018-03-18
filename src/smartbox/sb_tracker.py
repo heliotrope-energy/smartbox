@@ -13,7 +13,7 @@ class SmartBoxTracker:
 		self.limits = {self.NS_PIN:[0,6.0], self.EW_PIN:[0,12.0]}
 		self.ns_motor = Motor(26,20)
 		self.ew_motor = Motor(21,16)
-		self.motors = {self.NS_PIN:self.ns_motor, self.EW_PIN:self.ew_motor}
+		self.actuators = {self.NS_PIN:self.ns_motor, self.EW_PIN:self.ew_motor}
 		self.actuator_names = {self.NS_PIN: "North-South", self.EW_PIN: "East-West"}
 		
 		self.actuator_conversions = {
@@ -27,13 +27,13 @@ class SmartBoxTracker:
 		"""
 			Returns the position in inches of the North-South Actuator
 		"""
-		return self.get_ns_position(self.NS_PIN)
+		return self._get_position_(self.NS_PIN)
 
 	def get_ew_position(self):
 		"""
 			Returns the position in inches of the East-West Actuator
 		"""
-		return self.get_ew_position(self.EW_PIN)
+		return self._get_position_(self.EW_PIN)
 
 	def get_ns_angle(self):
 		"""
@@ -162,9 +162,9 @@ class SmartBoxTracker:
 		return inches
 
 	def _move_axis_to_linear_position_(self, direction_pin, pos):
-		min_limit, max_limit = self.limits[direction]
-		current_position = self.get_position(direction)
-		motor = self.motors[direction]
+		min_limit, max_limit = self.limits[direction_pin]
+		current_position = self.get_position(direction_pin)
+		actuator = self.actuators[direction_pin]
 
 		if pos < min_limit:
 			pos = min_limit
@@ -172,16 +172,16 @@ class SmartBoxTracker:
 			pos = max_limit
 
 		while abs(current_position - pos) > self.TOLERANCE: 
-			current_position = self.get_position(direction)
+			current_position = self.get_position(direction_pin)
 			print("Current Pos {}\nDesired pos {}".format(current_position, pos))
 			
-			direction = current_position > pos
-			self._move_axis_(direction_pin, direction)
+			direction_pin = current_position > pos
+			self._move_axis_(direction_pin, direction_pin)
 
-		motor.stop()
+		actuator.stop()
 
 	def _move_axis_(self, direction_pin, forward_or_backward):
-		actuator = self.actuators[direction]
+		actuator = self.actuators[direction_pin]
 		forward_dir, backward_dir = self.actuator_directions[direction_pin]
 		if forward_or_backward:
 			print("Moving {}".format(forward_dir))
@@ -192,5 +192,5 @@ class SmartBoxTracker:
 
 	def _stop_axis_(self, direction_pin):
 		print("Stopping {} actuator".format(self.actuator_names[direction_pin]))
-		self.actuators[direction].stop()
+		self.actuators[direction_pin].stop()
 

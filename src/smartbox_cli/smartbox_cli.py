@@ -13,8 +13,8 @@ def display_help(stdscr):
 def display_info(stdscr):
 	ew_position = tracker.get_ew_position()
 	ew_angle = tracker.get_ew_angle()
-	ns_position = tracker.get_sw_position()
-	ns_angle = tracker.get_ew_angle()
+	ns_position = tracker.get_ns_position()
+	ns_angle = tracker.get_ns_angle()
 
 	ns_moving = "MOVING" if tracker.is_ns_moving() else ""
 	ew_moving = "MOVING" if tracker.is_ew_moving() else ""
