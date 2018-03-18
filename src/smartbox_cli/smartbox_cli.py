@@ -19,8 +19,8 @@ def display_info(stdscr):
 	ns_moving = "MOVING" if tracker.is_ns_moving() else ""
 	ew_moving = "MOVING" if tracker.is_ew_moving() else ""
 
-	stdscr.addstr(15, 0, "NS position: {}\tangle: {}\t{}".format(ns_position, ns_angle, ns_moving))
-	stdscr.addstr(16, 0, "EW position: {}\tangle: {}\t{}".format(ew_position, ew_angle, ew_moving))
+	stdscr.addstr(15, 0, "NS position: {:.3f}\tangle: {:.3f}\t{}".format(ns_position, ns_angle, ns_moving))
+	stdscr.addstr(16, 0, "EW position: {:.3f}\tangle: {:.3f}\t{}".format(ew_position, ew_angle, ew_moving))
 
 def handle_key(stdscr, key_press):
 	stdscr.addstr(0, 70, key_press)
@@ -80,7 +80,7 @@ def move_to_linear_position(stdscr):
 	stdscr.addstr(5, 70, str(ns_pos))
 	stdscr.addstr(6, 70, str(ew_pos))
 	stdscr.refresh()
-	tracker.move_to_linear_position(ns_pos, ew_pos)
+	tracker.move_panel_to_linear_position(ns_pos, ew_pos)
 
 
 def move_to_angular_position(stdscr):
@@ -97,7 +97,7 @@ def move_to_angular_position(stdscr):
 	stdscr.addstr(5, 70, str(ns_pos))
 	stdscr.addstr(6, 70, str(ew_pos))
 	stdscr.refresh()
-	tracker.move_to_angular_position(ns_pos, ew_pos)
+	tracker.move_panel_to_angular_position(ns_pos, ew_pos)
 
 def draw_screen(stdscr):
 	stdscr.clear()
