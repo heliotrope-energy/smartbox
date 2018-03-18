@@ -31,14 +31,14 @@ def display_info(stdscr):
 	ew_moving = "MOVING" if tracker.is_ew_moving() else ""
 	light_on = "ON" if light.is_light_on() else "OFF"
 
-	stdscr.addstr(15, 0, "NS position: {:.3f}\tangle: {:.3f}\t{}".format(ns_position, ns_angle, ns_moving))
-	stdscr.addstr(16, 0, "EW position: {:.3f}\tangle: {:.3f}\t{}".format(ew_position, ew_angle, ew_moving))
-	stdscr.addstr(17, 0, "Light: {}".format(light_on))
-	stdscr.addstr(18, 0, "Battery {:.3f} V  Panel {:.3f} V".format(\
+	stdscr.addstr(15, 0, "NS position: {:.3f}    Angle:  {:.3f}\t{}".format(ns_position, ns_angle, ns_moving))
+	stdscr.addstr(16, 0, "EW position: {:.3f}    Angle:  {:.3f}\t{}".format(ew_position, ew_angle, ew_moving))
+	stdscr.addstr(17, 0, "Light:       {}".format(light_on))
+	stdscr.addstr(18, 0, "Battery      {:.3f} V  Panel:  {:.3f} V".format(\
 			battery_voltage, panel_voltage))
-	stdscr.addstr(19, 0, "Load {:.3f} V, {:.3f} A".format(\
+	stdscr.addstr(19, 0, "Load         {:.3f} V, Current {:.3f} A".format(\
 			load_voltage, load_current))
-	stdscr.addstr(19, 0, "BCharge {:.3f} A State {}".format(\
+	stdscr.addstr(20, 0, "Batt Charge  {:.3f} A  State   {}".format(\
 			charge_current, charge_state))
 
 
