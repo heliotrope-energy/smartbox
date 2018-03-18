@@ -1,8 +1,10 @@
 from smartbox.sb_tracker import SmartBoxTracker
+from smartbox.sb_light import SmartBoxLight
 import curses
 
 
 tracker = SmartBoxTracker()
+light = SmartBoxLight
 
 def display_help(stdscr):
 	help_message = ""
@@ -18,9 +20,12 @@ def display_info(stdscr):
 
 	ns_moving = "MOVING" if tracker.is_ns_moving() else ""
 	ew_moving = "MOVING" if tracker.is_ew_moving() else ""
+	light_on = "ON" if light.is_light_on() else "OFF"
 
 	stdscr.addstr(15, 0, "NS position: {:.3f}\tangle: {:.3f}\t{}".format(ns_position, ns_angle, ns_moving))
 	stdscr.addstr(16, 0, "EW position: {:.3f}\tangle: {:.3f}\t{}".format(ew_position, ew_angle, ew_moving))
+	stdscr.addstr(17, 0, "Light: {}".format(light_on))
+
 
 def handle_key(stdscr, key_press):
 	stdscr.addstr(0, 70, key_press)
@@ -55,6 +60,9 @@ def stop(stdscr):
 	stdscr.addstr(0, 70, "Stop")
 	stdscr.refresh()
 	tracker.stop()
+
+def toggle_light(stdscr):
+	light.toggle()
 
 def get_float_input(stdscr):
 	stdscr.addstr(25, 0, " " * 80)
@@ -132,7 +140,8 @@ KEY_BINDINGS = [
 	["w or left arrow", "Move panel west"],
 	["p", "Move panel actuators to linear position"],
 	["a", "Move panel to angular position"],
-	["f", "Move panel to a flat orientation"]
+	["f", "Move panel to a flat orientation"],
+	["l", "Toggle light on/off"]
 ]
 
 FUNCTION_BINDINGS = {
@@ -147,7 +156,8 @@ FUNCTION_BINDINGS = {
 	"p": move_to_linear_position,
 	"a": move_to_angular_position,
 	" ": stop,
-	"f": stow
+	"f": stow,
+	"l": toggle_light
 }
 
 if __name__ == "__main__":
