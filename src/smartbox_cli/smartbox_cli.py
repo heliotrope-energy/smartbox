@@ -1,4 +1,4 @@
-from smartbox import SmartBoxTracker
+from smartbox.sb_tracker import SmartBoxTracker
 import curses
 
 
