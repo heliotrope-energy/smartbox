@@ -86,6 +86,9 @@ class SmartBoxChargeController:
     def get_all_data(self):
         register_values = self._get_all_register_values_()
         data = {}
+        if register_values is None:
+            return data
+
         for addr, (desc, units, conversion) in registers.items():
             offset = addr - self.start_addr
             reg_value = register_values[offset]
@@ -106,6 +109,8 @@ class SmartBoxChargeController:
             return result[0]
         except modbus_tk.modbus.ModbusError as exc:
             print("%s- Code=%d", exc, exc.get_exception_code())
+        except Exception as e:
+            print("Exception thrown getting result")
         return None
 
     def _get_all_register_values_(self):
@@ -115,6 +120,8 @@ class SmartBoxChargeController:
             return result
         except modbus_tk.modbus.ModbusError as exc:
             print("%s- Code=%d", exc, exc.get_exception_code())
+        except Exception as e:
+            print("Exception thrown getting result")
         return None
 
 
