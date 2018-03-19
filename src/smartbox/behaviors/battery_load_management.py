@@ -17,6 +17,7 @@ def main():
 	light = SmartBoxLight()
 
 	while True:
-
+		process_for_state(controller, light)
 
 if __name__ == "__main__":
+	main()

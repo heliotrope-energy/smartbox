@@ -54,7 +54,29 @@ registers = {
     0x0034: ["Maximum battery voltage", "V", lambda n: n * 100 * 2 **-15],
 }
 
+charge_states = {
+    0: "START",
+    1: "NIGHT_CHECK",
+    2: "DISCONNECT",
+    3: "NIGHT",
+    4: "FAULT",
+    5: "BULK_CHARGE",
+    6: "ABSORBTION",
+    7: "FLOAT",
+    8: "EQUALIZE"
+}
+
 class SmartBoxChargeController:
+    START = 0
+    NIGHT_CHECK = 1
+    DISCONNECT = 2
+    NIGHT = 3
+    FAULT = 4
+    BULK_CHARGE = 5
+    ABSORBTION = 6
+    FLOAT = 7
+    EQUALIZE = 8
+
     def __init__(self):
         self.server = modbus_rtu.RtuMaster(serial.Serial(port=PORT, baudrate=9600, bytesize=8, parity='N', stopbits=2, xonxoff=0))
         self.server.set_timeout(5.0)
@@ -77,11 +99,16 @@ class SmartBoxChargeController:
     def get_load_current(self):
         return self._get_register_(0x000C, registers[0x000C][2])
 
-    def get_charge_state(self):
+    def get_charge_state_name(self):
         """
             TODO, this reg value actually hase 8 different states
         """
-        return self._get_register_(0x0011, registers[0x0011][2])
+        value = self._get_register_(0x0011, registers[0x0011][2])
+        return charge_states[value]
+
+    def get_charge_state(self):
+        value = self._get_register_(0x0011, registers[0x0011][2])
+        return value
 
     def get_all_data(self):
         register_values = self._get_all_register_values_()
