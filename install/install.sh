@@ -27,6 +27,6 @@ cp -rv smartbox_cli /opt/heliotrope/
 
 if [[ $PYTHONPATH != *"$install_dir"* ]]; then
   	echo 'Adding '$install_dir' to PYTHONPATH'
-	echo 'export PYTHONPATH=$PYTHONPATH:'$install_dir > ~/.bashrc
+	echo 'export PYTHONPATH=$PYTHONPATH:'$install_dir >> ~/.bashrc
 	export PYTHONPATH=$PYTHONPATH:$install_dir
 fi
