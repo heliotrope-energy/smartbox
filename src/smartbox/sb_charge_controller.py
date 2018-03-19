@@ -11,7 +11,7 @@ registers = {
     0x0009: ["Array voltage", "V", lambda n: (n * 100 * 2**-15)],
     0x000A: ["Load Voltage", "V", lambda n: (n * 100 * 2 ** -15)],
     0x000B: ["Charging current", "A", lambda n: (n * 79.16 * 2**-15)],
-    0x000C: ["Load Current", "°C", lambda n: (n * 79.16 * 2 ** -15)],
+    0x000C: ["Load Current", "C", lambda n: (n * 79.16 * 2 ** -15)],
     0x000D: ["Heatsink temperature","C", lambda n: (n)],
     0x000E: ["Battery temperature", "C", lambda n: (n)],
     0x000F: ["Ambient temperature", "C", lambda n: (n)],
