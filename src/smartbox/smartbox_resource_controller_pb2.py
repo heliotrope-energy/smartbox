@@ -18,14 +18,14 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='smartbox_resource_controller.proto',
-  package='',
+  package='smartbox',
   syntax='proto3',
-  serialized_pb=_b('\n\"smartbox_resource_controller.proto\"-\n\x1aTrackerSystemStatusRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\"\n\x08Position\x12\n\n\x02ns\x18\x01 \x01(\x01\x12\n\n\x02\x65w\x18\x02 \x01(\x01\"$\n\nMoveStatus\x12\n\n\x02ns\x18\x01 \x01(\x08\x12\n\n\x02\x65w\x18\x02 \x01(\x08\"\x8b\x01\n\rTrackerStatus\x12\x1b\n\x08position\x18\x01 \x01(\x0b\x32\t.Position\x12\x18\n\x05\x61ngle\x18\x02 \x01(\x0b\x32\t.Position\x12 \n\x0bmove_status\x18\x03 \x01(\x0b\x32\x0b.MoveStatus\x12!\n\x19\x63urrent_controlling_level\x18\x04 \x01(\x03\"\xe3\x01\n\x16\x43hargeControllerStatus\x12\x17\n\x0f\x62\x61ttery_voltage\x18\x01 \x01(\x01\x12\x15\n\rarray_voltage\x18\x02 \x01(\x01\x12\x14\n\x0cload_voltage\x18\x03 \x01(\x01\x12\x16\n\x0e\x63harge_current\x18\x04 \x01(\x01\x12\x14\n\x0cload_current\x18\x05 \x01(\x01\x12\"\n\x0c\x63harge_state\x18\x06 \x01(\x0e\x32\x0c.ChargeState\x12\x18\n\x10\x65nergy_collected\x18\x07 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x08 \x01(\x01\"r\n\x1bTrackerSystemStatusResponse\x12\x1f\n\x07tracker\x18\x01 \x01(\x0b\x32\x0e.TrackerStatus\x12\x32\n\x11\x63harge_controller\x18\x02 \x01(\x0b\x32\x17.ChargeControllerStatus\"@\n\x15RequestControlRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x16\n\x0esecurity_level\x18\x02 \x01(\x04\"V\n\x16RequestControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12+\n\x07success\x18\x02 \x01(\x0e\x32\x1a.ControlRequestSuccessFlag\"+\n\x18RelinquishControlRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x8c\x01\n\x19RelinquishControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x18\n\x10\x65nergy_collected\x18\x02 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x03 \x01(\x01\x12+\n\x07success\x18\x04 \x01(\x0e\x32\x1a.ControlRequestSuccessFlag\"\xe2\x01\n\x0bMoveRequest\x12(\n\tmove_type\x18\x01 \x01(\x0e\x32\x15.MoveRequest.MoveType\x12\x1d\n\tdirection\x18\x02 \x01(\x0e\x32\n.DIRECTION\x12\x15\n\rmove_duration\x18\x03 \x01(\x01\x12\x1b\n\x08position\x18\x04 \x01(\x0b\x32\t.Position\x12\x18\n\x05\x61ngle\x18\x05 \x01(\x0b\x32\t.Position\"<\n\x08MoveType\x12\t\n\x05UNSET\x10\x00\x12\x0c\n\x08\x44URATION\x10\x01\x12\x0c\n\x08POSITION\x10\x02\x12\t\n\x05\x41NGLE\x10\x03\"L\n\x0cMoveResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12+\n\x07success\x18\x02 \x01(\x0e\x32\x1a.ControlRequestSuccessFlag\"\x1e\n\x0bStopRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"L\n\x0cStopResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12+\n\x07success\x18\x02 \x01(\x0e\x32\x1a.ControlRequestSuccessFlag\"\x1e\n\x0bStowRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"L\n\x0cStowResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12+\n\x07success\x18\x02 \x01(\x0e\x32\x1a.ControlRequestSuccessFlag\"f\n\x0cLightRequest\x12)\n\x05light\x18\x01 \x01(\x0e\x32\x1a.LightRequest.LightSetting\"+\n\x0cLightSetting\x12\n\n\x06STATUS\x10\x00\x12\x06\n\x02ON\x10\x01\x12\x07\n\x03OFF\x10\x02\"[\n\rLightResponse\x12*\n\x06status\x18\x01 \x01(\x0e\x32\x1a.LightResponse.LightStatus\"\x1e\n\x0bLightStatus\x12\x06\n\x02ON\x10\x00\x12\x07\n\x03OFF\x10\x01*5\n\tDIRECTION\x12\t\n\x05NORTH\x10\x00\x12\x08\n\x04\x45\x41ST\x10\x01\x12\t\n\x05SOUTH\x10\x02\x12\x08\n\x04WEST\x10\x03*\x89\x01\n\x0b\x43hargeState\x12\t\n\x05START\x10\x00\x12\x0f\n\x0bNIGHT_CHECK\x10\x01\x12\x0e\n\nDISCONNECT\x10\x02\x12\t\n\x05NIGHT\x10\x03\x12\t\n\x05\x46\x41ULT\x10\x04\x12\x0f\n\x0b\x42ULK_CHARGE\x10\x05\x12\x0e\n\nABSORBTION\x10\x06\x12\t\n\x05\x46LOAT\x10\x07\x12\x0c\n\x08\x45QUALIZE\x10\x08*V\n\x19\x43ontrolRequestSuccessFlag\x12\x0b\n\x07SUCCESS\x10\x00\x12\x1f\n\x1bINSUFFICIENT_SECURITY_LEVEL\x10\x01\x12\x0b\n\x07\x46\x41ILURE\x10\x02\x32\xad\x03\n\x1aSmartBoxResourceController\x12Q\n\x12get_tracker_status\x12\x1b.TrackerSystemStatusRequest\x1a\x1c.TrackerSystemStatusResponse\"\x00\x12\x44\n\x0frequest_control\x12\x16.RequestControlRequest\x1a\x17.RequestControlResponse\"\x00\x12M\n\x12relinquish_control\x12\x19.RelinquishControlRequest\x1a\x1a.RelinquishControlResponse\"\x00\x12+\n\nmove_panel\x12\x0c.MoveRequest\x1a\r.MoveResponse\"\x00\x12%\n\x04stop\x12\x0c.StopRequest\x1a\r.StopResponse\"\x00\x12%\n\x04stow\x12\x0c.StowRequest\x1a\r.StowResponse\"\x00\x12,\n\tset_light\x12\r.LightRequest\x1a\x0e.LightResponse\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\"smartbox_resource_controller.proto\x12\x08smartbox\"-\n\x1aTrackerSystemStatusRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\"\n\x08Position\x12\n\n\x02ns\x18\x01 \x01(\x01\x12\n\n\x02\x65w\x18\x02 \x01(\x01\"$\n\nMoveStatus\x12\n\n\x02ns\x18\x01 \x01(\x08\x12\n\n\x02\x65w\x18\x02 \x01(\x08\"\xa6\x01\n\rTrackerStatus\x12$\n\x08position\x18\x01 \x01(\x0b\x32\x12.smartbox.Position\x12!\n\x05\x61ngle\x18\x02 \x01(\x0b\x32\x12.smartbox.Position\x12)\n\x0bmove_status\x18\x03 \x01(\x0b\x32\x14.smartbox.MoveStatus\x12!\n\x19\x63urrent_controlling_level\x18\x04 \x01(\x03\"\xec\x01\n\x16\x43hargeControllerStatus\x12\x17\n\x0f\x62\x61ttery_voltage\x18\x01 \x01(\x01\x12\x15\n\rarray_voltage\x18\x02 \x01(\x01\x12\x14\n\x0cload_voltage\x18\x03 \x01(\x01\x12\x16\n\x0e\x63harge_current\x18\x04 \x01(\x01\x12\x14\n\x0cload_current\x18\x05 \x01(\x01\x12+\n\x0c\x63harge_state\x18\x06 \x01(\x0e\x32\x15.smartbox.ChargeState\x12\x18\n\x10\x65nergy_collected\x18\x07 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x08 \x01(\x01\"\x84\x01\n\x1bTrackerSystemStatusResponse\x12(\n\x07tracker\x18\x01 \x01(\x0b\x32\x17.smartbox.TrackerStatus\x12;\n\x11\x63harge_controller\x18\x02 \x01(\x0b\x32 .smartbox.ChargeControllerStatus\"@\n\x15RequestControlRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x16\n\x0esecurity_level\x18\x02 \x01(\x04\"_\n\x16RequestControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x34\n\x07success\x18\x02 \x01(\x0e\x32#.smartbox.ControlRequestSuccessFlag\"+\n\x18RelinquishControlRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x95\x01\n\x19RelinquishControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x18\n\x10\x65nergy_collected\x18\x02 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x03 \x01(\x01\x12\x34\n\x07success\x18\x04 \x01(\x0e\x32#.smartbox.ControlRequestSuccessFlag\"\x86\x02\n\x0bMoveRequest\x12\x31\n\tmove_type\x18\x01 \x01(\x0e\x32\x1e.smartbox.MoveRequest.MoveType\x12&\n\tdirection\x18\x02 \x01(\x0e\x32\x13.smartbox.DIRECTION\x12\x15\n\rmove_duration\x18\x03 \x01(\x01\x12$\n\x08position\x18\x04 \x01(\x0b\x32\x12.smartbox.Position\x12!\n\x05\x61ngle\x18\x05 \x01(\x0b\x32\x12.smartbox.Position\"<\n\x08MoveType\x12\t\n\x05UNSET\x10\x00\x12\x0c\n\x08\x44URATION\x10\x01\x12\x0c\n\x08POSITION\x10\x02\x12\t\n\x05\x41NGLE\x10\x03\"U\n\x0cMoveResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x34\n\x07success\x18\x02 \x01(\x0e\x32#.smartbox.ControlRequestSuccessFlag\"\x1e\n\x0bStopRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"U\n\x0cStopResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x34\n\x07success\x18\x02 \x01(\x0e\x32#.smartbox.ControlRequestSuccessFlag\"\x1e\n\x0bStowRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"U\n\x0cStowResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x34\n\x07success\x18\x02 \x01(\x0e\x32#.smartbox.ControlRequestSuccessFlag\"o\n\x0cLightRequest\x12\x32\n\x05light\x18\x01 \x01(\x0e\x32#.smartbox.LightRequest.LightSetting\"+\n\x0cLightSetting\x12\n\n\x06STATUS\x10\x00\x12\x06\n\x02ON\x10\x01\x12\x07\n\x03OFF\x10\x02\"d\n\rLightResponse\x12\x33\n\x06status\x18\x01 \x01(\x0e\x32#.smartbox.LightResponse.LightStatus\"\x1e\n\x0bLightStatus\x12\x06\n\x02ON\x10\x00\x12\x07\n\x03OFF\x10\x01*5\n\tDIRECTION\x12\t\n\x05NORTH\x10\x00\x12\x08\n\x04\x45\x41ST\x10\x01\x12\t\n\x05SOUTH\x10\x02\x12\x08\n\x04WEST\x10\x03*\x89\x01\n\x0b\x43hargeState\x12\t\n\x05START\x10\x00\x12\x0f\n\x0bNIGHT_CHECK\x10\x01\x12\x0e\n\nDISCONNECT\x10\x02\x12\t\n\x05NIGHT\x10\x03\x12\t\n\x05\x46\x41ULT\x10\x04\x12\x0f\n\x0b\x42ULK_CHARGE\x10\x05\x12\x0e\n\nABSORBTION\x10\x06\x12\t\n\x05\x46LOAT\x10\x07\x12\x0c\n\x08\x45QUALIZE\x10\x08*V\n\x19\x43ontrolRequestSuccessFlag\x12\x0b\n\x07SUCCESS\x10\x00\x12\x1f\n\x1bINSUFFICIENT_SECURITY_LEVEL\x10\x01\x12\x0b\n\x07\x46\x41ILURE\x10\x02\x32\xab\x04\n\x1aSmartBoxResourceController\x12\x63\n\x12get_tracker_status\x12$.smartbox.TrackerSystemStatusRequest\x1a%.smartbox.TrackerSystemStatusResponse\"\x00\x12V\n\x0frequest_control\x12\x1f.smartbox.RequestControlRequest\x1a .smartbox.RequestControlResponse\"\x00\x12_\n\x12relinquish_control\x12\".smartbox.RelinquishControlRequest\x1a#.smartbox.RelinquishControlResponse\"\x00\x12=\n\nmove_panel\x12\x15.smartbox.MoveRequest\x1a\x16.smartbox.MoveResponse\"\x00\x12\x37\n\x04stop\x12\x15.smartbox.StopRequest\x1a\x16.smartbox.StopResponse\"\x00\x12\x37\n\x04stow\x12\x15.smartbox.StowRequest\x1a\x16.smartbox.StowResponse\"\x00\x12>\n\tset_light\x12\x16.smartbox.LightRequest\x1a\x17.smartbox.LightResponse\"\x00\x62\x06proto3')
 )
 
 _DIRECTION = _descriptor.EnumDescriptor(
   name='DIRECTION',
-  full_name='DIRECTION',
+  full_name='smartbox.DIRECTION',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -48,15 +48,15 @@ _DIRECTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1713,
-  serialized_end=1766,
+  serialized_start=1877,
+  serialized_end=1930,
 )
 _sym_db.RegisterEnumDescriptor(_DIRECTION)
 
 DIRECTION = enum_type_wrapper.EnumTypeWrapper(_DIRECTION)
 _CHARGESTATE = _descriptor.EnumDescriptor(
   name='ChargeState',
-  full_name='ChargeState',
+  full_name='smartbox.ChargeState',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -99,15 +99,15 @@ _CHARGESTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1769,
-  serialized_end=1906,
+  serialized_start=1933,
+  serialized_end=2070,
 )
 _sym_db.RegisterEnumDescriptor(_CHARGESTATE)
 
 ChargeState = enum_type_wrapper.EnumTypeWrapper(_CHARGESTATE)
 _CONTROLREQUESTSUCCESSFLAG = _descriptor.EnumDescriptor(
   name='ControlRequestSuccessFlag',
-  full_name='ControlRequestSuccessFlag',
+  full_name='smartbox.ControlRequestSuccessFlag',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -126,8 +126,8 @@ _CONTROLREQUESTSUCCESSFLAG = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1908,
-  serialized_end=1994,
+  serialized_start=2072,
+  serialized_end=2158,
 )
 _sym_db.RegisterEnumDescriptor(_CONTROLREQUESTSUCCESSFLAG)
 
@@ -152,7 +152,7 @@ FAILURE = 2
 
 _MOVEREQUEST_MOVETYPE = _descriptor.EnumDescriptor(
   name='MoveType',
-  full_name='MoveRequest.MoveType',
+  full_name='smartbox.MoveRequest.MoveType',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -175,14 +175,14 @@ _MOVEREQUEST_MOVETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1156,
-  serialized_end=1216,
+  serialized_start=1275,
+  serialized_end=1335,
 )
 _sym_db.RegisterEnumDescriptor(_MOVEREQUEST_MOVETYPE)
 
 _LIGHTREQUEST_LIGHTSETTING = _descriptor.EnumDescriptor(
   name='LightSetting',
-  full_name='LightRequest.LightSetting',
+  full_name='smartbox.LightRequest.LightSetting',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -201,14 +201,14 @@ _LIGHTREQUEST_LIGHTSETTING = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1575,
-  serialized_end=1618,
+  serialized_start=1730,
+  serialized_end=1773,
 )
 _sym_db.RegisterEnumDescriptor(_LIGHTREQUEST_LIGHTSETTING)
 
 _LIGHTRESPONSE_LIGHTSTATUS = _descriptor.EnumDescriptor(
   name='LightStatus',
-  full_name='LightResponse.LightStatus',
+  full_name='smartbox.LightResponse.LightStatus',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -223,21 +223,21 @@ _LIGHTRESPONSE_LIGHTSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1681,
-  serialized_end=1711,
+  serialized_start=1845,
+  serialized_end=1875,
 )
 _sym_db.RegisterEnumDescriptor(_LIGHTRESPONSE_LIGHTSTATUS)
 
 
 _TRACKERSYSTEMSTATUSREQUEST = _descriptor.Descriptor(
   name='TrackerSystemStatusRequest',
-  full_name='TrackerSystemStatusRequest',
+  full_name='smartbox.TrackerSystemStatusRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='TrackerSystemStatusRequest.message', index=0,
+      name='message', full_name='smartbox.TrackerSystemStatusRequest.message', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -255,27 +255,27 @@ _TRACKERSYSTEMSTATUSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=38,
-  serialized_end=83,
+  serialized_start=48,
+  serialized_end=93,
 )
 
 
 _POSITION = _descriptor.Descriptor(
   name='Position',
-  full_name='Position',
+  full_name='smartbox.Position',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='ns', full_name='Position.ns', index=0,
+      name='ns', full_name='smartbox.Position.ns', index=0,
       number=1, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='ew', full_name='Position.ew', index=1,
+      name='ew', full_name='smartbox.Position.ew', index=1,
       number=2, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
@@ -293,27 +293,27 @@ _POSITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=85,
-  serialized_end=119,
+  serialized_start=95,
+  serialized_end=129,
 )
 
 
 _MOVESTATUS = _descriptor.Descriptor(
   name='MoveStatus',
-  full_name='MoveStatus',
+  full_name='smartbox.MoveStatus',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='ns', full_name='MoveStatus.ns', index=0,
+      name='ns', full_name='smartbox.MoveStatus.ns', index=0,
       number=1, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='ew', full_name='MoveStatus.ew', index=1,
+      name='ew', full_name='smartbox.MoveStatus.ew', index=1,
       number=2, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
@@ -331,41 +331,41 @@ _MOVESTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=121,
-  serialized_end=157,
+  serialized_start=131,
+  serialized_end=167,
 )
 
 
 _TRACKERSTATUS = _descriptor.Descriptor(
   name='TrackerStatus',
-  full_name='TrackerStatus',
+  full_name='smartbox.TrackerStatus',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='position', full_name='TrackerStatus.position', index=0,
+      name='position', full_name='smartbox.TrackerStatus.position', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='angle', full_name='TrackerStatus.angle', index=1,
+      name='angle', full_name='smartbox.TrackerStatus.angle', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='move_status', full_name='TrackerStatus.move_status', index=2,
+      name='move_status', full_name='smartbox.TrackerStatus.move_status', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='current_controlling_level', full_name='TrackerStatus.current_controlling_level', index=3,
+      name='current_controlling_level', full_name='smartbox.TrackerStatus.current_controlling_level', index=3,
       number=4, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -383,69 +383,69 @@ _TRACKERSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=160,
-  serialized_end=299,
+  serialized_start=170,
+  serialized_end=336,
 )
 
 
 _CHARGECONTROLLERSTATUS = _descriptor.Descriptor(
   name='ChargeControllerStatus',
-  full_name='ChargeControllerStatus',
+  full_name='smartbox.ChargeControllerStatus',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='battery_voltage', full_name='ChargeControllerStatus.battery_voltage', index=0,
+      name='battery_voltage', full_name='smartbox.ChargeControllerStatus.battery_voltage', index=0,
       number=1, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='array_voltage', full_name='ChargeControllerStatus.array_voltage', index=1,
+      name='array_voltage', full_name='smartbox.ChargeControllerStatus.array_voltage', index=1,
       number=2, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='load_voltage', full_name='ChargeControllerStatus.load_voltage', index=2,
+      name='load_voltage', full_name='smartbox.ChargeControllerStatus.load_voltage', index=2,
       number=3, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='charge_current', full_name='ChargeControllerStatus.charge_current', index=3,
+      name='charge_current', full_name='smartbox.ChargeControllerStatus.charge_current', index=3,
       number=4, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='load_current', full_name='ChargeControllerStatus.load_current', index=4,
+      name='load_current', full_name='smartbox.ChargeControllerStatus.load_current', index=4,
       number=5, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='charge_state', full_name='ChargeControllerStatus.charge_state', index=5,
+      name='charge_state', full_name='smartbox.ChargeControllerStatus.charge_state', index=5,
       number=6, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='energy_collected', full_name='ChargeControllerStatus.energy_collected', index=6,
+      name='energy_collected', full_name='smartbox.ChargeControllerStatus.energy_collected', index=6,
       number=7, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='energy_expended', full_name='ChargeControllerStatus.energy_expended', index=7,
+      name='energy_expended', full_name='smartbox.ChargeControllerStatus.energy_expended', index=7,
       number=8, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
@@ -463,27 +463,27 @@ _CHARGECONTROLLERSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=302,
-  serialized_end=529,
+  serialized_start=339,
+  serialized_end=575,
 )
 
 
 _TRACKERSYSTEMSTATUSRESPONSE = _descriptor.Descriptor(
   name='TrackerSystemStatusResponse',
-  full_name='TrackerSystemStatusResponse',
+  full_name='smartbox.TrackerSystemStatusResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='tracker', full_name='TrackerSystemStatusResponse.tracker', index=0,
+      name='tracker', full_name='smartbox.TrackerSystemStatusResponse.tracker', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='charge_controller', full_name='TrackerSystemStatusResponse.charge_controller', index=1,
+      name='charge_controller', full_name='smartbox.TrackerSystemStatusResponse.charge_controller', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -501,27 +501,27 @@ _TRACKERSYSTEMSTATUSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=531,
-  serialized_end=645,
+  serialized_start=578,
+  serialized_end=710,
 )
 
 
 _REQUESTCONTROLREQUEST = _descriptor.Descriptor(
   name='RequestControlRequest',
-  full_name='RequestControlRequest',
+  full_name='smartbox.RequestControlRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='RequestControlRequest.message', index=0,
+      name='message', full_name='smartbox.RequestControlRequest.message', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='security_level', full_name='RequestControlRequest.security_level', index=1,
+      name='security_level', full_name='smartbox.RequestControlRequest.security_level', index=1,
       number=2, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -539,27 +539,27 @@ _REQUESTCONTROLREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=647,
-  serialized_end=711,
+  serialized_start=712,
+  serialized_end=776,
 )
 
 
 _REQUESTCONTROLRESPONSE = _descriptor.Descriptor(
   name='RequestControlResponse',
-  full_name='RequestControlResponse',
+  full_name='smartbox.RequestControlResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='RequestControlResponse.message', index=0,
+      name='message', full_name='smartbox.RequestControlResponse.message', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='success', full_name='RequestControlResponse.success', index=1,
+      name='success', full_name='smartbox.RequestControlResponse.success', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -577,20 +577,20 @@ _REQUESTCONTROLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=713,
-  serialized_end=799,
+  serialized_start=778,
+  serialized_end=873,
 )
 
 
 _RELINQUISHCONTROLREQUEST = _descriptor.Descriptor(
   name='RelinquishControlRequest',
-  full_name='RelinquishControlRequest',
+  full_name='smartbox.RelinquishControlRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='RelinquishControlRequest.message', index=0,
+      name='message', full_name='smartbox.RelinquishControlRequest.message', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -608,41 +608,41 @@ _RELINQUISHCONTROLREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=801,
-  serialized_end=844,
+  serialized_start=875,
+  serialized_end=918,
 )
 
 
 _RELINQUISHCONTROLRESPONSE = _descriptor.Descriptor(
   name='RelinquishControlResponse',
-  full_name='RelinquishControlResponse',
+  full_name='smartbox.RelinquishControlResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='RelinquishControlResponse.message', index=0,
+      name='message', full_name='smartbox.RelinquishControlResponse.message', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='energy_collected', full_name='RelinquishControlResponse.energy_collected', index=1,
+      name='energy_collected', full_name='smartbox.RelinquishControlResponse.energy_collected', index=1,
       number=2, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='energy_expended', full_name='RelinquishControlResponse.energy_expended', index=2,
+      name='energy_expended', full_name='smartbox.RelinquishControlResponse.energy_expended', index=2,
       number=3, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='success', full_name='RelinquishControlResponse.success', index=3,
+      name='success', full_name='smartbox.RelinquishControlResponse.success', index=3,
       number=4, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -660,48 +660,48 @@ _RELINQUISHCONTROLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=847,
-  serialized_end=987,
+  serialized_start=921,
+  serialized_end=1070,
 )
 
 
 _MOVEREQUEST = _descriptor.Descriptor(
   name='MoveRequest',
-  full_name='MoveRequest',
+  full_name='smartbox.MoveRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='move_type', full_name='MoveRequest.move_type', index=0,
+      name='move_type', full_name='smartbox.MoveRequest.move_type', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='direction', full_name='MoveRequest.direction', index=1,
+      name='direction', full_name='smartbox.MoveRequest.direction', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='move_duration', full_name='MoveRequest.move_duration', index=2,
+      name='move_duration', full_name='smartbox.MoveRequest.move_duration', index=2,
       number=3, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='position', full_name='MoveRequest.position', index=3,
+      name='position', full_name='smartbox.MoveRequest.position', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='angle', full_name='MoveRequest.angle', index=4,
+      name='angle', full_name='smartbox.MoveRequest.angle', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -720,27 +720,27 @@ _MOVEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=990,
-  serialized_end=1216,
+  serialized_start=1073,
+  serialized_end=1335,
 )
 
 
 _MOVERESPONSE = _descriptor.Descriptor(
   name='MoveResponse',
-  full_name='MoveResponse',
+  full_name='smartbox.MoveResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='MoveResponse.message', index=0,
+      name='message', full_name='smartbox.MoveResponse.message', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='success', full_name='MoveResponse.success', index=1,
+      name='success', full_name='smartbox.MoveResponse.success', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -758,20 +758,20 @@ _MOVERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1218,
-  serialized_end=1294,
+  serialized_start=1337,
+  serialized_end=1422,
 )
 
 
 _STOPREQUEST = _descriptor.Descriptor(
   name='StopRequest',
-  full_name='StopRequest',
+  full_name='smartbox.StopRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='StopRequest.message', index=0,
+      name='message', full_name='smartbox.StopRequest.message', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -789,27 +789,27 @@ _STOPREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1296,
-  serialized_end=1326,
+  serialized_start=1424,
+  serialized_end=1454,
 )
 
 
 _STOPRESPONSE = _descriptor.Descriptor(
   name='StopResponse',
-  full_name='StopResponse',
+  full_name='smartbox.StopResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='StopResponse.message', index=0,
+      name='message', full_name='smartbox.StopResponse.message', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='success', full_name='StopResponse.success', index=1,
+      name='success', full_name='smartbox.StopResponse.success', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -827,20 +827,20 @@ _STOPRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1328,
-  serialized_end=1404,
+  serialized_start=1456,
+  serialized_end=1541,
 )
 
 
 _STOWREQUEST = _descriptor.Descriptor(
   name='StowRequest',
-  full_name='StowRequest',
+  full_name='smartbox.StowRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='StowRequest.message', index=0,
+      name='message', full_name='smartbox.StowRequest.message', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -858,27 +858,27 @@ _STOWREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1406,
-  serialized_end=1436,
+  serialized_start=1543,
+  serialized_end=1573,
 )
 
 
 _STOWRESPONSE = _descriptor.Descriptor(
   name='StowResponse',
-  full_name='StowResponse',
+  full_name='smartbox.StowResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='StowResponse.message', index=0,
+      name='message', full_name='smartbox.StowResponse.message', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='success', full_name='StowResponse.success', index=1,
+      name='success', full_name='smartbox.StowResponse.success', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -896,20 +896,20 @@ _STOWRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1438,
-  serialized_end=1514,
+  serialized_start=1575,
+  serialized_end=1660,
 )
 
 
 _LIGHTREQUEST = _descriptor.Descriptor(
   name='LightRequest',
-  full_name='LightRequest',
+  full_name='smartbox.LightRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='light', full_name='LightRequest.light', index=0,
+      name='light', full_name='smartbox.LightRequest.light', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -928,20 +928,20 @@ _LIGHTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1516,
-  serialized_end=1618,
+  serialized_start=1662,
+  serialized_end=1773,
 )
 
 
 _LIGHTRESPONSE = _descriptor.Descriptor(
   name='LightResponse',
-  full_name='LightResponse',
+  full_name='smartbox.LightResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='status', full_name='LightResponse.status', index=0,
+      name='status', full_name='smartbox.LightResponse.status', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -960,8 +960,8 @@ _LIGHTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1620,
-  serialized_end=1711,
+  serialized_start=1775,
+  serialized_end=1875,
 )
 
 _TRACKERSTATUS.fields_by_name['position'].message_type = _POSITION
@@ -1010,126 +1010,126 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 TrackerSystemStatusRequest = _reflection.GeneratedProtocolMessageType('TrackerSystemStatusRequest', (_message.Message,), dict(
   DESCRIPTOR = _TRACKERSYSTEMSTATUSREQUEST,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:TrackerSystemStatusRequest)
+  # @@protoc_insertion_point(class_scope:smartbox.TrackerSystemStatusRequest)
   ))
 _sym_db.RegisterMessage(TrackerSystemStatusRequest)
 
 Position = _reflection.GeneratedProtocolMessageType('Position', (_message.Message,), dict(
   DESCRIPTOR = _POSITION,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:Position)
+  # @@protoc_insertion_point(class_scope:smartbox.Position)
   ))
 _sym_db.RegisterMessage(Position)
 
 MoveStatus = _reflection.GeneratedProtocolMessageType('MoveStatus', (_message.Message,), dict(
   DESCRIPTOR = _MOVESTATUS,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:MoveStatus)
+  # @@protoc_insertion_point(class_scope:smartbox.MoveStatus)
   ))
 _sym_db.RegisterMessage(MoveStatus)
 
 TrackerStatus = _reflection.GeneratedProtocolMessageType('TrackerStatus', (_message.Message,), dict(
   DESCRIPTOR = _TRACKERSTATUS,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:TrackerStatus)
+  # @@protoc_insertion_point(class_scope:smartbox.TrackerStatus)
   ))
 _sym_db.RegisterMessage(TrackerStatus)
 
 ChargeControllerStatus = _reflection.GeneratedProtocolMessageType('ChargeControllerStatus', (_message.Message,), dict(
   DESCRIPTOR = _CHARGECONTROLLERSTATUS,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:ChargeControllerStatus)
+  # @@protoc_insertion_point(class_scope:smartbox.ChargeControllerStatus)
   ))
 _sym_db.RegisterMessage(ChargeControllerStatus)
 
 TrackerSystemStatusResponse = _reflection.GeneratedProtocolMessageType('TrackerSystemStatusResponse', (_message.Message,), dict(
   DESCRIPTOR = _TRACKERSYSTEMSTATUSRESPONSE,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:TrackerSystemStatusResponse)
+  # @@protoc_insertion_point(class_scope:smartbox.TrackerSystemStatusResponse)
   ))
 _sym_db.RegisterMessage(TrackerSystemStatusResponse)
 
 RequestControlRequest = _reflection.GeneratedProtocolMessageType('RequestControlRequest', (_message.Message,), dict(
   DESCRIPTOR = _REQUESTCONTROLREQUEST,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:RequestControlRequest)
+  # @@protoc_insertion_point(class_scope:smartbox.RequestControlRequest)
   ))
 _sym_db.RegisterMessage(RequestControlRequest)
 
 RequestControlResponse = _reflection.GeneratedProtocolMessageType('RequestControlResponse', (_message.Message,), dict(
   DESCRIPTOR = _REQUESTCONTROLRESPONSE,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:RequestControlResponse)
+  # @@protoc_insertion_point(class_scope:smartbox.RequestControlResponse)
   ))
 _sym_db.RegisterMessage(RequestControlResponse)
 
 RelinquishControlRequest = _reflection.GeneratedProtocolMessageType('RelinquishControlRequest', (_message.Message,), dict(
   DESCRIPTOR = _RELINQUISHCONTROLREQUEST,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:RelinquishControlRequest)
+  # @@protoc_insertion_point(class_scope:smartbox.RelinquishControlRequest)
   ))
 _sym_db.RegisterMessage(RelinquishControlRequest)
 
 RelinquishControlResponse = _reflection.GeneratedProtocolMessageType('RelinquishControlResponse', (_message.Message,), dict(
   DESCRIPTOR = _RELINQUISHCONTROLRESPONSE,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:RelinquishControlResponse)
+  # @@protoc_insertion_point(class_scope:smartbox.RelinquishControlResponse)
   ))
 _sym_db.RegisterMessage(RelinquishControlResponse)
 
 MoveRequest = _reflection.GeneratedProtocolMessageType('MoveRequest', (_message.Message,), dict(
   DESCRIPTOR = _MOVEREQUEST,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:MoveRequest)
+  # @@protoc_insertion_point(class_scope:smartbox.MoveRequest)
   ))
 _sym_db.RegisterMessage(MoveRequest)
 
 MoveResponse = _reflection.GeneratedProtocolMessageType('MoveResponse', (_message.Message,), dict(
   DESCRIPTOR = _MOVERESPONSE,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:MoveResponse)
+  # @@protoc_insertion_point(class_scope:smartbox.MoveResponse)
   ))
 _sym_db.RegisterMessage(MoveResponse)
 
 StopRequest = _reflection.GeneratedProtocolMessageType('StopRequest', (_message.Message,), dict(
   DESCRIPTOR = _STOPREQUEST,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:StopRequest)
+  # @@protoc_insertion_point(class_scope:smartbox.StopRequest)
   ))
 _sym_db.RegisterMessage(StopRequest)
 
 StopResponse = _reflection.GeneratedProtocolMessageType('StopResponse', (_message.Message,), dict(
   DESCRIPTOR = _STOPRESPONSE,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:StopResponse)
+  # @@protoc_insertion_point(class_scope:smartbox.StopResponse)
   ))
 _sym_db.RegisterMessage(StopResponse)
 
 StowRequest = _reflection.GeneratedProtocolMessageType('StowRequest', (_message.Message,), dict(
   DESCRIPTOR = _STOWREQUEST,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:StowRequest)
+  # @@protoc_insertion_point(class_scope:smartbox.StowRequest)
   ))
 _sym_db.RegisterMessage(StowRequest)
 
 StowResponse = _reflection.GeneratedProtocolMessageType('StowResponse', (_message.Message,), dict(
   DESCRIPTOR = _STOWRESPONSE,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:StowResponse)
+  # @@protoc_insertion_point(class_scope:smartbox.StowResponse)
   ))
 _sym_db.RegisterMessage(StowResponse)
 
 LightRequest = _reflection.GeneratedProtocolMessageType('LightRequest', (_message.Message,), dict(
   DESCRIPTOR = _LIGHTREQUEST,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:LightRequest)
+  # @@protoc_insertion_point(class_scope:smartbox.LightRequest)
   ))
 _sym_db.RegisterMessage(LightRequest)
 
 LightResponse = _reflection.GeneratedProtocolMessageType('LightResponse', (_message.Message,), dict(
   DESCRIPTOR = _LIGHTRESPONSE,
   __module__ = 'smartbox_resource_controller_pb2'
-  # @@protoc_insertion_point(class_scope:LightResponse)
+  # @@protoc_insertion_point(class_scope:smartbox.LightResponse)
   ))
 _sym_db.RegisterMessage(LightResponse)
 
@@ -1137,16 +1137,16 @@ _sym_db.RegisterMessage(LightResponse)
 
 _SMARTBOXRESOURCECONTROLLER = _descriptor.ServiceDescriptor(
   name='SmartBoxResourceController',
-  full_name='SmartBoxResourceController',
+  full_name='smartbox.SmartBoxResourceController',
   file=DESCRIPTOR,
   index=0,
   options=None,
-  serialized_start=1997,
-  serialized_end=2426,
+  serialized_start=2161,
+  serialized_end=2716,
   methods=[
   _descriptor.MethodDescriptor(
     name='get_tracker_status',
-    full_name='SmartBoxResourceController.get_tracker_status',
+    full_name='smartbox.SmartBoxResourceController.get_tracker_status',
     index=0,
     containing_service=None,
     input_type=_TRACKERSYSTEMSTATUSREQUEST,
@@ -1155,7 +1155,7 @@ _SMARTBOXRESOURCECONTROLLER = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='request_control',
-    full_name='SmartBoxResourceController.request_control',
+    full_name='smartbox.SmartBoxResourceController.request_control',
     index=1,
     containing_service=None,
     input_type=_REQUESTCONTROLREQUEST,
@@ -1164,7 +1164,7 @@ _SMARTBOXRESOURCECONTROLLER = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='relinquish_control',
-    full_name='SmartBoxResourceController.relinquish_control',
+    full_name='smartbox.SmartBoxResourceController.relinquish_control',
     index=2,
     containing_service=None,
     input_type=_RELINQUISHCONTROLREQUEST,
@@ -1173,7 +1173,7 @@ _SMARTBOXRESOURCECONTROLLER = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='move_panel',
-    full_name='SmartBoxResourceController.move_panel',
+    full_name='smartbox.SmartBoxResourceController.move_panel',
     index=3,
     containing_service=None,
     input_type=_MOVEREQUEST,
@@ -1182,7 +1182,7 @@ _SMARTBOXRESOURCECONTROLLER = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='stop',
-    full_name='SmartBoxResourceController.stop',
+    full_name='smartbox.SmartBoxResourceController.stop',
     index=4,
     containing_service=None,
     input_type=_STOPREQUEST,
@@ -1191,7 +1191,7 @@ _SMARTBOXRESOURCECONTROLLER = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='stow',
-    full_name='SmartBoxResourceController.stow',
+    full_name='smartbox.SmartBoxResourceController.stow',
     index=5,
     containing_service=None,
     input_type=_STOWREQUEST,
@@ -1200,7 +1200,7 @@ _SMARTBOXRESOURCECONTROLLER = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='set_light',
-    full_name='SmartBoxResourceController.set_light',
+    full_name='smartbox.SmartBoxResourceController.set_light',
     index=6,
     containing_service=None,
     input_type=_LIGHTREQUEST,
