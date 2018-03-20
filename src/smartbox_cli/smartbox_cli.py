@@ -25,7 +25,7 @@ def display_info(stdscr):
 	load_voltage = controller.get_load_voltage()
 	charge_current = controller.get_charging_current()
 	load_current = controller.get_load_current()
-	charge_state = controller.get_charge_state_name()
+	charge_state = controller.get_charge_state()
 
 	ns_moving = "MOVING" if tracker.is_ns_moving() else ""
 	ew_moving = "MOVING" if tracker.is_ew_moving() else ""
