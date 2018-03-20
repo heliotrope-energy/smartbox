@@ -3,7 +3,7 @@ from smartbox.sb_light import SmartBoxLight
 
 def process_for_state(controller, light):
 	charge_state = controller.get_charge_state()
-	if charge_state == SmartBoxChargeController.FLOAT:
+	if charge_state == SmartBoxChargeController.FLOAT and not light.is_light_on():
 		print("Charging state has reached floating, turning on light")
 		light.turn_on()
 	if charge_state == SmartBoxChargeController.BULK_CHARGE:
