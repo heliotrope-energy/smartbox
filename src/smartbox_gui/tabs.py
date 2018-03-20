@@ -1,18 +1,22 @@
 #!/usr/bin/python
 
+from smartbox.sb_resource_controller_client import SmartBoxResourceControllerClient
+import smartbox.smartbox_resource_controller_pb2 as sb_pb2
+
 from tkinter import *
 from tkinter import ttk
-from gpiozero import Motor, CPUTemperature
+#from gpiozero import Motor, CPUTemperature
 import time
-import cv2
+#import cv2
 from PIL import Image, ImageTk
 import numpy as np
-import Adafruit_ADS1x15
+#import Adafruit_ADS1x15
 
 
 class App:
     def __init__(self, root):
-
+        self.client = SmartBoxResourceControllerClient(1)
+        
         self.setup_grid(root)
 
         # creating Notebook that holds tabs   
@@ -22,7 +26,7 @@ class App:
         # The first tab 
         control_tab = ttk.Frame(nb) 
         nb.add(control_tab, text = 'Control')
-        self.createButtons(control_tab)
+        # self.createButtons(control_tab)
 
         # Label for updating the angle 
         self.angle = Label(control_tab)
@@ -33,15 +37,15 @@ class App:
         percepts_tab = ttk.Frame(nb)
         nb.add(percepts_tab, text = 'Percepts')
         self.setup_grid(percepts_tab)
-        self.set_camera_image(percepts_tab)
+        #     self.set_camera_image(percepts_tab)
 
         # Label for updating the temperature 
         # what I trying to sat is the 52 row of the percepts tab. I do not get my mssage across.
         self.temp = Label(percepts_tab, width = 50, height = 5)
         self.temp.grid(row = 52, column = 0)
       #  self.temp.grid_propagate(0)
-        self.cpu = CPUTemperature()
-        self.update_temp()
+      #   self.cpu = CPUTemperature()
+      #    self.update_temp()
 
         info_tab = ttk.Frame(nb)
         nb.add(info_tab, text = 'Info')
@@ -58,7 +62,7 @@ class App:
 
             # wind_stow code 
         self.TOLERANCE = 0.1
-        self.adc = Adafruit_ADS1x15.ADS1115()
+        #self.adc = Adafruit_ADS1x15.ADS1115()
         self.GAIN  = 2/3
         self.EW_PIN = 1
         self.NS_PIN = 0
@@ -70,7 +74,7 @@ class App:
         self.change_position(goto_tab)
 
         self.limits = {self.NS_PIN:[0,6.0], self.EW_PIN:[0,12.0]}
-        self.motors = {self.NS_PIN:motor_ns, self.EW_PIN:motor_ew}
+    # self.motors = {self.NS_PIN:motor_ns, self.EW_PIN:motor_ew}
         
     def calculate_inches(self, pin_num, voltage): 
         if (pin_num == self.NS_PIN):
@@ -80,7 +84,7 @@ class App:
         return v_per_in
 
     def get_position(self, direction):
-        value = self.adc.read_adc(direction, gain=self.GAIN)
+        value = self.client(direction, gain=self.GAIN)
         voltage = value * self.scale
         inches =  self.calculate_inches(direction, voltage); 
         return inches
@@ -124,7 +128,7 @@ class App:
         print ("East-west {}".format(ew_str))
         print ("North-south {}".format(ns_str))
         is_error = False
-        current_pos_ew = self.get_position(self.EW_PIN)
+        current_pos_ew = self.client.get_ew_position()
         try:
             ew_pos = float(ew_str)
         except ValueError:
@@ -142,7 +146,7 @@ class App:
             self.ew_position.insert(0, ew_max)
         
 
-        current_pos_ns = self.get_position(self.NS_PIN)
+        current_pos_ns = self.client.get_ns_position()
         try:
             ns_pos = float(ns_str)
         except ValueError:
@@ -159,8 +163,9 @@ class App:
             self.ns_position.delete(0, END)
             self.ns_position.insert(0, ns_max)
             
-        if not is_error: 
-            self.move_panel_to_position(ns_pos, ew_pos)
+        if not is_error:
+            print ("Positions: {} {}".format(ns_pos, ew_pos))
+            self.client.move_panel_to_linear_position(ns_pos, ew_pos)
             
         
     def move_panel_to_position(self, ns_pos, ew_pos):
@@ -168,13 +173,15 @@ class App:
         self.move_axis_to_position(self.NS_PIN, ns_pos)
 
     def update_voltage(self):
-        self.tree.set(self.id, column = "one", value=self.cpu.temperature)
+        self.tree.set(self.id, column = "one", value=self.client.get_battery_voltage())
         self.tree.after(100, self.update_voltage)
         
     # Replace this method by the formula of angle calculation 
     def update_angle(self):
-        new_time = time.strftime('%H:%M:%S')
-        self.angle.configure(text = "Angle: "+ new_time)
+        ns = self.client.get_ns_position()
+        ew = self.client.get_ew_position()
+        
+        self.angle.configure(text = "Position: {:.3f} {:.3f}".format(ns, ew))
         self.angle.after(100, self.update_angle)
 
     def update_temp(self):
@@ -262,8 +269,8 @@ main = Tk()
 main.title("Python GUI")
 main.geometry('500x500')
 
-motor_ns = Motor(26,20)
-motor_ew= Motor(21,16)
+#motor_ns = Motor(26,20)
+#motor_ew= Motor(21,16)
 
 app = App (main)
 main.bind()
