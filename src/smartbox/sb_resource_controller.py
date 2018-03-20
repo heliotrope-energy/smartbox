@@ -90,12 +90,12 @@ class SmartBoxResourceController(smartbox_resource_controller_pb2_grpc.SmartBoxR
 		response.tracker.move_status.ns = self.tracker_controller.is_ew_moving()
 		response.tracker.current_controlling_level = self.controlling_security_level
 
-		response.charge_controller.battery_voltage = charge_data[SmartBoxController.ADC_VB_F]
-		response.charge_controller.array_voltage = charge_data[SmartBoxController.ADC_VA_F]
-		response.charge_controller.load_voltage = charge_data[SmartBoxController.ADC_VL_F]
-		response.charge_controller.charge_current = charge_data[SmartBoxController.ADC_IC_F]
-		response.charge_controller.load_current = charge_data[SmartBoxController.ADC_IL_F]
-		response.charge_controller.charge_state = charge_data[SmartBoxController.CHARGE_STATE]
+		response.charge_controller.battery_voltage = charge_data[SmartBoxChargeController.ADC_VB_F]
+		response.charge_controller.array_voltage = charge_data[SmartBoxChargeController.ADC_VA_F]
+		response.charge_controller.load_voltage = charge_data[SmartBoxChargeController.ADC_VL_F]
+		response.charge_controller.charge_current = charge_data[SmartBoxChargeController.ADC_IC_F]
+		response.charge_controller.load_current = charge_data[SmartBoxChargeController.ADC_IL_F]
+		response.charge_controller.charge_state = charge_data[SmartBoxChargeController.CHARGE_STATE]
 		response.charge_controller.energy_collected = self.energy_collected_at_current_time - \
 			self.energy_collected_at_start
 		response.charge_controller.energy_expended = self.energy_expended_at_current_time	- \
