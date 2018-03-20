@@ -67,7 +67,7 @@ class SmartBoxResourceController(smartbox_resource_controller_pb2_grpc.SmartBoxR
 			ns_angle = request.angle.ns
 			ew_angle = request.angle.ew
 			self.tracker_controller.move_panel_to_angular_position(ns_angle, ew_angle)
-
+		return smartbox_resource_controller_pb2.MoveResponse()
 
 
 	def stop(self, request, context):
