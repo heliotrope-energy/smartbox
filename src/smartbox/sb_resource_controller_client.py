@@ -154,27 +154,27 @@ class SmartBoxResourceControllerClient():
 
 	def get_battery_voltage(self):
 		status = self._request_status_()
-        return status.charge_controller.battery_voltage
+		return status.charge_controller.battery_voltage
 
-    def get_solar_panel_voltage(self):
-    	status = self._request_status_()
-        return status.charge_controller.array_voltage
+	def get_solar_panel_voltage(self):
+		status = self._request_status_()
+		return status.charge_controller.array_voltage
 
-    def get_load_voltage(self):
-    	status = self._request_status_()
-        return status.charge_controller.load_voltage
+	def get_load_voltage(self):
+		status = self._request_status_()
+		return status.charge_controller.load_voltage
 
-    def get_charging_current(self):
-    	status = self._request_status_()
-        return status.charge_controller.charge_current
+	def get_charging_current(self):
+		status = self._request_status_()
+		return status.charge_controller.charge_current
 
-    def get_load_current(self):
-    	status = self._request_status_()
-        return status.charge_controller.load_current
+	def get_load_current(self):
+		status = self._request_status_()
+		return status.charge_controller.load_current
 
-    def get_charge_status(self):
-    	status = self._request_status_()
-    	return status.charge_controller.charge_state
+	def get_charge_status(self):
+		status = self._request_status_()
+		return status.charge_controller.charge_state
 
 	def _request_status_(self):
 		request = smartbox_resource_controller_pb2.TrackerSystemStatusRequest(message = "hello")

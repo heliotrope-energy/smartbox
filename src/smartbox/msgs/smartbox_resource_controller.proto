@@ -103,7 +103,7 @@ message MoveRequest {
 		ANGLE = 3;
 	}
 
-	MoveType move_type = 1 [default = UNSET];
+	MoveType move_type = 1;
 	DIRECTION direction = 2;
 	double move_duration = 3;
 	Position position = 4;
@@ -139,7 +139,7 @@ message LightRequest {
 	ON = 1;
 	OFF = 2;
 	}
-	LightSetting light = 1 [default = UNSET]
+	LightSetting light = 1;
 }
 
 message LightResponse {
@@ -147,5 +147,5 @@ message LightResponse {
 		ON = 0;
 		OFF = 1;
 	}
-	status = 1;
+	LightStatus status = 1;
 }
