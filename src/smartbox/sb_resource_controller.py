@@ -80,7 +80,7 @@ class SmartBoxResourceController(smartbox_resource_controller_pb2_grpc.SmartBoxR
 
 	def _get_tracker_status_message_(self):
 		response = smartbox_resource_controller_pb2.TrackerSystemStatusResponse()
-		charge_data = self.charge_controller.get_all_data()
+		_, charge_data = self.charge_controller.get_all_data()
 
 		response.tracker.position.ns = self.tracker_controller.get_ns_position()
 		response.tracker.position.ew = self.tracker_controller.get_ew_position()

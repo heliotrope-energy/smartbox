@@ -136,6 +136,7 @@ class SmartBoxChargeController:
     def get_all_data(self):
         register_values = self._get_all_register_values_()
         data = {}
+        data_by_addr = {}
         if register_values is None:
             return data
 
@@ -145,7 +146,8 @@ class SmartBoxChargeController:
             units_str = "" if units is None else units
             full_description = desc + " " + units_str
             data[full_description] = conversion(reg_value)
-        return data
+            data_by_addr[addr] = conversion(reg_value)
+        return data, data_by_addr
 
     def _get_register_(self, address, conversion_func, default_value = 0.0):
         reg_value = self._get_register_value_(address)
