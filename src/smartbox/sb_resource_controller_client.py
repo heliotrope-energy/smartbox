@@ -6,7 +6,7 @@ import smartbox_resource_controller_pb2_grpc
 
 class SmartBoxResourceControllerClient():
 	def __init__(self, security_level):
-		self.channel = grpc.insecure_channel('localhost:50051')
+		self.channel = grpc.insecure_channel('138.16.161.117:50051')
 		self.stub = smartbox_resource_controller_pb2_grpc.SmartBoxResourceControllerStub(self.channel)
 		self.security_level = security_level
 
@@ -139,6 +139,19 @@ class SmartBoxResourceControllerClient():
 		request = smartbox_resource_controller_pb2.StopRequest(message="stop")
 		self.stub.stop(request)
 
+	def get_light_status(self):
+		request = smartbox_resource_controller_pb2.StopRequest()
+		response = self.stub.stop(request)
+		status = response.status == smartbox_resource_controller_pb2.LightResponse.ON
+		return status
+
+	def set_light_status(self, turn_light_on):
+		status = smartbox_resource_controller_pb2.LightRequest.ON if turn_light_on else smartbox_resource_controller_pb2.LightRequest.OFF
+		request = smartbox_resource_controller_pb2.StopRequest(light = status)
+		response = self.stub.stop(request)
+		status = response.status == smartbox_resource_controller_pb2.LightResponse.ON
+		return status
+
 	def _request_status_(self):
 		request = smartbox_resource_controller_pb2.TrackerSystemStatusRequest(message = "hello")
 		return self.stub.get_tracker_status(request)
@@ -180,6 +193,13 @@ if __name__ == "__main__":
 	print(client.move_panel_to_angular_position(0.0, 0.0))
 	print(client.stow())
 	print(client.stop())
+	print(client.get_light_status())
+	print(client.set_light_status(True))
+	print(client.get_light_status())
+	print(client.set_light_status(False))
+	print(client.get_light_status())
+	
+
 
 
 

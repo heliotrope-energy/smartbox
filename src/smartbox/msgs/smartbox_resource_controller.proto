@@ -7,6 +7,7 @@ service SmartBoxResourceController {
 	rpc move_panel (MoveRequest) returns (MoveResponse) {}
 	rpc stop (StopRequest) returns (StopResponse) {}
 	rpc stow (StowRequest) returns (StowResponse) {}
+	rpc set_light (LightRequest) returns (LightResponse) {}
 
 }
 
@@ -96,12 +97,13 @@ message RelinquishControlResponse {
 
 message MoveRequest {
 	enum MoveType {
-		DURATION = 0;
-		POSITION = 1;
-		ANGLE = 2;
+		UNSET = 0;
+		DURATION = 1;
+		POSITION = 2;
+		ANGLE = 3;
 	}
 
-	MoveType move_type = 1;
+	MoveType move_type = 1 [default = UNSET];
 	DIRECTION direction = 2;
 	double move_duration = 3;
 	Position position = 4;
@@ -129,4 +131,21 @@ message StowRequest {
 message StowResponse {
 	string message = 1;
 	ControlRequestSuccessFlag success = 2;
+}
+
+message LightRequest {
+	enum LightSetting{
+	STATUS = 0;
+	ON = 1;
+	OFF = 2;
+	}
+	LightSetting light = 1 [default = UNSET]
+}
+
+message LightResponse {
+	enum LightStatus {
+		ON = 0;
+		OFF = 1;
+	}
+	status = 1;
 }

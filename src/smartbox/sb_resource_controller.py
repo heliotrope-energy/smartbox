@@ -78,6 +78,17 @@ class SmartBoxResourceController(smartbox_resource_controller_pb2_grpc.SmartBoxR
 		self.tracker_controller.stow()
 		return smartbox_resource_controller_pb2.StowResponse(message="Success")
 
+	def set_light(self, request, context):
+		if request.light == smartbox_resource_controller_pb2.LightRequest.ON:
+			self.light.on()
+		elif request.light == smartbox_resource_controller_pb2.LightRequest.OFF:
+			self.light.off()
+		if self.light.is_light_on():
+			status = smartbox_resource_controller_pb2.LightResponse.ON
+		else:
+			status = smartbox_resource_controller_pb2.LightResponse.OFF
+		return smartbox_resource_controller_pb2.LightResponse(status = status)
+
 	def _get_tracker_status_message_(self):
 		response = smartbox_resource_controller_pb2.TrackerSystemStatusResponse()
 		_, charge_data = self.charge_controller.get_all_data()
