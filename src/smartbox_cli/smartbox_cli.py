@@ -1,10 +1,12 @@
 from smartbox.sb_tracker import SmartBoxTracker
 from smartbox.sb_light import SmartBoxLight
+from smartbox.sb_charge_controller import SmartBoxChargeController
 import curses
 
 
 tracker = SmartBoxTracker()
-light = SmartBoxLight
+light = SmartBoxLight()
+controller = SmartBoxChargeController()
 
 def display_help(stdscr):
 	help_message = ""
@@ -18,13 +20,26 @@ def display_info(stdscr):
 	ns_position = tracker.get_ns_position()
 	ns_angle = tracker.get_ns_angle()
 
+	battery_voltage = controller.get_battery_voltage()
+	panel_voltage = controller.get_solar_panel_voltage()
+	load_voltage = controller.get_load_voltage()
+	charge_current = controller.get_charging_current()
+	load_current = controller.get_load_current()
+	charge_state = controller.get_charge_state()
+
 	ns_moving = "MOVING" if tracker.is_ns_moving() else ""
 	ew_moving = "MOVING" if tracker.is_ew_moving() else ""
 	light_on = "ON" if light.is_light_on() else "OFF"
 
-	stdscr.addstr(15, 0, "NS position: {:.3f}\tangle: {:.3f}\t{}".format(ns_position, ns_angle, ns_moving))
-	stdscr.addstr(16, 0, "EW position: {:.3f}\tangle: {:.3f}\t{}".format(ew_position, ew_angle, ew_moving))
-	stdscr.addstr(17, 0, "Light: {}".format(light_on))
+	stdscr.addstr(15, 0, "NS position: {:.3f} in  Angle:  {:.3f}\t{}".format(ns_position, ns_angle, ns_moving))
+	stdscr.addstr(16, 0, "EW position: {:.3f} in  Angle:  {:.3f}\t{}".format(ew_position, ew_angle, ew_moving))
+	stdscr.addstr(18, 0, "Light:       {}".format(light_on))
+	stdscr.addstr(19, 0, "Battery      {:.3f} V  Panel:  {:.3f} V".format(\
+			battery_voltage, panel_voltage))
+	stdscr.addstr(21, 0, "Load         {:.3f} V  Current {:.3f} A".format(\
+			load_voltage, load_current))
+	stdscr.addstr(22, 0, "Batt Charge  {:.3f} A    State   {}".format(\
+			charge_current, charge_state))
 
 
 def handle_key(stdscr, key_press):

@@ -70,13 +70,13 @@ class SmartBoxTracker:
 		"""
 
 		"""
-		return self.ns_motor.value
+		return self.ns_motor.value > 0.0
 
 	def is_ew_moving(self):
 		"""
 
 		"""
-		return self.ew_motor.value
+		return self.ew_motor.value > 0.0
 
 	def move_panel_to_linear_position(self, ns_pos, ew_pos):
 		"""
