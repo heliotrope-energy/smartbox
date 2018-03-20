@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+service SmartBoxResourceController {
+	rpc get_tracker_status (TrackerSystemStatusRequest) returns (TrackerSystemStatusResponse) {}
+	rpc request_control (RequestControlRequest) returns (RequestControlResponse) {}
+	rpc relinquish_control (RelinquishControlRequest) returns (RelinquishControlResponse) {}
+	rpc move_panel (MoveRequest) returns (MoveResponse) {}
+	rpc stop (StopRequest) returns (StopResponse) {}
+	rpc stow (StowRequest) returns (StowResponse) {}
+
+}
+
+enum DIRECTION {
+	NORTH = 0;
+	EAST = 1;
+	SOUTH = 2;
+	WEST = 3;
+}
+
+enum ChargeState {
+	START = 0;
+	NIGHT_CHECK = 1;
+	DISCONNECT = 2;
+	NIGHT = 3;
+	FAULT = 4;
+	BULK_CHARGE = 5;
+	ABSORBTION = 6;
+	FLOAT = 7;
+	EQUALIZE = 8;
+}
+
+enum ControlRequestSuccessFlag {
+		SUCCESS = 0;
+		INSUFFICIENT_SECURITY_LEVEL = 1;
+		FAILURE=2;
+	}
+
+message TrackerSystemStatusRequest {
+	string message = 1;
+}
+
+message Position {
+	double ns = 1;
+	double ew = 2;
+}
+
+message MoveStatus {
+	bool ns = 1;
+	bool ew = 2;
+}
+
+message TrackerStatus {
+	Position position = 1;
+	Position angle = 2;
+	MoveStatus move_status = 3;
+	int64 current_controlling_level = 4;
+}	
+
+message ChargeControllerStatus {
+	double battery_voltage = 1;
+	double array_voltage = 2;
+	double load_voltage = 3;
+	double charge_current = 4;
+	double load_current = 5;
+
+	ChargeState charge_state = 6;
+	double energy_collected = 7;
+	double energy_expended = 8;
+}
+
+message TrackerSystemStatusResponse {
+	TrackerStatus tracker = 1;
+	ChargeControllerStatus charge_controller = 2;	
+}
+
+message RequestControlRequest {
+	string message = 1;
+	uint64 security_level = 2;
+}
+
+message RequestControlResponse {
+	string message = 1;
+	ControlRequestSuccessFlag success = 2;
+}
+
+message RelinquishControlRequest {
+	string message = 1;
+}
+
+message RelinquishControlResponse {
+	string message = 1;
+	double energy_collected = 2;
+	double energy_expended = 3;
+	ControlRequestSuccessFlag success = 4;
+}
+
+message MoveRequest {
+	enum MoveType {
+		DURATION = 0;
+		POSITION = 1;
+		ANGLE = 2;
+	}
+
+	MoveType move_type = 1;
+	DIRECTION direction = 2;
+	double move_duration = 3;
+	Position position = 4;
+	Position angle = 5;
+}
+
+message MoveResponse {
+	string message = 1;
+	ControlRequestSuccessFlag success = 2;
+}
+
+message StopRequest {
+	string message = 1;	
+}
+
+message StopResponse {
+	string message = 1;
+	ControlRequestSuccessFlag success = 2;
+}
+
+message StowRequest {
+	string message = 1;
+}
+
+message StowResponse {
+	string message = 1;
+	ControlRequestSuccessFlag success = 2;
+}
