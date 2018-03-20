@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='smartbox_resource_controller.proto',
   package='',
   syntax='proto3',
-  serialized_pb=_b('\n\"smartbox_resource_controller.proto\"-\n\x1aTrackerSystemStatusRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\"\n\x08Position\x12\n\n\x02ns\x18\x01 \x01(\x01\x12\n\n\x02\x65w\x18\x02 \x01(\x01\"$\n\nMoveStatus\x12\n\n\x02ns\x18\x01 \x01(\x08\x12\n\n\x02\x65w\x18\x02 \x01(\x08\"\x8b\x01\n\rTrackerStatus\x12\x1b\n\x08position\x18\x01 \x01(\x0b\x32\t.Position\x12\x18\n\x05\x61ngle\x18\x02 \x01(\x0b\x32\t.Position\x12 \n\x0bmove_status\x18\x03 \x01(\x0b\x32\x0b.MoveStatus\x12!\n\x19\x63urrent_controlling_level\x18\x04 \x01(\x03\"\xe3\x01\n\x16\x43hargeControllerStatus\x12\x17\n\x0f\x62\x61ttery_voltage\x18\x01 \x01(\x01\x12\x15\n\rarray_voltage\x18\x02 \x01(\x01\x12\x14\n\x0cload_voltage\x18\x03 \x01(\x01\x12\x16\n\x0e\x63harge_current\x18\x04 \x01(\x01\x12\x14\n\x0cload_current\x18\x05 \x01(\x01\x12\"\n\x0c\x63harge_state\x18\x06 \x01(\x0e\x32\x0c.ChargeState\x12\x18\n\x10\x65nergy_collected\x18\x07 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x08 \x01(\x01\"r\n\x1bTrackerSystemStatusResponse\x12\x1f\n\x07tracker\x18\x01 \x01(\x0b\x32\x0e.TrackerStatus\x12\x32\n\x11\x63harge_controller\x18\x02 \x01(\x0b\x32\x17.ChargeControllerStatus\"@\n\x15RequestControlRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x16\n\x0esecurity_level\x18\x02 \x01(\x04\"V\n\x16RequestControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12+\n\x07success\x18\x02 \x01(\x0e\x32\x1a.ControlRequestSuccessFlag\"+\n\x18RelinquishControlRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x8c\x01\n\x19RelinquishControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x18\n\x10\x65nergy_collected\x18\x02 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x03 \x01(\x01\x12+\n\x07success\x18\x04 \x01(\x0e\x32\x1a.ControlRequestSuccessFlag\"\xd7\x01\n\x0bMoveRequest\x12(\n\tmove_type\x18\x01 \x01(\x0e\x32\x15.MoveRequest.MoveType\x12\x1d\n\tdirection\x18\x02 \x01(\x0e\x32\n.DIRECTION\x12\x15\n\rmove_duration\x18\x03 \x01(\x01\x12\x1b\n\x08position\x18\x04 \x01(\x0b\x32\t.Position\x12\x18\n\x05\x61ngle\x18\x05 \x01(\x0b\x32\t.Position\"1\n\x08MoveType\x12\x0c\n\x08\x44URATION\x10\x00\x12\x0c\n\x08POSITION\x10\x01\x12\t\n\x05\x41NGLE\x10\x02\"L\n\x0cMoveResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12+\n\x07success\x18\x02 \x01(\x0e\x32\x1a.ControlRequestSuccessFlag\"\x1e\n\x0bStopRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"L\n\x0cStopResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12+\n\x07success\x18\x02 \x01(\x0e\x32\x1a.ControlRequestSuccessFlag\"\x1e\n\x0bStowRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"L\n\x0cStowResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12+\n\x07success\x18\x02 \x01(\x0e\x32\x1a.ControlRequestSuccessFlag*5\n\tDIRECTION\x12\t\n\x05NORTH\x10\x00\x12\x08\n\x04\x45\x41ST\x10\x01\x12\t\n\x05SOUTH\x10\x02\x12\x08\n\x04WEST\x10\x03*\x89\x01\n\x0b\x43hargeState\x12\t\n\x05START\x10\x00\x12\x0f\n\x0bNIGHT_CHECK\x10\x01\x12\x0e\n\nDISCONNECT\x10\x02\x12\t\n\x05NIGHT\x10\x03\x12\t\n\x05\x46\x41ULT\x10\x04\x12\x0f\n\x0b\x42ULK_CHARGE\x10\x05\x12\x0e\n\nABSORBTION\x10\x06\x12\t\n\x05\x46LOAT\x10\x07\x12\x0c\n\x08\x45QUALIZE\x10\x08*V\n\x19\x43ontrolRequestSuccessFlag\x12\x0b\n\x07SUCCESS\x10\x00\x12\x1f\n\x1bINSUFFICIENT_SECURITY_LEVEL\x10\x01\x12\x0b\n\x07\x46\x41ILURE\x10\x02\x32\xff\x02\n\x1aSmartBoxResourceController\x12Q\n\x12get_tracker_status\x12\x1b.TrackerSystemStatusRequest\x1a\x1c.TrackerSystemStatusResponse\"\x00\x12\x44\n\x0frequest_control\x12\x16.RequestControlRequest\x1a\x17.RequestControlResponse\"\x00\x12M\n\x12relinquish_control\x12\x19.RelinquishControlRequest\x1a\x1a.RelinquishControlResponse\"\x00\x12+\n\nmove_panel\x12\x0c.MoveRequest\x1a\r.MoveResponse\"\x00\x12%\n\x04stop\x12\x0c.StopRequest\x1a\r.StopResponse\"\x00\x12%\n\x04stow\x12\x0c.StowRequest\x1a\r.StowResponse\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\"smartbox_resource_controller.proto\"-\n\x1aTrackerSystemStatusRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\"\n\x08Position\x12\n\n\x02ns\x18\x01 \x01(\x01\x12\n\n\x02\x65w\x18\x02 \x01(\x01\"$\n\nMoveStatus\x12\n\n\x02ns\x18\x01 \x01(\x08\x12\n\n\x02\x65w\x18\x02 \x01(\x08\"\x8b\x01\n\rTrackerStatus\x12\x1b\n\x08position\x18\x01 \x01(\x0b\x32\t.Position\x12\x18\n\x05\x61ngle\x18\x02 \x01(\x0b\x32\t.Position\x12 \n\x0bmove_status\x18\x03 \x01(\x0b\x32\x0b.MoveStatus\x12!\n\x19\x63urrent_controlling_level\x18\x04 \x01(\x03\"\xe3\x01\n\x16\x43hargeControllerStatus\x12\x17\n\x0f\x62\x61ttery_voltage\x18\x01 \x01(\x01\x12\x15\n\rarray_voltage\x18\x02 \x01(\x01\x12\x14\n\x0cload_voltage\x18\x03 \x01(\x01\x12\x16\n\x0e\x63harge_current\x18\x04 \x01(\x01\x12\x14\n\x0cload_current\x18\x05 \x01(\x01\x12\"\n\x0c\x63harge_state\x18\x06 \x01(\x0e\x32\x0c.ChargeState\x12\x18\n\x10\x65nergy_collected\x18\x07 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x08 \x01(\x01\"r\n\x1bTrackerSystemStatusResponse\x12\x1f\n\x07tracker\x18\x01 \x01(\x0b\x32\x0e.TrackerStatus\x12\x32\n\x11\x63harge_controller\x18\x02 \x01(\x0b\x32\x17.ChargeControllerStatus\"@\n\x15RequestControlRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x16\n\x0esecurity_level\x18\x02 \x01(\x04\"V\n\x16RequestControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12+\n\x07success\x18\x02 \x01(\x0e\x32\x1a.ControlRequestSuccessFlag\"+\n\x18RelinquishControlRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x8c\x01\n\x19RelinquishControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x18\n\x10\x65nergy_collected\x18\x02 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x03 \x01(\x01\x12+\n\x07success\x18\x04 \x01(\x0e\x32\x1a.ControlRequestSuccessFlag\"\xe2\x01\n\x0bMoveRequest\x12(\n\tmove_type\x18\x01 \x01(\x0e\x32\x15.MoveRequest.MoveType\x12\x1d\n\tdirection\x18\x02 \x01(\x0e\x32\n.DIRECTION\x12\x15\n\rmove_duration\x18\x03 \x01(\x01\x12\x1b\n\x08position\x18\x04 \x01(\x0b\x32\t.Position\x12\x18\n\x05\x61ngle\x18\x05 \x01(\x0b\x32\t.Position\"<\n\x08MoveType\x12\t\n\x05UNSET\x10\x00\x12\x0c\n\x08\x44URATION\x10\x01\x12\x0c\n\x08POSITION\x10\x02\x12\t\n\x05\x41NGLE\x10\x03\"L\n\x0cMoveResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12+\n\x07success\x18\x02 \x01(\x0e\x32\x1a.ControlRequestSuccessFlag\"\x1e\n\x0bStopRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"L\n\x0cStopResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12+\n\x07success\x18\x02 \x01(\x0e\x32\x1a.ControlRequestSuccessFlag\"\x1e\n\x0bStowRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"L\n\x0cStowResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12+\n\x07success\x18\x02 \x01(\x0e\x32\x1a.ControlRequestSuccessFlag\"f\n\x0cLightRequest\x12)\n\x05light\x18\x01 \x01(\x0e\x32\x1a.LightRequest.LightSetting\"+\n\x0cLightSetting\x12\n\n\x06STATUS\x10\x00\x12\x06\n\x02ON\x10\x01\x12\x07\n\x03OFF\x10\x02\"[\n\rLightResponse\x12*\n\x06status\x18\x01 \x01(\x0e\x32\x1a.LightResponse.LightStatus\"\x1e\n\x0bLightStatus\x12\x06\n\x02ON\x10\x00\x12\x07\n\x03OFF\x10\x01*5\n\tDIRECTION\x12\t\n\x05NORTH\x10\x00\x12\x08\n\x04\x45\x41ST\x10\x01\x12\t\n\x05SOUTH\x10\x02\x12\x08\n\x04WEST\x10\x03*\x89\x01\n\x0b\x43hargeState\x12\t\n\x05START\x10\x00\x12\x0f\n\x0bNIGHT_CHECK\x10\x01\x12\x0e\n\nDISCONNECT\x10\x02\x12\t\n\x05NIGHT\x10\x03\x12\t\n\x05\x46\x41ULT\x10\x04\x12\x0f\n\x0b\x42ULK_CHARGE\x10\x05\x12\x0e\n\nABSORBTION\x10\x06\x12\t\n\x05\x46LOAT\x10\x07\x12\x0c\n\x08\x45QUALIZE\x10\x08*V\n\x19\x43ontrolRequestSuccessFlag\x12\x0b\n\x07SUCCESS\x10\x00\x12\x1f\n\x1bINSUFFICIENT_SECURITY_LEVEL\x10\x01\x12\x0b\n\x07\x46\x41ILURE\x10\x02\x32\xad\x03\n\x1aSmartBoxResourceController\x12Q\n\x12get_tracker_status\x12\x1b.TrackerSystemStatusRequest\x1a\x1c.TrackerSystemStatusResponse\"\x00\x12\x44\n\x0frequest_control\x12\x16.RequestControlRequest\x1a\x17.RequestControlResponse\"\x00\x12M\n\x12relinquish_control\x12\x19.RelinquishControlRequest\x1a\x1a.RelinquishControlResponse\"\x00\x12+\n\nmove_panel\x12\x0c.MoveRequest\x1a\r.MoveResponse\"\x00\x12%\n\x04stop\x12\x0c.StopRequest\x1a\r.StopResponse\"\x00\x12%\n\x04stow\x12\x0c.StowRequest\x1a\r.StowResponse\"\x00\x12,\n\tset_light\x12\r.LightRequest\x1a\x0e.LightResponse\"\x00\x62\x06proto3')
 )
 
 _DIRECTION = _descriptor.EnumDescriptor(
@@ -48,8 +48,8 @@ _DIRECTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1505,
-  serialized_end=1558,
+  serialized_start=1713,
+  serialized_end=1766,
 )
 _sym_db.RegisterEnumDescriptor(_DIRECTION)
 
@@ -99,8 +99,8 @@ _CHARGESTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1561,
-  serialized_end=1698,
+  serialized_start=1769,
+  serialized_end=1906,
 )
 _sym_db.RegisterEnumDescriptor(_CHARGESTATE)
 
@@ -126,8 +126,8 @@ _CONTROLREQUESTSUCCESSFLAG = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1700,
-  serialized_end=1786,
+  serialized_start=1908,
+  serialized_end=1994,
 )
 _sym_db.RegisterEnumDescriptor(_CONTROLREQUESTSUCCESSFLAG)
 
@@ -157,24 +157,76 @@ _MOVEREQUEST_MOVETYPE = _descriptor.EnumDescriptor(
   file=DESCRIPTOR,
   values=[
     _descriptor.EnumValueDescriptor(
-      name='DURATION', index=0, number=0,
+      name='UNSET', index=0, number=0,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='POSITION', index=1, number=1,
+      name='DURATION', index=1, number=1,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='ANGLE', index=2, number=2,
+      name='POSITION', index=2, number=2,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='ANGLE', index=3, number=3,
       options=None,
       type=None),
   ],
   containing_type=None,
   options=None,
   serialized_start=1156,
-  serialized_end=1205,
+  serialized_end=1216,
 )
 _sym_db.RegisterEnumDescriptor(_MOVEREQUEST_MOVETYPE)
+
+_LIGHTREQUEST_LIGHTSETTING = _descriptor.EnumDescriptor(
+  name='LightSetting',
+  full_name='LightRequest.LightSetting',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='STATUS', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='ON', index=1, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='OFF', index=2, number=2,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=1575,
+  serialized_end=1618,
+)
+_sym_db.RegisterEnumDescriptor(_LIGHTREQUEST_LIGHTSETTING)
+
+_LIGHTRESPONSE_LIGHTSTATUS = _descriptor.EnumDescriptor(
+  name='LightStatus',
+  full_name='LightResponse.LightStatus',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='ON', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='OFF', index=1, number=1,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=1681,
+  serialized_end=1711,
+)
+_sym_db.RegisterEnumDescriptor(_LIGHTRESPONSE_LIGHTSTATUS)
 
 
 _TRACKERSYSTEMSTATUSREQUEST = _descriptor.Descriptor(
@@ -669,7 +721,7 @@ _MOVEREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=990,
-  serialized_end=1205,
+  serialized_end=1216,
 )
 
 
@@ -706,8 +758,8 @@ _MOVERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1207,
-  serialized_end=1283,
+  serialized_start=1218,
+  serialized_end=1294,
 )
 
 
@@ -737,8 +789,8 @@ _STOPREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1285,
-  serialized_end=1315,
+  serialized_start=1296,
+  serialized_end=1326,
 )
 
 
@@ -775,8 +827,8 @@ _STOPRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1317,
-  serialized_end=1393,
+  serialized_start=1328,
+  serialized_end=1404,
 )
 
 
@@ -806,8 +858,8 @@ _STOWREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1395,
-  serialized_end=1425,
+  serialized_start=1406,
+  serialized_end=1436,
 )
 
 
@@ -844,8 +896,72 @@ _STOWRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1427,
-  serialized_end=1503,
+  serialized_start=1438,
+  serialized_end=1514,
+)
+
+
+_LIGHTREQUEST = _descriptor.Descriptor(
+  name='LightRequest',
+  full_name='LightRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='light', full_name='LightRequest.light', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _LIGHTREQUEST_LIGHTSETTING,
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1516,
+  serialized_end=1618,
+)
+
+
+_LIGHTRESPONSE = _descriptor.Descriptor(
+  name='LightResponse',
+  full_name='LightResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='status', full_name='LightResponse.status', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _LIGHTRESPONSE_LIGHTSTATUS,
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1620,
+  serialized_end=1711,
 )
 
 _TRACKERSTATUS.fields_by_name['position'].message_type = _POSITION
@@ -864,6 +980,10 @@ _MOVEREQUEST_MOVETYPE.containing_type = _MOVEREQUEST
 _MOVERESPONSE.fields_by_name['success'].enum_type = _CONTROLREQUESTSUCCESSFLAG
 _STOPRESPONSE.fields_by_name['success'].enum_type = _CONTROLREQUESTSUCCESSFLAG
 _STOWRESPONSE.fields_by_name['success'].enum_type = _CONTROLREQUESTSUCCESSFLAG
+_LIGHTREQUEST.fields_by_name['light'].enum_type = _LIGHTREQUEST_LIGHTSETTING
+_LIGHTREQUEST_LIGHTSETTING.containing_type = _LIGHTREQUEST
+_LIGHTRESPONSE.fields_by_name['status'].enum_type = _LIGHTRESPONSE_LIGHTSTATUS
+_LIGHTRESPONSE_LIGHTSTATUS.containing_type = _LIGHTRESPONSE
 DESCRIPTOR.message_types_by_name['TrackerSystemStatusRequest'] = _TRACKERSYSTEMSTATUSREQUEST
 DESCRIPTOR.message_types_by_name['Position'] = _POSITION
 DESCRIPTOR.message_types_by_name['MoveStatus'] = _MOVESTATUS
@@ -880,6 +1000,8 @@ DESCRIPTOR.message_types_by_name['StopRequest'] = _STOPREQUEST
 DESCRIPTOR.message_types_by_name['StopResponse'] = _STOPRESPONSE
 DESCRIPTOR.message_types_by_name['StowRequest'] = _STOWREQUEST
 DESCRIPTOR.message_types_by_name['StowResponse'] = _STOWRESPONSE
+DESCRIPTOR.message_types_by_name['LightRequest'] = _LIGHTREQUEST
+DESCRIPTOR.message_types_by_name['LightResponse'] = _LIGHTRESPONSE
 DESCRIPTOR.enum_types_by_name['DIRECTION'] = _DIRECTION
 DESCRIPTOR.enum_types_by_name['ChargeState'] = _CHARGESTATE
 DESCRIPTOR.enum_types_by_name['ControlRequestSuccessFlag'] = _CONTROLREQUESTSUCCESSFLAG
@@ -997,6 +1119,20 @@ StowResponse = _reflection.GeneratedProtocolMessageType('StowResponse', (_messag
   ))
 _sym_db.RegisterMessage(StowResponse)
 
+LightRequest = _reflection.GeneratedProtocolMessageType('LightRequest', (_message.Message,), dict(
+  DESCRIPTOR = _LIGHTREQUEST,
+  __module__ = 'smartbox_resource_controller_pb2'
+  # @@protoc_insertion_point(class_scope:LightRequest)
+  ))
+_sym_db.RegisterMessage(LightRequest)
+
+LightResponse = _reflection.GeneratedProtocolMessageType('LightResponse', (_message.Message,), dict(
+  DESCRIPTOR = _LIGHTRESPONSE,
+  __module__ = 'smartbox_resource_controller_pb2'
+  # @@protoc_insertion_point(class_scope:LightResponse)
+  ))
+_sym_db.RegisterMessage(LightResponse)
+
 
 
 _SMARTBOXRESOURCECONTROLLER = _descriptor.ServiceDescriptor(
@@ -1005,8 +1141,8 @@ _SMARTBOXRESOURCECONTROLLER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   options=None,
-  serialized_start=1789,
-  serialized_end=2172,
+  serialized_start=1997,
+  serialized_end=2426,
   methods=[
   _descriptor.MethodDescriptor(
     name='get_tracker_status',
@@ -1060,6 +1196,15 @@ _SMARTBOXRESOURCECONTROLLER = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_STOWREQUEST,
     output_type=_STOWRESPONSE,
+    options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='set_light',
+    full_name='SmartBoxResourceController.set_light',
+    index=6,
+    containing_service=None,
+    input_type=_LIGHTREQUEST,
+    output_type=_LIGHTRESPONSE,
     options=None,
   ),
 ])
