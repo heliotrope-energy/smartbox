@@ -7,6 +7,7 @@ import grpc
 
 from smartbox.sb_tracker import SmartBoxTracker
 from smartbox.sb_charge_controller import SmartBoxChargeController
+from smartbox.sb_light import SmartBoxLight
 
 import smartbox_resource_controller_pb2
 import smartbox_resource_controller_pb2_grpc
@@ -23,6 +24,7 @@ class SmartBoxResourceController(smartbox_resource_controller_pb2_grpc.SmartBoxR
 	def __init__(self):
 		self.charge_controller = SmartBoxChargeController()
 		self.tracker_controller = SmartBoxTracker()
+		self.light = SmartBoxLight()
 		self.energy_collected_at_start = 0.0
 		self.energy_collected_at_current_time = 0.0
 		self.energy_expended_at_start = 0.0
