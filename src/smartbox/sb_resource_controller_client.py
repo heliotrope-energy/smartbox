@@ -140,17 +140,41 @@ class SmartBoxResourceControllerClient():
 		self.stub.stop(request)
 
 	def get_light_status(self):
-		request = smartbox_resource_controller_pb2.StopRequest()
-		response = self.stub.stop(request)
+		request = smartbox_resource_controller_pb2.LightRequest()
+		response = self.stub.set_light(request)
 		status = response.status == smartbox_resource_controller_pb2.LightResponse.ON
 		return status
 
 	def set_light_status(self, turn_light_on):
 		status = smartbox_resource_controller_pb2.LightRequest.ON if turn_light_on else smartbox_resource_controller_pb2.LightRequest.OFF
-		request = smartbox_resource_controller_pb2.StopRequest(light = status)
-		response = self.stub.stop(request)
+		request = smartbox_resource_controller_pb2.LightRequest(light = status)
+		response = self.stub.set_light(request)
 		status = response.status == smartbox_resource_controller_pb2.LightResponse.ON
 		return status
+
+	def get_battery_voltage(self):
+		status = self._request_status_()
+        return status.charge_controller.battery_voltage
+
+    def get_solar_panel_voltage(self):
+    	status = self._request_status_()
+        return status.charge_controller.array_voltage
+
+    def get_load_voltage(self):
+    	status = self._request_status_()
+        return status.charge_controller.load_voltage
+
+    def get_charging_current(self):
+    	status = self._request_status_()
+        return status.charge_controller.charge_current
+
+    def get_load_current(self):
+    	status = self._request_status_()
+        return status.charge_controller.load_current
+
+    def get_charge_status(self):
+    	status = self._request_status_()
+    	return status.charge_controller.charge_state
 
 	def _request_status_(self):
 		request = smartbox_resource_controller_pb2.TrackerSystemStatusRequest(message = "hello")
@@ -198,6 +222,13 @@ if __name__ == "__main__":
 	print(client.get_light_status())
 	print(client.set_light_status(False))
 	print(client.get_light_status())
+	print(client.get_battery_voltage())
+	print(client.get_solar_panel_voltage())
+	print(client.get_load_voltage())
+	print(client.get_charging_current())
+	print(client.get_load_current())
+	print(client.get_charge_status())
+
 	
 
 
