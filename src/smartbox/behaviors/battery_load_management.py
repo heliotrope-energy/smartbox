@@ -1,5 +1,6 @@
 from smartbox.sb_resource_controller_client import SmartBoxResourceControllerClient
 import smartbox_resource_controller_pb2 as sb_pb2
+
 def process_for_state(client):
 	charge_state = client.get_charge_status()
 	is_light_on = client.get_light_status()

@@ -15,37 +15,37 @@ class SmartBoxResourceControllerStub(object):
       channel: A grpc.Channel.
     """
     self.get_tracker_status = channel.unary_unary(
-        '/SmartBoxResourceController/get_tracker_status',
+        '/smartbox.SmartBoxResourceController/get_tracker_status',
         request_serializer=smartbox__resource__controller__pb2.TrackerSystemStatusRequest.SerializeToString,
         response_deserializer=smartbox__resource__controller__pb2.TrackerSystemStatusResponse.FromString,
         )
     self.request_control = channel.unary_unary(
-        '/SmartBoxResourceController/request_control',
+        '/smartbox.SmartBoxResourceController/request_control',
         request_serializer=smartbox__resource__controller__pb2.RequestControlRequest.SerializeToString,
         response_deserializer=smartbox__resource__controller__pb2.RequestControlResponse.FromString,
         )
     self.relinquish_control = channel.unary_unary(
-        '/SmartBoxResourceController/relinquish_control',
+        '/smartbox.SmartBoxResourceController/relinquish_control',
         request_serializer=smartbox__resource__controller__pb2.RelinquishControlRequest.SerializeToString,
         response_deserializer=smartbox__resource__controller__pb2.RelinquishControlResponse.FromString,
         )
     self.move_panel = channel.unary_unary(
-        '/SmartBoxResourceController/move_panel',
+        '/smartbox.SmartBoxResourceController/move_panel',
         request_serializer=smartbox__resource__controller__pb2.MoveRequest.SerializeToString,
         response_deserializer=smartbox__resource__controller__pb2.MoveResponse.FromString,
         )
     self.stop = channel.unary_unary(
-        '/SmartBoxResourceController/stop',
+        '/smartbox.SmartBoxResourceController/stop',
         request_serializer=smartbox__resource__controller__pb2.StopRequest.SerializeToString,
         response_deserializer=smartbox__resource__controller__pb2.StopResponse.FromString,
         )
     self.stow = channel.unary_unary(
-        '/SmartBoxResourceController/stow',
+        '/smartbox.SmartBoxResourceController/stow',
         request_serializer=smartbox__resource__controller__pb2.StowRequest.SerializeToString,
         response_deserializer=smartbox__resource__controller__pb2.StowResponse.FromString,
         )
     self.set_light = channel.unary_unary(
-        '/SmartBoxResourceController/set_light',
+        '/smartbox.SmartBoxResourceController/set_light',
         request_serializer=smartbox__resource__controller__pb2.LightRequest.SerializeToString,
         response_deserializer=smartbox__resource__controller__pb2.LightResponse.FromString,
         )
@@ -144,5 +144,5 @@ def add_SmartBoxResourceControllerServicer_to_server(servicer, server):
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
-      'SmartBoxResourceController', rpc_method_handlers)
+      'smartbox.SmartBoxResourceController', rpc_method_handlers)
   server.add_generic_rpc_handlers((generic_handler,))
