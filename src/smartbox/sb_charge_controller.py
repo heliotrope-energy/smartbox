@@ -138,7 +138,7 @@ class SmartBoxChargeController:
         data = {}
         data_by_addr = {}
         if register_values is None:
-            return data
+            return data, data_by_addr
 
         for addr, (desc, units, conversion) in registers.items():
             offset = addr - self.start_addr
