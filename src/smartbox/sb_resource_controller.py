@@ -21,7 +21,7 @@ class SmartBoxResourceController(smartbox_resource_controller_pb2_grpc.SmartBoxR
 	security_level_queue = Queue()
 
 	def __init__(self):
-		self.charge_controller = SmartBoxController()
+		self.charge_controller = SmartBoxChargeController()
 		self.tracker_controller = SmartBoxTracker()
 		self.energy_collected_at_start = 0.0
 		self.energy_collected_at_current_time = 0.0

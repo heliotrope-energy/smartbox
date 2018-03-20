@@ -77,6 +77,29 @@ class SmartBoxChargeController:
     FLOAT = 7
     EQUALIZE = 8
 
+    ADC_VB_F = 0x0008
+    ADC_VA_F = 0x0009
+    ADC_VL_F = 0x000A
+    ADC_IC_F = 0x000B
+    ADC_IL_F = 0x000C
+    T_HS = 0x000D
+    T_BATT = 0x000E
+    T_AMB = 0x000F
+    T_RTS = 0x0010
+    CHARGE_STATE = 0x0011
+    ARRAY_FAULT = 0x0012
+    VB_F = 0x0013
+    VB_REF = 0x0014
+    AHC_R_HI = 0x0015
+    AHC_R_LO = 0x0016
+    AHC_T_HI = 0x0017
+    AHC_T_LO = 0x0018
+    KWHC = 0x0019
+
+
+
+
+
     def __init__(self):
         self.server = modbus_rtu.RtuMaster(serial.Serial(port=PORT, baudrate=9600, bytesize=8, parity='N', stopbits=2, xonxoff=0))
         self.server.set_timeout(5.0)
@@ -119,7 +142,8 @@ class SmartBoxChargeController:
         for addr, (desc, units, conversion) in registers.items():
             offset = addr - self.start_addr
             reg_value = register_values[offset]
-            full_description = desc + " " + units
+            units_str = "" if units is None else units
+            full_description = desc + " " + units_str
             data[full_description] = conversion(reg_value)
         return data
 
