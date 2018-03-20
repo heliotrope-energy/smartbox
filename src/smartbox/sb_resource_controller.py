@@ -62,11 +62,11 @@ class SmartBoxResourceController(smartbox_resource_controller_pb2_grpc.SmartBoxR
 		elif move_type == smartbox_resource_controller_pb2.MoveRequest.POSITION:
 			ns_position = request.position.ns
 			ew_position = request.position.ew
-			self.tracker_controller.move_to_linear_position(ns_position, ew_position)
+			self.tracker_controller.move_panel_to_linear_position(ns_position, ew_position)
 		elif move_type == smartbox_resource_controller_pb2.MoveRequest.ANGLE:
 			ns_angle = request.angle.ns
 			ew_angle = request.angle.ew
-			self.tracker_controller.move_to_angular_position(ns_angle, ew_angle)
+			self.tracker_controller.move_panel_to_angular_position(ns_angle, ew_angle)
 
 
 
