@@ -82,23 +82,23 @@ class SmartBoxResourceController(smartbox_resource_controller_pb2_grpc.SmartBoxR
 		response = smartbox_resource_controller_pb2.TrackerSystemStatusResponse()
 		charge_data = self.charge_controller.get_all_data()
 
-		response.position_ns = self.tracker_controller.get_ns_position()
-		response.position_ew = self.tracker_controller.get_ew_position()
-		response.angle_ns = self.tracker_controller.get_ns_angle()
-		response.angle_ew = self.tracker_controller.get_ew_angle()
-		response.is_moving_ns = self.tracker_controller.is_ns_moving()
-		response.is_moving_ew = self.tracker_controller.is_ew_moving()
-		response.current_controlling_level = self.controlling_security_level
+		response.tracker.position.ns = self.tracker_controller.get_ns_position()
+		response.tracker.position.ew = self.tracker_controller.get_ew_position()
+		response.tracker.angle.ns = self.tracker_controller.get_ns_angle()
+		response.tracker.angle.ew = self.tracker_controller.get_ew_angle()
+		response.tracker.move_status.ns= self.tracker_controller.is_ns_moving()
+		response.tracker.move_status.ns = self.tracker_controller.is_ew_moving()
+		response.tracker.current_controlling_level = self.controlling_security_level
 
-		response.battery_voltage = charge_data[SmartBoxController.ADC_VB_F]
-		response.array_voltage = charge_data[SmartBoxController.ADC_VA_F]
-		response.load_voltage = charge_data[SmartBoxController.ADC_VL_F]
-		response.charge_current = charge_data[SmartBoxController.ADC_IC_F]
-		response.load_current = charge_data[SmartBoxController.ADC_IL_F]
-		response.charge_state = charge_data[SmartBoxController.CHARGE_STATE]
-		response.energy_collected = self.energy_collected_at_current_time - \
+		response.charge_controller.battery_voltage = charge_data[SmartBoxController.ADC_VB_F]
+		response.charge_controller.array_voltage = charge_data[SmartBoxController.ADC_VA_F]
+		response.charge_controller.load_voltage = charge_data[SmartBoxController.ADC_VL_F]
+		response.charge_controller.charge_current = charge_data[SmartBoxController.ADC_IC_F]
+		response.charge_controller.load_current = charge_data[SmartBoxController.ADC_IL_F]
+		response.charge_controller.charge_state = charge_data[SmartBoxController.CHARGE_STATE]
+		response.charge_controller.energy_collected = self.energy_collected_at_current_time - \
 			self.energy_collected_at_start
-		response.energy_expended = self.energy_expended_at_current_time	- \
+		response.charge_controller.energy_expended = self.energy_expended_at_current_time	- \
 			self.energy_expended_at_start
 
 		return response
