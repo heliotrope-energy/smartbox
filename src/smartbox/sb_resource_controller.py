@@ -82,12 +82,12 @@ class SmartBoxResourceController(smartbox_resource_controller_pb2_grpc.SmartBoxR
 		response = smartbox_resource_controller_pb2.TrackerSystemStatusResponse()
 		charge_data = self.charge_controller.get_all_data()
 
-		response.position_ns = tracker_controller.get_ns_position()
-		response.position_ew = tracker_controller.get_ew_position()
-		response.angle_ns = tracker_controller.get_ns_angle()
-		response.angle_ew = tracker_controller.get_ew_angle()
-		response.is_moving_ns = tracker_controller.is_ns_moving()
-		response.is_moving_ew = tracker_controller.is_ew_moving()
+		response.position_ns = self.tracker_controller.get_ns_position()
+		response.position_ew = self.tracker_controller.get_ew_position()
+		response.angle_ns = self.tracker_controller.get_ns_angle()
+		response.angle_ew = self.tracker_controller.get_ew_angle()
+		response.is_moving_ns = self.tracker_controller.is_ns_moving()
+		response.is_moving_ew = self.tracker_controller.is_ew_moving()
 		response.current_controlling_level = self.controlling_security_level
 
 		response.battery_voltage = charge_data[SmartBoxController.ADC_VB_F]
