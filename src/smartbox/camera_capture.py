@@ -8,15 +8,16 @@ _SLEEP_TIME_ = 0.1
 _TMP_FILENAME_ = "/var/www/html/images/image.png"
 _STREAM_FILENAME_ = "/var/www/html/images/most_recent.png"
 
-def capture_image():
+def capture_image(cap):
   ok, fr = self.cap.read()
   fr  = cv2.flip(fr, 1) 
   cv2image = cv2.cvtColor(fr, cv2.COLOR_BGR2RGBA)
   cv2.imwrite(_TMP_FILENAME_, cv2image)
 
 def main():
+  cap = cv2.VideoCapture(0)
   while True:
-    capture_image()
+    capture_image(cap)
     time.sleep(_SLEEP_TIME_)
 
 if __name__ == "__main__":
