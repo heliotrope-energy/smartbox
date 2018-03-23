@@ -8,6 +8,7 @@ import smartbox_resource_controller_pb2_grpc
 class SmartBoxResourceControllerClient():
 	def __init__(self, security_level):
 		self.channel = grpc.insecure_channel('138.16.161.117:50051')
+		self.image_url = "http://138.16.161.117/images/image.png"
 		self.stub = smartbox_resource_controller_pb2_grpc.SmartBoxResourceControllerStub(self.channel)
 		self.security_level = security_level
 
@@ -179,7 +180,7 @@ class SmartBoxResourceControllerClient():
 		return status.charge_controller.charge_state
 
 	def get_image(self):
-		resp = urllib.urlopen(url)
+		resp = urllib.urlopen(self.image_url)
 		image = np.asarray(bytearray(resp.read()), dtype="uint8")
 		image = cv2.imdecode(image, cv2.IMREAD_COLOR)
 		return image

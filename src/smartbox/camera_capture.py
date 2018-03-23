@@ -9,7 +9,7 @@ _TMP_FILENAME_ = "/var/www/html/images/image.png"
 _STREAM_FILENAME_ = "/var/www/html/images/most_recent.png"
 
 def capture_image(cap):
-  ok, fr = self.cap.read()
+  ok, fr = cap.read()
   fr  = cv2.flip(fr, 1) 
   cv2image = cv2.cvtColor(fr, cv2.COLOR_BGR2RGBA)
   cv2.imwrite(_TMP_FILENAME_, cv2image)

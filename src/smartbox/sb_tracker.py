@@ -1,7 +1,7 @@
 from gpiozero import Motor, CPUTemperature
 from threading import Thread
 import Adafruit_ADS1x15
-
+import math
 class SmartBoxTracker:
 	def __init__(self):
 		self.TOLERANCE = 0.1
@@ -10,6 +10,9 @@ class SmartBoxTracker:
 		self.EW_PIN = 1
 		self.NS_PIN = 0
 		self.scale = 6.144/32767
+		self.EW_retracted_length = 12.0
+		self.NS_retracted_length = 6.0
+
 
 		self.limits = {self.NS_PIN:[0,6.0], self.EW_PIN:[0,12.0]}
 		self.ns_motor = Motor(26,20)
@@ -91,7 +94,7 @@ class SmartBoxTracker:
 		
 		self.ns_thread = \
 			Thread(target = self._move_axis_to_linear_position_, \
-				args = (self.EW_PIN, ew_pos))
+				args = (self.NS_PIN, ns_pos))
 		
 		self.ew_thread.start()
 		self.ns_thread.start()
@@ -106,6 +109,17 @@ class SmartBoxTracker:
 				ew_angle: The angle to move the panel from the east-west axis.
 						  West is positive
 		"""
+
+		self.ew_thread = \
+			Thread(target = self._move_ew_axis_to_angular_position_, \
+				args = (ew_angle,))
+		
+		self.ns_thread = \
+			Thread(target = self._move_ns_axis_to_angular_position_, \
+				args = (ns_angle,))
+		
+		self.ew_thread.start()
+		self.ns_thread.start()
 
 	def stow(self):
 		"""
@@ -163,6 +177,51 @@ class SmartBoxTracker:
 		self.stop_ew()
 
 
+	def _calculate_angle_from_position_(self, vert_dist, mount_point_dist, act_offset, total_length_actuator):
+		panel_mount_point_to_mast = math.sqrt(vert_dist ** 2.0 + act_offset ** 2.0)
+		angle1 = math.atan(act_offset / vert_dist)
+
+		angle2 = math.acon((mount_point_dist ** 2.0 + panel_mount_point_to_mast ** 2.0 - total_length_actuator ** 2.0) / \
+				(2 * mount_point_dist * panel_mount_point_to_mast))
+		return 90.0 - (angle1 + angle2)
+
+	def _calculate_ew_angle_from_position(self, extended_length):
+		total_length = self.EW_retracted_length + extended_length
+		return self._calculate_angle_from_position_(20, 6, 2, total_length)
+
+	def _calculate_ns_angle_from_position(self, extended_length):
+		total_length = self.NS_retracted_length + extended_length
+		return self._calculate_angle_from_position_(20, 6, 2, total_length)
+
+	def _calculate_ew_position_from_angle(self, desired_angle):
+		a = 24.25
+		b = 2.1875
+		c = 8.625
+		total_length = self._calculate_total_length_from_angle(desired_angle, a ,b ,c )
+
+		extended_length = total_length - 18.125
+		return extended_length
+
+	def _calculate_ns_position_from_angle(self, desired_angle):
+		a = 16.75
+		b = 2.5
+		c = 8.625
+		total_length = self._calculate_total_length_from_angle(desired_angle, a ,b ,c )
+
+		extended_length = total_length - 12.125
+		return extended_length
+
+	def _calculate_total_length_from_angle(self, desired_angle, a, b, c):
+		# a: vertical distance
+		# b: actuator offset
+		# c: panel_mount_offset
+		# desired_angle: 
+
+		v = math.sqrt(a**2 + c**2.0 - 2.0 * a * c * math.cos(desired_angle))
+		angle1 = math.acos((v**2.0 + a**2.0 - c**2.0) / (2 * v * a))
+		total_length = math.sqrt(v**2.0 + b**2.0 - 2* v * b * math.cos(90.0 - angle1))
+		return total_length
+
 	def _actuator_voltage_to_position_(self, pin_num, voltage): 
 		scale, offset = self.actuator_conversions[pin_num]
 		position = voltage * scale + offset
@@ -195,6 +254,15 @@ class SmartBoxTracker:
 
 		actuator.stop()
 
+	def _move_ew_axis_to_angular_position_(self, angle):
+		desired_position = self._calculate_ew_position_from_angle(angle)
+		print("EW Position {}: Angle {}".format(desired_position, angle))
+		self._move_axis_to_linear_position_(self.EW_PIN, desired_position)
+
+	def _move_ns_axis_to_angular_position_(self, angle):
+		desired_position = self._calculate_ns_position_from_angle(angle)
+		print("NS Position {}: Angle {}".format(desired_position, angle))
+		self._move_axis_to_linear_position_(self.NS_PIN, desired_position)
 		
 
 	def _move_axis_(self, direction_pin, forward_or_backward):
