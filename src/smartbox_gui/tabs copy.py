@@ -1,22 +1,18 @@
 #!/usr/bin/python
 
-from smartbox.sb_resource_controller_client import SmartBoxResourceControllerClient
-import smartbox.smartbox_resource_controller_pb2 as sb_pb2
-#from smartbox.sb_camera import SmartBoxCamera
-
 from tkinter import *
 from tkinter import ttk
+from gpiozero import Motor, CPUTemperature
 import time
-#import cv2
+import cv2
 from PIL import Image, ImageTk
 import numpy as np
-#import Adafruit_ADS1x15
+import Adafruit_ADS1x15
 
 
 class App:
     def __init__(self, root):
-        self.client = SmartBoxResourceControllerClient(1)
-        
+
         self.setup_grid(root)
 
         # creating Notebook that holds tabs   
@@ -26,7 +22,7 @@ class App:
         # The first tab 
         control_tab = ttk.Frame(nb) 
         nb.add(control_tab, text = 'Control')
-        # self.createButtons(control_tab)
+        self.createButtons(control_tab)
 
         # Label for updating the angle 
         self.angle = Label(control_tab)
@@ -44,8 +40,8 @@ class App:
         self.temp = Label(percepts_tab, width = 50, height = 5)
         self.temp.grid(row = 52, column = 0)
       #  self.temp.grid_propagate(0)
-      #   self.cpu = CPUTemperature()
-      #    self.update_temp()
+        self.cpu = CPUTemperature()
+        self.update_temp()
 
         info_tab = ttk.Frame(nb)
         nb.add(info_tab, text = 'Info')
@@ -62,7 +58,7 @@ class App:
 
             # wind_stow code 
         self.TOLERANCE = 0.1
-        #self.adc = Adafruit_ADS1x15.ADS1115()
+        self.adc = Adafruit_ADS1x15.ADS1115()
         self.GAIN  = 2/3
         self.EW_PIN = 1
         self.NS_PIN = 0
@@ -74,7 +70,7 @@ class App:
         self.change_position(goto_tab)
 
         self.limits = {self.NS_PIN:[0,6.0], self.EW_PIN:[0,12.0]}
-    # self.motors = {self.NS_PIN:motor_ns, self.EW_PIN:motor_ew}
+        self.motors = {self.NS_PIN:motor_ns, self.EW_PIN:motor_ew}
         
     def calculate_inches(self, pin_num, voltage): 
         if (pin_num == self.NS_PIN):
@@ -84,7 +80,7 @@ class App:
         return v_per_in
 
     def get_position(self, direction):
-        value = self.client(direction, gain=self.GAIN)
+        value = self.adc.read_adc(direction, gain=self.GAIN)
         voltage = value * self.scale
         inches =  self.calculate_inches(direction, voltage); 
         return inches
@@ -128,7 +124,7 @@ class App:
         print ("East-west {}".format(ew_str))
         print ("North-south {}".format(ns_str))
         is_error = False
-        current_pos_ew = self.client.get_ew_position()
+        current_pos_ew = self.get_position(self.EW_PIN)
         try:
             ew_pos = float(ew_str)
         except ValueError:
@@ -146,7 +142,7 @@ class App:
             self.ew_position.insert(0, ew_max)
         
 
-        current_pos_ns = self.client.get_ns_position()
+        current_pos_ns = self.get_position(self.NS_PIN)
         try:
             ns_pos = float(ns_str)
         except ValueError:
@@ -163,9 +159,8 @@ class App:
             self.ns_position.delete(0, END)
             self.ns_position.insert(0, ns_max)
             
-        if not is_error:
-            print ("Positions: {} {}".format(ns_pos, ew_pos))
-            self.client.move_panel_to_linear_position(ns_pos, ew_pos)
+        if not is_error: 
+            self.move_panel_to_position(ns_pos, ew_pos)
             
         
     def move_panel_to_position(self, ns_pos, ew_pos):
@@ -173,15 +168,13 @@ class App:
         self.move_axis_to_position(self.NS_PIN, ns_pos)
 
     def update_voltage(self):
-        self.tree.set(self.id, column = "one", value=self.client.get_battery_voltage())
+        self.tree.set(self.id, column = "one", value=self.cpu.temperature)
         self.tree.after(100, self.update_voltage)
         
     # Replace this method by the formula of angle calculation 
     def update_angle(self):
-        ns = self.client.get_ns_position()
-        ew = self.client.get_ew_position()
-        
-        self.angle.configure(text = "Position: {:.3f} {:.3f}".format(ns, ew))
+        new_time = time.strftime('%H:%M:%S')
+        self.angle.configure(text = "Angle: "+ new_time)
         self.angle.after(100, self.update_angle)
 
     def update_temp(self):
@@ -192,27 +185,41 @@ class App:
         
         imageFrame = ttk.Frame(tab, width = 350, height = 350)
         imageFrame.grid(rowspan = 50)
-        # this function makes sure that Tkinter listens to the specifications
+        # making sure that my settings hold
         imageFrame.grid_propagate(0)
+
         
-        
-        self.image_label = Label(imageFrame)
-        self.image_label.grid(row = 0, column = 1, rowspan = 10)
+
+        self.lmain = Label(imageFrame)
+        self.lmain.grid(row = 0, column = 1, rowspan = 10)
+        self.cap = cv2.VideoCapture(0)
         self.video_loop()
 
     def video_loop(self):
         
-        # Ask Stephen whether he is happy with the setup!
-        self.cv2image  = self.client.get_image()
-        
-        # Translating the image onto the gui
+        ok, fr = self.cap.read()
+        fr  = cv2.flip(fr, 1) 
+        cv2image = cv2.cvtColor(fr, cv2.COLOR_BGR2RGBA)
+        # cv2.PutText(currentframe, datetime.now().strftime("%Y.%m.%d %H:%M:%S"), (10, 30), self.timeFont, 0)
+        # making a timestamp 
         img = Image.fromarray(cv2image)
         imgtk = ImageTk.PhotoImage(image = img)
-        self.image_label.imgtk = imgtk
-        self.image_label.configure(image = imgtk)
-        self.image_label.after(10, self.video_loop)
-    
-    
+        self.lmain.imgtk = imgtk
+        self.lmain.configure(image = imgtk)
+        self.lmain.after(10, self.video_loop)     
+        
+    def move_forward(self, event, motor_name):
+        print("Moving forward")
+        motor_name.forward(speed=1)
+
+    def move_backward(self, event, motor_name):
+        print("Moving backward")
+        motor_name.backward(speed=1)
+
+    def release(self, event, motor_name):
+        print("Stopped")
+        motor_name.stop()
+
     def createButtons(self, tab):
        
         self.setup_grid(tab); 
@@ -228,23 +235,20 @@ class App:
         self.button4.grid(row = 20, column = 35)
 
         # Motor 1
-        self.button1.bind("<ButtonPress>", self.client.move_north())
-        self.button2.bind("<ButtonPress>", self.client.move_south())
+        self.button1.bind("<ButtonPress>", lambda event, arg = motor_ns: self.move_forward(event, arg))
+        self.button2.bind("<ButtonPress>", lambda event, arg = motor_ns: self.move_backward(event, arg))
 
-        self.button1.bind("<ButtonRelease>", self.client.stop_ns())
-        self.button2.bind("<ButtonRelease>", self.client.stop_ns())
+        self.button1.bind("<ButtonRelease>", lambda event, arg = motor_ns: self.release(event, arg))
+        self.button2.bind("<ButtonRelease>", lambda event, arg = motor_ns: self.release(event, arg))
       
         # Motor 2
-        self.button3.bind("<ButtonPress>", self.client.move_west())
-        self.button4.bind("<ButtonPress>", self.client.move_east())
+        self.button3.bind("<ButtonPress>", lambda event, arg = motor_ew: self.move_forward(event, arg))
+        self.button4.bind("<ButtonPress>", lambda event, arg = motor_ew: self.move_backward(event, arg))
 
-        self.button3.bind("<ButtonRelease>", self.client.stop_ew())
-        self.button4.bind("<ButtonRelease>", self.client.stop_ns())
+        self.button3.bind("<ButtonRelease>", lambda event, arg = motor_ew: self.release(event, arg))
+        self.button4.bind("<ButtonRelease>", lambda event, arg = motor_ew: self.release(event, arg))
 
-    def update_all_functions():
-        self.image_label.after(10, self.video_loop)
-    
-    
+
     #assigning weight to the cells in a grid => make sure that the positioning is as expected 
     def setup_grid(self, grid_name):
         row=0
@@ -257,6 +261,9 @@ class App:
 main = Tk()
 main.title("Python GUI")
 main.geometry('500x500')
+
+motor_ns = Motor(26,20)
+motor_ew= Motor(21,16)
 
 app = App (main)
 main.bind()
