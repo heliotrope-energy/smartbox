@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import grpc, urllib, cv2
+import grpc, urllib3, cv2
 import numpy as np
 
 import smartbox_resource_controller_pb2
@@ -11,6 +11,7 @@ class SmartBoxResourceControllerClient():
 		self.image_url = "http://138.16.161.117/images/image.png"
 		self.stub = smartbox_resource_controller_pb2_grpc.SmartBoxResourceControllerStub(self.channel)
 		self.security_level = security_level
+		self.http = urllib3.PoolManager()
 
 
 	def get_ns_position(self):
@@ -180,8 +181,8 @@ class SmartBoxResourceControllerClient():
 		return status.charge_controller.charge_state
 
 	def get_image(self):
-		resp = urllib.urlopen(self.image_url)
-		image = np.asarray(bytearray(resp.read()), dtype="uint8")
+		resp = self.http.request('GET', self.image_url)
+		image = np.asarray(bytearray(resp.data, dtype="uint8"))
 		image = cv2.imdecode(image, cv2.IMREAD_COLOR)
 		return image
 
