@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-import grpc
+import grpc, urllib, cv2
+import numpy as np
 
 import smartbox_resource_controller_pb2
 import smartbox_resource_controller_pb2_grpc
@@ -7,8 +8,10 @@ import smartbox_resource_controller_pb2_grpc
 class SmartBoxResourceControllerClient():
 	def __init__(self, security_level):
 		self.channel = grpc.insecure_channel('138.16.161.117:50051')
+		self.image_url = "http://138.16.161.117/images/image.png"
 		self.stub = smartbox_resource_controller_pb2_grpc.SmartBoxResourceControllerStub(self.channel)
 		self.security_level = security_level
+
 
 	def get_ns_position(self):
 		"""
@@ -176,6 +179,12 @@ class SmartBoxResourceControllerClient():
 		status = self._request_status_()
 		return status.charge_controller.charge_state
 
+	def get_image(self):
+		resp = urllib.urlopen(self.image_url)
+		image = np.asarray(bytearray(resp.read()), dtype="uint8")
+		image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+		return image
+
 	def _request_status_(self):
 		request = smartbox_resource_controller_pb2.TrackerSystemStatusRequest(message = "hello")
 		return self.stub.get_tracker_status(request)
@@ -213,10 +222,10 @@ if __name__ == "__main__":
 	print(client.get_ew_angle())
 	print(client.is_ew_moving())
 	print(client.is_ns_moving())
-	print(client.move_panel_to_linear_position(0.0, 0.0))
-	print(client.move_panel_to_angular_position(0.0, 0.0))
-	print(client.stow())
-	print(client.stop())
+	#print(client.move_panel_to_linear_position(4.4, 1))
+	# print(client.move_panel_to_angular_position(0.0, 0.0))
+	# print(client.stow())
+	# print(client.stop())
 	print(client.get_light_status())
 	print(client.set_light_status(True))
 	print(client.get_light_status())

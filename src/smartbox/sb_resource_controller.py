@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 from queue import Queue
 from concurrent import futures
-import time
+from threading import Thread
+import time, copy
 
 import grpc
 
@@ -29,6 +30,10 @@ class SmartBoxResourceController(smartbox_resource_controller_pb2_grpc.SmartBoxR
 		self.energy_collected_at_current_time = 0.0
 		self.energy_expended_at_start = 0.0
 		self.energy_expended_at_current_time = 0.0
+		self.charge_controller_poller = \
+			Thread(target = self._get_charge_controller_data)
+		self.charge_controller_poller.start()
+
 
 	def get_tracker_status(self, request, context):
 		return self._get_tracker_status_message_()
@@ -93,7 +98,7 @@ class SmartBoxResourceController(smartbox_resource_controller_pb2_grpc.SmartBoxR
 
 	def _get_tracker_status_message_(self):
 		response = smartbox_resource_controller_pb2.TrackerSystemStatusResponse()
-		_, charge_data = self.charge_controller.get_all_data()
+		charge_data = copy.copy(self.charge_data)
 
 		response.tracker.position.ns = self.tracker_controller.get_ns_position()
 		response.tracker.position.ew = self.tracker_controller.get_ew_position()
@@ -115,7 +120,11 @@ class SmartBoxResourceController(smartbox_resource_controller_pb2_grpc.SmartBoxR
 			self.energy_expended_at_start
 
 		return response
-				
+
+	def _get_charge_controller_data(self):
+		while True:
+			self.data, self.charge_data = self.charge_controller.get_all_data()
+			time.sleep(1)	
 
 	
 
