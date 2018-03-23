@@ -26,7 +26,7 @@ class App:
         # The first tab 
         control_tab = ttk.Frame(nb) 
         nb.add(control_tab, text = 'Control')
-        # self.createButtons(control_tab)
+        self.createButtons(control_tab)
 
         # Label for updating the angle 
         self.angle = Label(control_tab)
@@ -182,6 +182,7 @@ class App:
         ew = self.client.get_ew_position()
         
         self.angle.configure(text = "Position: {:.3f} {:.3f}".format(ns, ew))
+        
         self.angle.after(100, self.update_angle)
 
     def update_temp(self):
@@ -206,11 +207,31 @@ class App:
         self.cv2image  = self.client.get_image()
         
         # Translating the image onto the gui
-        img = Image.fromarray(cv2image)
+        img = Image.fromarray(self.cv2image)
         imgtk = ImageTk.PhotoImage(image = img)
         self.image_label.imgtk = imgtk
         self.image_label.configure(image = imgtk)
-        self.image_label.after(10, self.video_loop)
+        self.image_label.after(1000, self.video_loop)
+
+    def move_east(self, event):
+        print("Moving east")
+        self.client.move_east()
+
+    def move_west(self, event):
+        print("Moving west")
+        self.client.move_west()
+
+    def move_south(self, event):
+        print("Moving south")
+        self.client.move_south()
+
+    def move_north(self, event):
+        print("Moving north")
+        self.client.move_north()
+
+    def release(self, event):
+        print("Stopped")
+        self.client.stop()
     
     
     def createButtons(self, tab):
@@ -227,19 +248,18 @@ class App:
         self.button3.grid(row = 20, column = 15)
         self.button4.grid(row = 20, column = 35)
 
-        # Motor 1
-        self.button1.bind("<ButtonPress>", self.client.move_north())
-        self.button2.bind("<ButtonPress>", self.client.move_south())
-
-        self.button1.bind("<ButtonRelease>", self.client.stop_ns())
-        self.button2.bind("<ButtonRelease>", self.client.stop_ns())
-      
+        self.button1.bind("<ButtonPress>", lambda event: self.move_north(event))
+        self.button2.bind("<ButtonPress>", lambda event: self.move_south(event))
+        
+        self.button1.bind("<ButtonRelease>", lambda event: self.release(event))
+        self.button2.bind("<ButtonRelease>", lambda event: self.release(event))
+        
         # Motor 2
-        self.button3.bind("<ButtonPress>", self.client.move_west())
-        self.button4.bind("<ButtonPress>", self.client.move_east())
-
-        self.button3.bind("<ButtonRelease>", self.client.stop_ew())
-        self.button4.bind("<ButtonRelease>", self.client.stop_ns())
+        self.button3.bind("<ButtonPress>", lambda event: self.move_west(event))
+        self.button4.bind("<ButtonPress>", lambda event: self.move_east(event))
+        
+        self.button3.bind("<ButtonRelease>", lambda event: self.release(event))
+        self.button4.bind("<ButtonRelease>", lambda event: self.release(event))
 
     def update_all_functions():
         self.image_label.after(10, self.video_loop)
