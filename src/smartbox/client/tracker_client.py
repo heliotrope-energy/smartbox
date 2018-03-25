@@ -1,13 +1,11 @@
 #!/usr/bin/env python
-import grpc, urllib3, cv2
-import numpy as np
-
-import smartbox_resource_controller_pb2
-import smartbox_resource_controller_pb2_grpc
+import tracker_pb2
+import tracker_pb2_grpc
 
 class TrackerClient:
-	def __init__(self, stub):
-		self.stub = stub
+	def __init__(self, stub, authority_level):
+		self.authority_level = authority_level
+		self.stub = tracker_pb2_grpc.TrackerControllerStub(self.channel)
 
 	def get_ns_position(self):
 		"""
@@ -98,7 +96,7 @@ class TrackerClient:
 		"""
 			Moves the panel to a safe wind-stow position
 		"""
-		request = smartbox_resource_controller_pb2.StowRequest(message="Flat please")
+		request = tracker_pb2.StowRequest(message="Flat please")
 		self.stub.stow(request)
 
 	def move_north(self):
@@ -106,7 +104,7 @@ class TrackerClient:
 			Moves the panel to face north. Call stop_ns() or stop() to stop 
 			the movement
 		"""
-		self._request_direction_move_(direction=smartbox_resource_controller_pb2.NORTH)
+		self._request_direction_move_(direction=tracker_pb2.NORTH)
 		
 
 	def move_south(self):
@@ -115,27 +113,27 @@ class TrackerClient:
 			the movement
 		"""
 
-		self._request_direction_move_(direction=smartbox_resource_controller_pb2.SOUTH)
+		self._request_direction_move_(direction=tracker_pb2.SOUTH)
 		
 	def move_east(self):
 		"""
 			Moves the panel to face east. Call stop_ew() or stop() to stop 
 			the movement
 		"""
-		self._request_direction_move_(direction=smartbox_resource_controller_pb2.EAST)
+		self._request_direction_move_(direction=tracker_pb2.EAST)
 		
 	def move_west(self):
 		"""
 			Moves the panel to face west. Call stop_ew() or stop() to stop 
 			the movement
 		"""
-		self._request_direction_move_(direction=smartbox_resource_controller_pb2.WEST)
+		self._request_direction_move_(direction=tracker_pb2.WEST)
 
 	def stop(self):
 		"""
 			Stops the movement of both axes
 		"""
-		request = smartbox_resource_controller_pb2.StopRequest(message="stop")
+		request = tracker_pb2.StopRequest(message="stop")
 		self.stub.stop(request)
 
 	def get_battery_voltage(self):
@@ -163,30 +161,30 @@ class TrackerClient:
 		return status.charge_controller.charge_state
 
 	def _request_status_(self):
-		request = smartbox_resource_controller_pb2.TrackerSystemStatusRequest(message = "hello")
+		request = tracker_pb2.TrackerSystemStatusRequest(message = "hello")
 		return self.stub.get_tracker_status(request)
 
 	def _request_control_(self):
-		request = smartbox_resource_controller_pb2.RequestControlRequest(message="Control please", security_level = self.security_level)
+		request = tracker_pb2.RequestControlRequest(message="Control please", security_level = self.security_level)
 		return self.stub.request_control(request)
 
 	def _relinquish_control_(self):
-		request = smartbox_resource_controller_pb2.RelinquishControl(message="All done")
+		request = tracker_pb2.RelinquishControl(message="All done")
 		return self.stub.request_control(request)
 
 	def _request_direction_move_(self, direction):
-		request = smartbox_resource_controller_pb2.MoveRequest(move_type = smartbox_resource_controller_pb2.MoveRequest.DURATION)
+		request = tracker_pb2.MoveRequest(move_type = tracker_pb2.MoveRequest.DURATION)
 		request.direction = direction
 		return self.stub.move_panel(request)
 
 	def _request_position_move_(self, pos_ns, pos_ew):
-		request = smartbox_resource_controller_pb2.MoveRequest(move_type = smartbox_resource_controller_pb2.MoveRequest.POSITION)
+		request = tracker_pb2.MoveRequest(move_type = tracker_pb2.MoveRequest.POSITION)
 		request.position.ns = pos_ns
 		request.position.ew = pos_ew
 		return self.stub.move_panel(request)
 
 	def _request_angular_move_(self, angle_ns, angle_ew):
-		request = smartbox_resource_controller_pb2.MoveRequest(move_type = smartbox_resource_controller_pb2.MoveRequest.ANGLE)
+		request = tracker_pb2.MoveRequest(move_type = tracker_pb2.MoveRequest.ANGLE)
 		request.angle.ns = angle_ns
 		request.angle.ew = angle_ew
 		return self.stub.move_panel(request)

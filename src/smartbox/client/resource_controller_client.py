@@ -1,9 +1,5 @@
 #!/usr/bin/env python
-import grpc, urllib3, cv2
-import numpy as np
-
-import smartbox_resource_controller_pb2
-import smartbox_resource_controller_pb2_grpc
+import grpc
 
 from sb_tracker_client import TrackerClient
 from sb_charge_controller_client import ChargeControllerClient
@@ -16,13 +12,9 @@ from sb_camera import CameraClient
 class SmartBoxResourceControllerClient():
 	def __init__(self, security_level):
 		self.channel = grpc.insecure_channel('138.16.161.117:50051')
-		self.image_url = "http://138.16.161.117/images/image.png"
-		self.stub = smartbox_resource_controller_pb2_grpc.SmartBoxResourceControllerStub(self.channel)
-		self.security_level = security_level
-		self.http = urllib3.PoolManager()
-
+		#self.stub = smartbox_resource_controller_pb2_grpc.SmartBoxResourceControllerStub(self.channel)
+		
 		self.tracker = TrackerClient(self.channel)
-		self.charge_controller = ChargeControllerClient(self.channel)
 		self.weather = WeatherClient(self.channel)
 		self.light = LightClient(self.channel)
 		self.panel_temps = PanelTemperatureClient(self.channel)
@@ -45,12 +37,12 @@ if __name__ == "__main__":
 	print(client.light.get_light_status())
 	print(client.light.set_light_status(False))
 	print(client.light.get_light_status())
-	print(client.charge_controller.get_battery_voltage())
-	print(client.charge_controller.get_solar_panel_voltage())
-	print(client.charge_controller.get_load_voltage())
-	print(client.charge_controller.get_charging_current())
-	print(client.charge_controller.get_load_current())
-	print(client.charge_controller.get_charge_status())
+	print(client.tracker.get_battery_voltage())
+	print(client.tracker.get_solar_panel_voltage())
+	print(client.tracker.get_load_voltage())
+	print(client.tracker.get_charging_current())
+	print(client.tracker.get_load_current())
+	print(client.tracker.get_charge_status())
 
 	
 

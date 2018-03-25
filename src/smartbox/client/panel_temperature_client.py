@@ -1,14 +1,12 @@
 #!/usr/bin/env python
-import grpc, urllib3, cv2
-import numpy as np
-
-import smartbox_resource_controller_pb2
-import smartbox_resource_controller_pb2_grpc
+import temperature_pb2
+import temperature_pb2_grpc
 
 class PanelTemperaturesClient:
-	def __init__(self, stub):
-		self.stub = stub
+	def __init__(self, channel):
+		self.channel = channel
+		self.stub = temperature_pb2_grpc.TemperatureControllerStub(self.channel)
 
 	def _request_panel_temperatures_(self):
-		request = smartbox_resource_controller_pb2.PanelTemperatureRequest()
+		request = temperature_pb2.PanelTemperatureRequest()
 		return self.stub.panel_temperature(request)
