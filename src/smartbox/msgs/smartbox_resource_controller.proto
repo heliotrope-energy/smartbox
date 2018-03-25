@@ -1,9 +1,0 @@
-syntax = "proto3";
-package smartbox;
-
-service SmartBoxResourceController {
-	rpc set_light (LightRequest) returns (LightResponse) {}
-	rpc weather_report (WeatherRequest) returns (WeatherResponse) {}
-	rpc panel_temperature (PanelTemperatureRequest) returns (PanelTemperatureResponse) {}
-}
-
