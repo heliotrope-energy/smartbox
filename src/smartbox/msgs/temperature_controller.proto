@@ -1,0 +1,19 @@
+syntax = "proto3";
+package smartbox;
+
+service SmartBoxTrackerController {
+	rpc panel_temperature (PanelTemperatureRequest) returns (PanelTemperatureResponse) {}
+}
+
+message TemperatureSensor {
+	double value = 1;
+	string location = 2;
+}
+
+message PanelTemperatureRequest {
+	string message = 1;
+}
+
+message PanelTemperatureResponse {
+	repeated TemperatureSensor sensors = 1;
+}
