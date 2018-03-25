@@ -1,9 +1,8 @@
 syntax = "proto3";
 package smartbox;
 
-service SmartBoxTrackerController {
+service WeatherController {
 	rpc weather_report (WeatherRequest) returns (WeatherResponse) {}
-	rpc panel_temperature (PanelTemperatureRequest) returns (PanelTemperatureResponse) {}
 }
 
 

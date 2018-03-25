@@ -1,7 +1,7 @@
 syntax = "proto3";
 package smartbox;
 
-service SmartBoxTrackerController {
+service TrackerController {
 	rpc get_tracker_status (TrackerSystemStatusRequest) returns (TrackerSystemStatusResponse) {}
 	rpc request_control (RequestControlRequest) returns (RequestControlResponse) {}
 	rpc relinquish_control (RelinquishControlRequest) returns (RelinquishControlResponse) {}
