@@ -49,6 +49,11 @@ class SmartBoxResourceControllerStub(object):
         request_serializer=smartbox__resource__controller__pb2.LightRequest.SerializeToString,
         response_deserializer=smartbox__resource__controller__pb2.LightResponse.FromString,
         )
+    self.weather_report = channel.unary_unary(
+        '/smartbox.SmartBoxResourceController/weather_report',
+        request_serializer=smartbox__resource__controller__pb2.WeatherRequest.SerializeToString,
+        response_deserializer=smartbox__resource__controller__pb2.WeatherResponse.FromString,
+        )
 
 
 class SmartBoxResourceControllerServicer(object):
@@ -104,6 +109,13 @@ class SmartBoxResourceControllerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def weather_report(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_SmartBoxResourceControllerServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -141,6 +153,11 @@ def add_SmartBoxResourceControllerServicer_to_server(servicer, server):
           servicer.set_light,
           request_deserializer=smartbox__resource__controller__pb2.LightRequest.FromString,
           response_serializer=smartbox__resource__controller__pb2.LightResponse.SerializeToString,
+      ),
+      'weather_report': grpc.unary_unary_rpc_method_handler(
+          servicer.weather_report,
+          request_deserializer=smartbox__resource__controller__pb2.WeatherRequest.FromString,
+          response_serializer=smartbox__resource__controller__pb2.WeatherResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
