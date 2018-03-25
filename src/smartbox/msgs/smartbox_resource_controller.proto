@@ -10,6 +10,7 @@ service SmartBoxResourceController {
 	rpc stow (StowRequest) returns (StowResponse) {}
 	rpc set_light (LightRequest) returns (LightResponse) {}
 	rpc weather_report (WeatherRequest) returns (WeatherResponse) {}
+	rpc panel_temperature (PanelTemperatureRequest) returns (PanelTemperatureResponse) {}
 }
 
 enum DIRECTION {
@@ -125,6 +126,15 @@ message WeatherResponse {
 	HumidityReport humidity = 6;
 	RainReport rain = 7;
 	SolarReport solar = 8;
+}
+
+message TemperatureSensor {
+	double value;
+	string location;
+}
+
+message PanelTemperatureResponse {
+	repeated TemperatureSensor sensors = 1;
 }
 
 message TrackerSystemStatusResponse {

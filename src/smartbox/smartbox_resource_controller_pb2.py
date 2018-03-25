@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='smartbox_resource_controller.proto',
   package='smartbox',
   syntax='proto3',
-  serialized_pb=_b('\n\"smartbox_resource_controller.proto\x12\x08smartbox\"-\n\x1aTrackerSystemStatusRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\"\n\x08Position\x12\n\n\x02ns\x18\x01 \x01(\x01\x12\n\n\x02\x65w\x18\x02 \x01(\x01\"$\n\nMoveStatus\x12\n\n\x02ns\x18\x01 \x01(\x08\x12\n\n\x02\x65w\x18\x02 \x01(\x08\"\xa6\x01\n\rTrackerStatus\x12$\n\x08position\x18\x01 \x01(\x0b\x32\x12.smartbox.Position\x12!\n\x05\x61ngle\x18\x02 \x01(\x0b\x32\x12.smartbox.Position\x12)\n\x0bmove_status\x18\x03 \x01(\x0b\x32\x14.smartbox.MoveStatus\x12!\n\x19\x63urrent_controlling_level\x18\x04 \x01(\x03\"\xec\x01\n\x16\x43hargeControllerStatus\x12\x17\n\x0f\x62\x61ttery_voltage\x18\x01 \x01(\x01\x12\x15\n\rarray_voltage\x18\x02 \x01(\x01\x12\x14\n\x0cload_voltage\x18\x03 \x01(\x01\x12\x16\n\x0e\x63harge_current\x18\x04 \x01(\x01\x12\x14\n\x0cload_current\x18\x05 \x01(\x01\x12+\n\x0c\x63harge_state\x18\x06 \x01(\x0e\x32\x15.smartbox.ChargeState\x12\x18\n\x10\x65nergy_collected\x18\x07 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x08 \x01(\x01\"[\n\x11TemperatureReport\x12\x0f\n\x07outdoor\x18\x01 \x01(\x01\x12\x0e\n\x06indoor\x18\x02 \x01(\x01\x12\x12\n\nfeels_like\x18\x03 \x01(\x01\x12\x11\n\tdew_point\x18\x04 \x01(\x01\"4\n\x0ePressureReport\x12\x10\n\x08relative\x18\x01 \x01(\x01\x12\x10\n\x08\x61\x62solute\x18\x02 \x01(\x01\"T\n\nWindReport\x12\x11\n\tdirection\x18\x01 \x01(\x01\x12\r\n\x05speed\x18\x02 \x01(\x01\x12\x0c\n\x04gust\x18\x03 \x01(\x01\x12\x16\n\x0emax_daily_gust\x18\x04 \x01(\x01\"C\n\x0eHumidityReport\x12\x18\n\x10humidity_percent\x18\x01 \x01(\x01\x12\x17\n\x0fhumidity_indoor\x18\x02 \x01(\x01\"i\n\nRainReport\x12\x0e\n\x06hourly\x18\x01 \x01(\x01\x12\r\n\x05\x64\x61ily\x18\x02 \x01(\x01\x12\x0e\n\x06weekly\x18\x03 \x01(\x01\x12\x0f\n\x07monthly\x18\x04 \x01(\x01\x12\r\n\x05total\x18\x05 \x01(\x01\x12\x0c\n\x04last\x18\x06 \x01(\t\",\n\x0bSolarReport\x12\n\n\x02uv\x18\x01 \x01(\x01\x12\x11\n\tradiation\x18\x02 \x01(\x01\"!\n\x0eWeatherRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\xa9\x02\n\x0fWeatherResponse\x12\x0c\n\x04\x64\x61te\x18\x01 \x01(\t\x12\x10\n\x08\x64\x61te_utc\x18\x02 \x01(\x05\x12\x30\n\x0btemperature\x18\x03 \x01(\x0b\x32\x1b.smartbox.TemperatureReport\x12\"\n\x04wind\x18\x04 \x01(\x0b\x32\x14.smartbox.WindReport\x12*\n\x08pressure\x18\x05 \x01(\x0b\x32\x18.smartbox.PressureReport\x12*\n\x08humidity\x18\x06 \x01(\x0b\x32\x18.smartbox.HumidityReport\x12\"\n\x04rain\x18\x07 \x01(\x0b\x32\x14.smartbox.RainReport\x12$\n\x05solar\x18\x08 \x01(\x0b\x32\x15.smartbox.SolarReport\"\x84\x01\n\x1bTrackerSystemStatusResponse\x12(\n\x07tracker\x18\x01 \x01(\x0b\x32\x17.smartbox.TrackerStatus\x12;\n\x11\x63harge_controller\x18\x02 \x01(\x0b\x32 .smartbox.ChargeControllerStatus\"@\n\x15RequestControlRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x16\n\x0esecurity_level\x18\x02 \x01(\x04\"_\n\x16RequestControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x34\n\x07success\x18\x02 \x01(\x0e\x32#.smartbox.ControlRequestSuccessFlag\"+\n\x18RelinquishControlRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x95\x01\n\x19RelinquishControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x18\n\x10\x65nergy_collected\x18\x02 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x03 \x01(\x01\x12\x34\n\x07success\x18\x04 \x01(\x0e\x32#.smartbox.ControlRequestSuccessFlag\"\x86\x02\n\x0bMoveRequest\x12\x31\n\tmove_type\x18\x01 \x01(\x0e\x32\x1e.smartbox.MoveRequest.MoveType\x12&\n\tdirection\x18\x02 \x01(\x0e\x32\x13.smartbox.DIRECTION\x12\x15\n\rmove_duration\x18\x03 \x01(\x01\x12$\n\x08position\x18\x04 \x01(\x0b\x32\x12.smartbox.Position\x12!\n\x05\x61ngle\x18\x05 \x01(\x0b\x32\x12.smartbox.Position\"<\n\x08MoveType\x12\t\n\x05UNSET\x10\x00\x12\x0c\n\x08\x44URATION\x10\x01\x12\x0c\n\x08POSITION\x10\x02\x12\t\n\x05\x41NGLE\x10\x03\"U\n\x0cMoveResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x34\n\x07success\x18\x02 \x01(\x0e\x32#.smartbox.ControlRequestSuccessFlag\"\x1e\n\x0bStopRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"U\n\x0cStopResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x34\n\x07success\x18\x02 \x01(\x0e\x32#.smartbox.ControlRequestSuccessFlag\"\x1e\n\x0bStowRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"U\n\x0cStowResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x34\n\x07success\x18\x02 \x01(\x0e\x32#.smartbox.ControlRequestSuccessFlag\"o\n\x0cLightRequest\x12\x32\n\x05light\x18\x01 \x01(\x0e\x32#.smartbox.LightRequest.LightSetting\"+\n\x0cLightSetting\x12\n\n\x06STATUS\x10\x00\x12\x06\n\x02ON\x10\x01\x12\x07\n\x03OFF\x10\x02\"d\n\rLightResponse\x12\x33\n\x06status\x18\x01 \x01(\x0e\x32#.smartbox.LightResponse.LightStatus\"\x1e\n\x0bLightStatus\x12\x06\n\x02ON\x10\x00\x12\x07\n\x03OFF\x10\x01*5\n\tDIRECTION\x12\t\n\x05NORTH\x10\x00\x12\x08\n\x04\x45\x41ST\x10\x01\x12\t\n\x05SOUTH\x10\x02\x12\x08\n\x04WEST\x10\x03*\x89\x01\n\x0b\x43hargeState\x12\t\n\x05START\x10\x00\x12\x0f\n\x0bNIGHT_CHECK\x10\x01\x12\x0e\n\nDISCONNECT\x10\x02\x12\t\n\x05NIGHT\x10\x03\x12\t\n\x05\x46\x41ULT\x10\x04\x12\x0f\n\x0b\x42ULK_CHARGE\x10\x05\x12\x0e\n\nABSORBTION\x10\x06\x12\t\n\x05\x46LOAT\x10\x07\x12\x0c\n\x08\x45QUALIZE\x10\x08*V\n\x19\x43ontrolRequestSuccessFlag\x12\x0b\n\x07SUCCESS\x10\x00\x12\x1f\n\x1bINSUFFICIENT_SECURITY_LEVEL\x10\x01\x12\x0b\n\x07\x46\x41ILURE\x10\x02\x32\xf4\x04\n\x1aSmartBoxResourceController\x12\x63\n\x12get_tracker_status\x12$.smartbox.TrackerSystemStatusRequest\x1a%.smartbox.TrackerSystemStatusResponse\"\x00\x12V\n\x0frequest_control\x12\x1f.smartbox.RequestControlRequest\x1a .smartbox.RequestControlResponse\"\x00\x12_\n\x12relinquish_control\x12\".smartbox.RelinquishControlRequest\x1a#.smartbox.RelinquishControlResponse\"\x00\x12=\n\nmove_panel\x12\x15.smartbox.MoveRequest\x1a\x16.smartbox.MoveResponse\"\x00\x12\x37\n\x04stop\x12\x15.smartbox.StopRequest\x1a\x16.smartbox.StopResponse\"\x00\x12\x37\n\x04stow\x12\x15.smartbox.StowRequest\x1a\x16.smartbox.StowResponse\"\x00\x12>\n\tset_light\x12\x16.smartbox.LightRequest\x1a\x17.smartbox.LightResponse\"\x00\x12G\n\x0eweather_report\x12\x18.smartbox.WeatherRequest\x1a\x19.smartbox.WeatherResponse\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\"smartbox_resource_controller.proto\x12\x08smartbox\"-\n\x1aTrackerSystemStatusRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\"\n\x08Position\x12\n\n\x02ns\x18\x01 \x01(\x01\x12\n\n\x02\x65w\x18\x02 \x01(\x01\"$\n\nMoveStatus\x12\n\n\x02ns\x18\x01 \x01(\x08\x12\n\n\x02\x65w\x18\x02 \x01(\x08\"\xa6\x01\n\rTrackerStatus\x12$\n\x08position\x18\x01 \x01(\x0b\x32\x12.smartbox.Position\x12!\n\x05\x61ngle\x18\x02 \x01(\x0b\x32\x12.smartbox.Position\x12)\n\x0bmove_status\x18\x03 \x01(\x0b\x32\x14.smartbox.MoveStatus\x12!\n\x19\x63urrent_controlling_level\x18\x04 \x01(\x03\"\xec\x01\n\x16\x43hargeControllerStatus\x12\x17\n\x0f\x62\x61ttery_voltage\x18\x01 \x01(\x01\x12\x15\n\rarray_voltage\x18\x02 \x01(\x01\x12\x14\n\x0cload_voltage\x18\x03 \x01(\x01\x12\x16\n\x0e\x63harge_current\x18\x04 \x01(\x01\x12\x14\n\x0cload_current\x18\x05 \x01(\x01\x12+\n\x0c\x63harge_state\x18\x06 \x01(\x0e\x32\x15.smartbox.ChargeState\x12\x18\n\x10\x65nergy_collected\x18\x07 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x08 \x01(\x01\"[\n\x11TemperatureReport\x12\x0f\n\x07outdoor\x18\x01 \x01(\x01\x12\x0e\n\x06indoor\x18\x02 \x01(\x01\x12\x12\n\nfeels_like\x18\x03 \x01(\x01\x12\x11\n\tdew_point\x18\x04 \x01(\x01\"4\n\x0ePressureReport\x12\x10\n\x08relative\x18\x01 \x01(\x01\x12\x10\n\x08\x61\x62solute\x18\x02 \x01(\x01\"T\n\nWindReport\x12\x11\n\tdirection\x18\x01 \x01(\x01\x12\r\n\x05speed\x18\x02 \x01(\x01\x12\x0c\n\x04gust\x18\x03 \x01(\x01\x12\x16\n\x0emax_daily_gust\x18\x04 \x01(\x01\"C\n\x0eHumidityReport\x12\x18\n\x10humidity_percent\x18\x01 \x01(\x01\x12\x17\n\x0fhumidity_indoor\x18\x02 \x01(\x01\"i\n\nRainReport\x12\x0e\n\x06hourly\x18\x01 \x01(\x01\x12\r\n\x05\x64\x61ily\x18\x02 \x01(\x01\x12\x0e\n\x06weekly\x18\x03 \x01(\x01\x12\x0f\n\x07monthly\x18\x04 \x01(\x01\x12\r\n\x05total\x18\x05 \x01(\x01\x12\x0c\n\x04last\x18\x06 \x01(\t\",\n\x0bSolarReport\x12\n\n\x02uv\x18\x01 \x01(\x01\x12\x11\n\tradiation\x18\x02 \x01(\x01\"!\n\x0eWeatherRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\xa9\x02\n\x0fWeatherResponse\x12\x0c\n\x04\x64\x61te\x18\x01 \x01(\t\x12\x10\n\x08\x64\x61te_utc\x18\x02 \x01(\x05\x12\x30\n\x0btemperature\x18\x03 \x01(\x0b\x32\x1b.smartbox.TemperatureReport\x12\"\n\x04wind\x18\x04 \x01(\x0b\x32\x14.smartbox.WindReport\x12*\n\x08pressure\x18\x05 \x01(\x0b\x32\x18.smartbox.PressureReport\x12*\n\x08humidity\x18\x06 \x01(\x0b\x32\x18.smartbox.HumidityReport\x12\"\n\x04rain\x18\x07 \x01(\x0b\x32\x14.smartbox.RainReport\x12$\n\x05solar\x18\x08 \x01(\x0b\x32\x15.smartbox.SolarReport\"4\n\x11TemperatureSensor\x12\r\n\x05value\x18\x01 \x01(\x01\x12\x10\n\x08location\x18\x02 \x01(\t\"*\n\x17PanelTemperatureRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"H\n\x18PanelTemperatureResponse\x12,\n\x07sensors\x18\x01 \x03(\x0b\x32\x1b.smartbox.TemperatureSensor\"\x84\x01\n\x1bTrackerSystemStatusResponse\x12(\n\x07tracker\x18\x01 \x01(\x0b\x32\x17.smartbox.TrackerStatus\x12;\n\x11\x63harge_controller\x18\x02 \x01(\x0b\x32 .smartbox.ChargeControllerStatus\"@\n\x15RequestControlRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x16\n\x0esecurity_level\x18\x02 \x01(\x04\"_\n\x16RequestControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x34\n\x07success\x18\x02 \x01(\x0e\x32#.smartbox.ControlRequestSuccessFlag\"+\n\x18RelinquishControlRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x95\x01\n\x19RelinquishControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x18\n\x10\x65nergy_collected\x18\x02 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x03 \x01(\x01\x12\x34\n\x07success\x18\x04 \x01(\x0e\x32#.smartbox.ControlRequestSuccessFlag\"\x86\x02\n\x0bMoveRequest\x12\x31\n\tmove_type\x18\x01 \x01(\x0e\x32\x1e.smartbox.MoveRequest.MoveType\x12&\n\tdirection\x18\x02 \x01(\x0e\x32\x13.smartbox.DIRECTION\x12\x15\n\rmove_duration\x18\x03 \x01(\x01\x12$\n\x08position\x18\x04 \x01(\x0b\x32\x12.smartbox.Position\x12!\n\x05\x61ngle\x18\x05 \x01(\x0b\x32\x12.smartbox.Position\"<\n\x08MoveType\x12\t\n\x05UNSET\x10\x00\x12\x0c\n\x08\x44URATION\x10\x01\x12\x0c\n\x08POSITION\x10\x02\x12\t\n\x05\x41NGLE\x10\x03\"U\n\x0cMoveResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x34\n\x07success\x18\x02 \x01(\x0e\x32#.smartbox.ControlRequestSuccessFlag\"\x1e\n\x0bStopRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"U\n\x0cStopResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x34\n\x07success\x18\x02 \x01(\x0e\x32#.smartbox.ControlRequestSuccessFlag\"\x1e\n\x0bStowRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"U\n\x0cStowResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x34\n\x07success\x18\x02 \x01(\x0e\x32#.smartbox.ControlRequestSuccessFlag\"o\n\x0cLightRequest\x12\x32\n\x05light\x18\x01 \x01(\x0e\x32#.smartbox.LightRequest.LightSetting\"+\n\x0cLightSetting\x12\n\n\x06STATUS\x10\x00\x12\x06\n\x02ON\x10\x01\x12\x07\n\x03OFF\x10\x02\"d\n\rLightResponse\x12\x33\n\x06status\x18\x01 \x01(\x0e\x32#.smartbox.LightResponse.LightStatus\"\x1e\n\x0bLightStatus\x12\x06\n\x02ON\x10\x00\x12\x07\n\x03OFF\x10\x01*5\n\tDIRECTION\x12\t\n\x05NORTH\x10\x00\x12\x08\n\x04\x45\x41ST\x10\x01\x12\t\n\x05SOUTH\x10\x02\x12\x08\n\x04WEST\x10\x03*\x89\x01\n\x0b\x43hargeState\x12\t\n\x05START\x10\x00\x12\x0f\n\x0bNIGHT_CHECK\x10\x01\x12\x0e\n\nDISCONNECT\x10\x02\x12\t\n\x05NIGHT\x10\x03\x12\t\n\x05\x46\x41ULT\x10\x04\x12\x0f\n\x0b\x42ULK_CHARGE\x10\x05\x12\x0e\n\nABSORBTION\x10\x06\x12\t\n\x05\x46LOAT\x10\x07\x12\x0c\n\x08\x45QUALIZE\x10\x08*V\n\x19\x43ontrolRequestSuccessFlag\x12\x0b\n\x07SUCCESS\x10\x00\x12\x1f\n\x1bINSUFFICIENT_SECURITY_LEVEL\x10\x01\x12\x0b\n\x07\x46\x41ILURE\x10\x02\x32\xd2\x05\n\x1aSmartBoxResourceController\x12\x63\n\x12get_tracker_status\x12$.smartbox.TrackerSystemStatusRequest\x1a%.smartbox.TrackerSystemStatusResponse\"\x00\x12V\n\x0frequest_control\x12\x1f.smartbox.RequestControlRequest\x1a .smartbox.RequestControlResponse\"\x00\x12_\n\x12relinquish_control\x12\".smartbox.RelinquishControlRequest\x1a#.smartbox.RelinquishControlResponse\"\x00\x12=\n\nmove_panel\x12\x15.smartbox.MoveRequest\x1a\x16.smartbox.MoveResponse\"\x00\x12\x37\n\x04stop\x12\x15.smartbox.StopRequest\x1a\x16.smartbox.StopResponse\"\x00\x12\x37\n\x04stow\x12\x15.smartbox.StowRequest\x1a\x16.smartbox.StowResponse\"\x00\x12>\n\tset_light\x12\x16.smartbox.LightRequest\x1a\x17.smartbox.LightResponse\"\x00\x12G\n\x0eweather_report\x12\x18.smartbox.WeatherRequest\x1a\x19.smartbox.WeatherResponse\"\x00\x12\\\n\x11panel_temperature\x12!.smartbox.PanelTemperatureRequest\x1a\".smartbox.PanelTemperatureResponse\"\x00\x62\x06proto3')
 )
 
 _DIRECTION = _descriptor.EnumDescriptor(
@@ -48,8 +48,8 @@ _DIRECTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2667,
-  serialized_end=2720,
+  serialized_start=2839,
+  serialized_end=2892,
 )
 _sym_db.RegisterEnumDescriptor(_DIRECTION)
 
@@ -99,8 +99,8 @@ _CHARGESTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2723,
-  serialized_end=2860,
+  serialized_start=2895,
+  serialized_end=3032,
 )
 _sym_db.RegisterEnumDescriptor(_CHARGESTATE)
 
@@ -126,8 +126,8 @@ _CONTROLREQUESTSUCCESSFLAG = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2862,
-  serialized_end=2948,
+  serialized_start=3034,
+  serialized_end=3120,
 )
 _sym_db.RegisterEnumDescriptor(_CONTROLREQUESTSUCCESSFLAG)
 
@@ -175,8 +175,8 @@ _MOVEREQUEST_MOVETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2065,
-  serialized_end=2125,
+  serialized_start=2237,
+  serialized_end=2297,
 )
 _sym_db.RegisterEnumDescriptor(_MOVEREQUEST_MOVETYPE)
 
@@ -201,8 +201,8 @@ _LIGHTREQUEST_LIGHTSETTING = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2520,
-  serialized_end=2563,
+  serialized_start=2692,
+  serialized_end=2735,
 )
 _sym_db.RegisterEnumDescriptor(_LIGHTREQUEST_LIGHTSETTING)
 
@@ -223,8 +223,8 @@ _LIGHTRESPONSE_LIGHTSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2635,
-  serialized_end=2665,
+  serialized_start=2807,
+  serialized_end=2837,
 )
 _sym_db.RegisterEnumDescriptor(_LIGHTRESPONSE_LIGHTSTATUS)
 
@@ -863,6 +863,106 @@ _WEATHERRESPONSE = _descriptor.Descriptor(
 )
 
 
+_TEMPERATURESENSOR = _descriptor.Descriptor(
+  name='TemperatureSensor',
+  full_name='smartbox.TemperatureSensor',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='value', full_name='smartbox.TemperatureSensor.value', index=0,
+      number=1, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='location', full_name='smartbox.TemperatureSensor.location', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1367,
+  serialized_end=1419,
+)
+
+
+_PANELTEMPERATUREREQUEST = _descriptor.Descriptor(
+  name='PanelTemperatureRequest',
+  full_name='smartbox.PanelTemperatureRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='message', full_name='smartbox.PanelTemperatureRequest.message', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1421,
+  serialized_end=1463,
+)
+
+
+_PANELTEMPERATURERESPONSE = _descriptor.Descriptor(
+  name='PanelTemperatureResponse',
+  full_name='smartbox.PanelTemperatureResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='sensors', full_name='smartbox.PanelTemperatureResponse.sensors', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1465,
+  serialized_end=1537,
+)
+
+
 _TRACKERSYSTEMSTATUSRESPONSE = _descriptor.Descriptor(
   name='TrackerSystemStatusResponse',
   full_name='smartbox.TrackerSystemStatusResponse',
@@ -896,8 +996,8 @@ _TRACKERSYSTEMSTATUSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1368,
-  serialized_end=1500,
+  serialized_start=1540,
+  serialized_end=1672,
 )
 
 
@@ -934,8 +1034,8 @@ _REQUESTCONTROLREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1502,
-  serialized_end=1566,
+  serialized_start=1674,
+  serialized_end=1738,
 )
 
 
@@ -972,8 +1072,8 @@ _REQUESTCONTROLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1568,
-  serialized_end=1663,
+  serialized_start=1740,
+  serialized_end=1835,
 )
 
 
@@ -1003,8 +1103,8 @@ _RELINQUISHCONTROLREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1665,
-  serialized_end=1708,
+  serialized_start=1837,
+  serialized_end=1880,
 )
 
 
@@ -1055,8 +1155,8 @@ _RELINQUISHCONTROLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1711,
-  serialized_end=1860,
+  serialized_start=1883,
+  serialized_end=2032,
 )
 
 
@@ -1115,8 +1215,8 @@ _MOVEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1863,
-  serialized_end=2125,
+  serialized_start=2035,
+  serialized_end=2297,
 )
 
 
@@ -1153,8 +1253,8 @@ _MOVERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2127,
-  serialized_end=2212,
+  serialized_start=2299,
+  serialized_end=2384,
 )
 
 
@@ -1184,8 +1284,8 @@ _STOPREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2214,
-  serialized_end=2244,
+  serialized_start=2386,
+  serialized_end=2416,
 )
 
 
@@ -1222,8 +1322,8 @@ _STOPRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2246,
-  serialized_end=2331,
+  serialized_start=2418,
+  serialized_end=2503,
 )
 
 
@@ -1253,8 +1353,8 @@ _STOWREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2333,
-  serialized_end=2363,
+  serialized_start=2505,
+  serialized_end=2535,
 )
 
 
@@ -1291,8 +1391,8 @@ _STOWRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2365,
-  serialized_end=2450,
+  serialized_start=2537,
+  serialized_end=2622,
 )
 
 
@@ -1323,8 +1423,8 @@ _LIGHTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2452,
-  serialized_end=2563,
+  serialized_start=2624,
+  serialized_end=2735,
 )
 
 
@@ -1355,8 +1455,8 @@ _LIGHTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2565,
-  serialized_end=2665,
+  serialized_start=2737,
+  serialized_end=2837,
 )
 
 _TRACKERSTATUS.fields_by_name['position'].message_type = _POSITION
@@ -1369,6 +1469,7 @@ _WEATHERRESPONSE.fields_by_name['pressure'].message_type = _PRESSUREREPORT
 _WEATHERRESPONSE.fields_by_name['humidity'].message_type = _HUMIDITYREPORT
 _WEATHERRESPONSE.fields_by_name['rain'].message_type = _RAINREPORT
 _WEATHERRESPONSE.fields_by_name['solar'].message_type = _SOLARREPORT
+_PANELTEMPERATURERESPONSE.fields_by_name['sensors'].message_type = _TEMPERATURESENSOR
 _TRACKERSYSTEMSTATUSRESPONSE.fields_by_name['tracker'].message_type = _TRACKERSTATUS
 _TRACKERSYSTEMSTATUSRESPONSE.fields_by_name['charge_controller'].message_type = _CHARGECONTROLLERSTATUS
 _REQUESTCONTROLRESPONSE.fields_by_name['success'].enum_type = _CONTROLREQUESTSUCCESSFLAG
@@ -1398,6 +1499,9 @@ DESCRIPTOR.message_types_by_name['RainReport'] = _RAINREPORT
 DESCRIPTOR.message_types_by_name['SolarReport'] = _SOLARREPORT
 DESCRIPTOR.message_types_by_name['WeatherRequest'] = _WEATHERREQUEST
 DESCRIPTOR.message_types_by_name['WeatherResponse'] = _WEATHERRESPONSE
+DESCRIPTOR.message_types_by_name['TemperatureSensor'] = _TEMPERATURESENSOR
+DESCRIPTOR.message_types_by_name['PanelTemperatureRequest'] = _PANELTEMPERATUREREQUEST
+DESCRIPTOR.message_types_by_name['PanelTemperatureResponse'] = _PANELTEMPERATURERESPONSE
 DESCRIPTOR.message_types_by_name['TrackerSystemStatusResponse'] = _TRACKERSYSTEMSTATUSRESPONSE
 DESCRIPTOR.message_types_by_name['RequestControlRequest'] = _REQUESTCONTROLREQUEST
 DESCRIPTOR.message_types_by_name['RequestControlResponse'] = _REQUESTCONTROLRESPONSE
@@ -1507,6 +1611,27 @@ WeatherResponse = _reflection.GeneratedProtocolMessageType('WeatherResponse', (_
   ))
 _sym_db.RegisterMessage(WeatherResponse)
 
+TemperatureSensor = _reflection.GeneratedProtocolMessageType('TemperatureSensor', (_message.Message,), dict(
+  DESCRIPTOR = _TEMPERATURESENSOR,
+  __module__ = 'smartbox_resource_controller_pb2'
+  # @@protoc_insertion_point(class_scope:smartbox.TemperatureSensor)
+  ))
+_sym_db.RegisterMessage(TemperatureSensor)
+
+PanelTemperatureRequest = _reflection.GeneratedProtocolMessageType('PanelTemperatureRequest', (_message.Message,), dict(
+  DESCRIPTOR = _PANELTEMPERATUREREQUEST,
+  __module__ = 'smartbox_resource_controller_pb2'
+  # @@protoc_insertion_point(class_scope:smartbox.PanelTemperatureRequest)
+  ))
+_sym_db.RegisterMessage(PanelTemperatureRequest)
+
+PanelTemperatureResponse = _reflection.GeneratedProtocolMessageType('PanelTemperatureResponse', (_message.Message,), dict(
+  DESCRIPTOR = _PANELTEMPERATURERESPONSE,
+  __module__ = 'smartbox_resource_controller_pb2'
+  # @@protoc_insertion_point(class_scope:smartbox.PanelTemperatureResponse)
+  ))
+_sym_db.RegisterMessage(PanelTemperatureResponse)
+
 TrackerSystemStatusResponse = _reflection.GeneratedProtocolMessageType('TrackerSystemStatusResponse', (_message.Message,), dict(
   DESCRIPTOR = _TRACKERSYSTEMSTATUSRESPONSE,
   __module__ = 'smartbox_resource_controller_pb2'
@@ -1606,8 +1731,8 @@ _SMARTBOXRESOURCECONTROLLER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   options=None,
-  serialized_start=2951,
-  serialized_end=3579,
+  serialized_start=3123,
+  serialized_end=3845,
   methods=[
   _descriptor.MethodDescriptor(
     name='get_tracker_status',
@@ -1679,6 +1804,15 @@ _SMARTBOXRESOURCECONTROLLER = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_WEATHERREQUEST,
     output_type=_WEATHERRESPONSE,
+    options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='panel_temperature',
+    full_name='smartbox.SmartBoxResourceController.panel_temperature',
+    index=8,
+    containing_service=None,
+    input_type=_PANELTEMPERATUREREQUEST,
+    output_type=_PANELTEMPERATURERESPONSE,
     options=None,
   ),
 ])
