@@ -21,12 +21,12 @@ class SmartBoxResourceControllerClient():
 		self.security_level = security_level
 		self.http = urllib3.PoolManager()
 
-		self.tracker = TrackerClient(self.stub)
-		self.charge_controller = ChargeControllerClient(self.stub)
-		self.weather = WeatherClient()
-		self.light = LightClient()
-		self.panel_temps = PanelTemperatureClient()
-		self.camera = CameraClient()
+		self.tracker = TrackerClient(self.channel)
+		self.charge_controller = ChargeControllerClient(self.channel)
+		self.weather = WeatherClient(self.channel)
+		self.light = LightClient(self.channel)
+		self.panel_temps = PanelTemperatureClient(self.channel)
+		self.camera = CameraClient(self.channel)
 
 if __name__ == "__main__":
 	client = SmartBoxResourceControllerClient(101)
