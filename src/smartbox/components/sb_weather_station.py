@@ -26,6 +26,7 @@ class SmartBoxWeatherStation:
               data = json.loads(response.content)
               return data
         else:
+            return []
             response.raise_for_status()
 
 
@@ -41,11 +42,21 @@ class SmartBoxWeatherStation:
               data = json.loads(response.content)
               return data
         else:
+            return []
             response.raise_for_status()
+
+    def get_recent_weather(self):
+        data = self.query_data()
+        if len(data) > 0:
+            return data[0]
+        else:
+            return {}
+
 
 
 if __name__=="__main__":
     #testing
     sbw = SmartBoxWeatherStation()
-    data = sbw.query_data()
-    print(data)
+    data = sbw.get_recent_weather()
+    for key, value in data.items():
+        print("{}\t{}".format(key, value))

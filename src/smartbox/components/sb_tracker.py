@@ -217,6 +217,7 @@ class SmartBoxTracker:
 		# c: panel_mount_offset
 		# desired_angle: 
 
+		
 		v = math.sqrt(a**2 + c**2.0 - 2.0 * a * c * math.cos(desired_angle))
 		angle1 = math.acos((v**2.0 + a**2.0 - c**2.0) / (2 * v * a))
 		total_length = math.sqrt(v**2.0 + b**2.0 - 2* v * b * math.cos(90.0 - angle1))
