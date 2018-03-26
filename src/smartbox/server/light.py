@@ -1,6 +1,8 @@
 from smartbox_msgs import lights_pb2
 from smartbox_msgs import lights_pb2_grpc
 
+from smartbox.components.sb_light import SmartBoxLight
+
 class SmartBoxLightController(lights_pb2_grpc.LightControllerServicer):
 	def __init(self):
 		self.light = SmartBoxLight()

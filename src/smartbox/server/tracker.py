@@ -5,6 +5,9 @@ from threading import Thread
 from smartbox_msgs import tracker_pb2
 from smartbox_msgs import tracker_pb2_grpc
 
+from smartbox.components.sb_charge_controller import SmartBoxChargeController
+from smartbox.components.sb_tracker import SmartBoxTracker
+
 class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 	def __init__(self):
 		self.charge_controller = SmartBoxChargeController()

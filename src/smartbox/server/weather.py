@@ -1,7 +1,7 @@
 from smartbox_msgs import weather_pb2
 from smartbox_msgs import weather_pb2_grpc
 
-from sb_weather_station import SmartBoxWeatherStation
+from smartbox.components.sb_weather_station import SmartBoxWeatherStation
 
 class SmartboxWeatherController(weather_pb2_grpc.WeatherControllerServicer):
 	def __init__(self):
