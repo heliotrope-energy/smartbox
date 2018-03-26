@@ -110,7 +110,7 @@ def move_to_angular_position(stdscr):
 	ns_pos = get_float_input(stdscr)
 
 
-	stdscr.addstr(19, 0, "Please type the EW angular position (0 - 180)")
+	stdscr.addstr(19, 0, "Please type the EW angular position (-40 (W) <-> 40 (E))")
 	stdscr.refresh()
 	ew_pos = get_float_input(stdscr)
 	stdscr.addstr(19, 0, " " * 80)
