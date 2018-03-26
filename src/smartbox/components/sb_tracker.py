@@ -44,17 +44,18 @@ class SmartBoxTracker:
 
 	def get_ns_angle(self):
 		"""
-			TODO
 			Returns the position in degrees of the North-south direction
 		"""
-		return 0.0
-
+		pos_ns = self.get_ns_position()
+		return self._calculate_ns_angle_from_position(pos_ns)
+		
 	def get_ew_angle(self):
 		"""
-			TODO
 			Returns the position in degrees of the East-West direction
 		"""
-		return 0.0
+		pos_ns = self.get_ew_position()
+		return self._calculate_ew_angle_from_position(pos_ns)
+		
 
 	def get_ns_limits(self):
 		return self.limits[self.NS_PIN]

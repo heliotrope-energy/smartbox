@@ -24,7 +24,6 @@ class TrackerClient:
 
 	def get_ns_angle(self):
 		"""
-			TODO
 			Returns the position in degrees of the North-south direction
 		"""
 		msg = self._request_status_()
@@ -32,7 +31,6 @@ class TrackerClient:
 
 	def get_ew_angle(self):
 		"""
-			TODO
 			Returns the position in degrees of the East-West direction
 		"""
 		msg = self._request_status_()
@@ -52,7 +50,6 @@ class TrackerClient:
 
 	def is_panel_moving(self):
 		"""
-			TODO
 			Returns status of 
 		"""
 		msg = self._request_status_()
