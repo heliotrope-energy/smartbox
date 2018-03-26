@@ -1,5 +1,5 @@
 syntax = "proto3";
-package smartbox;
+package smartbox_msgs;
 
 service TrackerController {
 	rpc get_tracker_status (TrackerSystemStatusRequest) returns (TrackerSystemStatusResponse) {}
