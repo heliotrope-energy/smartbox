@@ -19,6 +19,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.charge_controller_poller = \
 			Thread(target = self._get_charge_controller_data)
 		self.charge_controller_poller.start()
+		self.controlling_security_level = -1
 		
 
 	def get_tracker_status(self, request, context):
