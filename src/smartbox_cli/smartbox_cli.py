@@ -20,7 +20,7 @@ def display_info(stdscr):
 	load_voltage = client.tracker.get_load_voltage()
 	charge_current = client.tracker.get_charging_current()
 	load_current = client.tracker.get_load_current()
-	charge_state = client.tracker.get_charge_state()
+	charge_state = client.tracker.get_charge_status()
 
 	ns_moving = "MOVING" if client.tracker.is_ns_moving() else ""
 	ew_moving = "MOVING" if client.tracker.is_ew_moving() else ""
