@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 import grpc
 
-from tracker_client import TrackerClient
-from weather_client import WeatherClient
-from light_client import LightClient
-from panel_temperature_client import PanelTemperatureClient
-from camera_client import CameraClient
+from smartbox.client.tracker_client import TrackerClient
+from smartbox.client.weather_client import WeatherClient
+from smartbox.client.light_client import LightClient
+from smartbox.client.panel_temperature_client import PanelTemperatureClient
+#from smartbox.client.camera_client import CameraClient
 
 
 class SmartBoxResourceControllerClient():
@@ -17,7 +17,7 @@ class SmartBoxResourceControllerClient():
 		self.weather = WeatherClient(self.channel)
 		self.light = LightClient(self.channel)
 		self.panel_temps = PanelTemperatureClient(self.channel)
-		self.camera = CameraClient(self.channel)
+		#self.camera = CameraClient(self.channel)
 
 if __name__ == "__main__":
 	client = SmartBoxResourceControllerClient(101)
