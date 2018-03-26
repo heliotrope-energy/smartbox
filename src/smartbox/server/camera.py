@@ -5,7 +5,7 @@ from smartbox_msgs import image_pb2_grpc
 
 from smartbox.components.sb_camera import SmartBoxCamera
 
-class SmartBoxCameraController(image_pb2_grpc.CameraImageControllerServicer):
+class SmartBoxCameraController(image_pb2_grpc.CameraControllerServicer):
 	def __init__(self):
 		self.camera = SmartBoxCamera()
 
