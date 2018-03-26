@@ -8,16 +8,16 @@ class LightClient:
 		self.stub = lights_pb2_grpc.LightControllerStub(channel)
 
 	def get_light_status(self):
-		request = light_pb2.LightRequest()
+		request = lights_pb2.LightRequest()
 		response = self.stub.set_light(request)
-		status = response.status == light_pb2.LightResponse.ON
+		status = response.status == lights_pb2.LightResponse.ON
 		return status
 
 	def set_light_status(self, turn_light_on):
-		status = light_pb2.LightRequest.ON if turn_light_on else light_pb2.LightRequest.OFF
-		request = light_pb2.LightRequest(light = status)
+		status = lights_pb2.LightRequest.ON if turn_light_on else lights_pb2.LightRequest.OFF
+		request = lights_pb2.LightRequest(light = status)
 		response = self.stub.set_light(request)
-		status = response.status == light_pb2.LightResponse.ON
+		status = response.status == lights_pb2.LightResponse.ON
 		return status
 
 	
