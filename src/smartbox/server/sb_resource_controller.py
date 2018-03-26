@@ -12,7 +12,7 @@ _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
 def serve(log_dir):
 	log_path = os.path.join(log_dir, "resource_controller.log")
-	logging.basicConfig(filename=log_path, format='[%(asctime)s]  %(levelname)s: %(message)s', level=logging.INFO)
+	logging.basicConfig(filename=log_path, format='[%(asctime)s] %(name)s %(levelname)s: %(message)s', level=logging.INFO)
 	logger = logging.getLogger(__name__)
 	gm = TlsSMTPHandler(("smtp.gmail.com", 587), 'heliotrope.bugger@gmail.com', ['brawner@gmail.com'], 'Server is not having a good day', ('heliotrope.bugger@gmail.com', 's6u#jW^8gMYUV^bf'))
 	gm.setLevel(logging.ERROR)
