@@ -4,15 +4,15 @@
 #docs here https://ambientweather.docs.apiary.io/#reference/ambient-realtime-api/query-device-data?console=1
 import requests
 import json
-import api_config
+import smartbox.components.weather_api_config as weather_api_config
 
 #TODO: move to git-secret instead of separate API config
 class SmartBoxWeatherStation:
     def __init__(self):
 
-        self.app_key=api_config.application_key
-        self.device_key=api_config.device_key
-        self.mac=api_config.MAC
+        self.app_key=weather_api_config.application_key
+        self.device_key=weather_api_config.device_key
+        self.mac=weather_api_config.MAC
 
     def query_devices(self):
         '''
