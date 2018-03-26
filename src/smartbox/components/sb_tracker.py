@@ -182,7 +182,7 @@ class SmartBoxTracker:
 		panel_mount_point_to_mast = math.sqrt(vert_dist ** 2.0 + act_offset ** 2.0)
 		angle1 = math.atan(act_offset / vert_dist)
 
-		angle2 = math.acon((mount_point_dist ** 2.0 + panel_mount_point_to_mast ** 2.0 - total_length_actuator ** 2.0) / \
+		angle2 = math.acos((mount_point_dist ** 2.0 + panel_mount_point_to_mast ** 2.0 - total_length_actuator ** 2.0) / \
 				(2 * mount_point_dist * panel_mount_point_to_mast))
 		return 90.0 - (angle1 + angle2)
 
