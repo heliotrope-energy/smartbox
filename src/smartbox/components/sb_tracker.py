@@ -10,8 +10,8 @@ class SmartBoxTracker:
 		self.EW_PIN = 1
 		self.NS_PIN = 0
 		self.scale = 6.144/32767
-		self.EW_retracted_length = 12.0
-		self.NS_retracted_length = 6.0
+		self.EW_retracted_length = 18.125
+		self.NS_retracted_length = 12.125
 
 
 		self.limits = {self.NS_PIN:[0,6.0], self.EW_PIN:[0,12.0]}
