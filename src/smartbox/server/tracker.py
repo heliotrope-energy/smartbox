@@ -1,4 +1,4 @@
-import copy, time
+import copy, time, logging
 from queue import Queue
 from threading import Thread
 
@@ -20,6 +20,8 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			Thread(target = self._get_charge_controller_data)
 		self.charge_controller_poller.start()
 		self.controlling_security_level = -1
+
+		self.logger = logging.getLogger(__name__)
 		
 
 	def get_tracker_status(self, request, context):
@@ -28,16 +30,20 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 	def request_control(self, request, context):
 		if self.controlling_security_level == -1:
 			self.controlling_security_level = request.security_level
+			self.logger.info("Someone requested access control and it was granted because no one had control")
 			return tracker_pb2.RequestControlResponse(message="Success", success=tracker_pb2.SUCCESS)
 		elif request.security_level < self.controlling_security_level:
 			self.security_level_queue.put(self.controlling_security_level)
 			self.controlling_security_level = request.security_level
+			self.logger.info("Someone requested access, it was granted and it was taken from someone else")
 			return tracker_pb2.RequestControlResponse(message="Success", success=tracker_pb2.SUCCESS)
 		elif request.security_level >= self.controlling_security_level:
+			self.logger.info("Someone requested access control but another process has control")
 			return tracker_pb2.RequestControlResponse(message="Failure", success=tracker_pb2.INSUFFICIENT_SECURITY_LEVEL)
 
 	def relinquish_control(self, request, context):
 		self.controlling_security_level = -1
+		self.logger.info("Control was relinquished")
 		return tracker_pb2.RequestControlResponse(message="Success")
 
 	def move_panel(self, request, context):
@@ -45,31 +51,39 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		if move_type == tracker_pb2.MoveRequest.DURATION:
 			direction = request.direction
 			if direction == tracker_pb2.NORTH:
+				self.logger.info("Moving north called")
 				self.tracker_controller.move_north()
 			elif direction == tracker_pb2.SOUTH:
+				self.logger.info("Moving south called")
 				self.tracker_controller.move_south()
 			elif direction == tracker_pb2.EAST:
+				self.logger.info("Moving east called")
 				self.tracker_controller.move_east()
 			elif direction == tracker_pb2.WEST:
+				self.logger.info("Moving west called")
 				self.tracker_controller.move_west()
 
 		elif move_type == tracker_pb2.MoveRequest.POSITION:
 			ns_position = request.position.ns
 			ew_position = request.position.ew
+			self.logger.info("Position move to {} {} called".format(ns_position, ew_position))
 			self.tracker_controller.move_panel_to_linear_position(ns_position, ew_position)
 		elif move_type == tracker_pb2.MoveRequest.ANGLE:
 			ns_angle = request.angle.ns
 			ew_angle = request.angle.ew
+			self.logger.info("Angular move to {} {} called".format(ns_angle, ew_angle))
 			self.tracker_controller.move_panel_to_angular_position(ns_angle, ew_angle)
 		return tracker_pb2.MoveResponse()
 
 
 	def stop(self, request, context):
 		self.tracker_controller.stop()
+		self.logger.info("Stop called")
 		return tracker_pb2.StopResponse(message="Success")
 
 	def stow(self, request, context):
 		self.tracker_controller.stow()
+		self.logger.info("Stow called")
 		return tracker_pb2.StowResponse(message="Success")
 
 
@@ -100,5 +114,9 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 
 	def _get_charge_controller_data(self):
 		while True:
-			self.data, self.charge_data = self.charge_controller.get_all_data()
+			try:
+				self.data, self.charge_data = self.charge_controller.get_all_data()
+			except Exception as e:
+				self.logger.error("Retrieving charge controller failed")
+				self.logger.error(e, exc_info = True)
 			time.sleep(1)

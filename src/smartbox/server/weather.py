@@ -1,3 +1,5 @@
+import logging
+
 from smartbox_msgs import weather_pb2
 from smartbox_msgs import weather_pb2_grpc
 
@@ -6,11 +8,21 @@ from smartbox.components.sb_weather_station import SmartBoxWeatherStation
 class SmartBoxWeatherController(weather_pb2_grpc.WeatherControllerServicer):
 	def __init__(self):
 		self.weather = SmartBoxWeatherStation()
+		self.logger = logging.getLogger(__name__)
 
 	def get_weather(self, request, context):
-		weather = self.weather.get_recent_weather()
+		self.logger.info("Weather request received")
 		response = weather_pb2.WeatherResponse()
+		
+		try:
+			weather = self.weather.get_recent_weather()
+		except Exception as e:
+			self.logger.error("Getting weather failed with an exception, must be a tornado")
+			self.logger.error(e, exc_info=True)
+			return response
+
 		if len(weather) == 0:
+			self.logger.error("Getting weather failed, let's just assume it's sunny")
 			return response
 
 		response.date = weather['date']
