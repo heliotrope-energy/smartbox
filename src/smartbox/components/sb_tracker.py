@@ -178,22 +178,24 @@ class SmartBoxTracker:
 		self.stop_ew()
 
 
-	def _calculate_angle_from_position_(self, vert_dist, mount_point_dist, act_offset, total_length_actuator):
-		return 0.0
-		panel_mount_point_to_mast = math.sqrt(vert_dist ** 2.0 + act_offset ** 2.0)
-		angle1 = math.atan(act_offset / vert_dist)
+	def _calculate_angle_from_position_(self, a, b, c, total_length_actuator):
+		# a: vertical distance
+		# b: actuator offset
+		# c: panel_mount_offset
+		# v: axis rotation point to actuator base pivot
 
-		angle2 = math.acos((mount_point_dist ** 2.0 + panel_mount_point_to_mast ** 2.0 - total_length_actuator ** 2.0) / \
-				(2 * mount_point_dist * panel_mount_point_to_mast))
-		return 90.0 - (angle1 + angle2)
+		v = math.sqrt(a ** 2.0 + b ** 2.0)
+		angle1 = math.atan(b / a)
+		angle2 = math.acos((v**2.0 + c**2.0 - total_length_actuator ** 2.0) / (2 * v * c))
+		return 90.0 - 180.0 * (angle1 + angle2) / math.pi
 
 	def _calculate_ew_angle_from_position(self, extended_length):
 		total_length = self.EW_retracted_length + extended_length
-		return self._calculate_angle_from_position_(20, 6, 2, total_length)
+		return self._calculate_angle_from_position_(24.25, 2.1875, 8.625, total_length)
 
 	def _calculate_ns_angle_from_position(self, extended_length):
 		total_length = self.NS_retracted_length + extended_length
-		return self._calculate_angle_from_position_(20, 6, 2, total_length)
+		return self._calculate_angle_from_position_(16.75, 2.5, 8.625, total_length)
 
 	def _calculate_ew_position_from_angle(self, desired_angle):
 		a = 24.25
@@ -201,7 +203,7 @@ class SmartBoxTracker:
 		c = 8.625
 		total_length = self._calculate_total_length_from_angle(desired_angle, a ,b ,c )
 
-		extended_length = total_length - 18.125
+		extended_length = total_length - self.EW_retracted_length
 		return extended_length
 
 	def _calculate_ns_position_from_angle(self, desired_angle):
@@ -210,7 +212,7 @@ class SmartBoxTracker:
 		c = 8.625
 		total_length = self._calculate_total_length_from_angle(desired_angle, a ,b ,c )
 
-		extended_length = total_length - 12.125
+		extended_length = total_length - self.NS_retracted_length
 		return extended_length
 
 	def _calculate_total_length_from_angle(self, desired_angle, a, b, c):
@@ -219,10 +221,23 @@ class SmartBoxTracker:
 		# c: panel_mount_offset
 		# desired_angle: 
 
-		
-		v = math.sqrt(a**2 + c**2.0 - 2.0 * a * c * math.cos(desired_angle))
+		desired_angle_radians = math.pi / 2.0 - math.pi * desired_angle / 180.0
+		v = math.sqrt(a**2 + c**2.0 - 2.0 * a * c * math.cos(desired_angle_radians))
 		angle1 = math.acos((v**2.0 + a**2.0 - c**2.0) / (2 * v * a))
 		total_length = math.sqrt(v**2.0 + b**2.0 - 2* v * b * math.cos(90.0 - angle1))
+		return total_length
+
+
+	def _calculate_total_length_from_angle(self, desired_angle, a, b, c):
+		# a: vertical distance
+		# b: actuator offset
+		# c: panel_mount_offset
+		# desired_angle: 
+
+		angle_panel_mast_radians = math.pi / 2.0 - math.pi * desired_angle / 180.0
+		angle1 = math.atan(b / a)
+		v = math.sqrt(a**2.0 + b ** 2.0)
+		total_length = math.sqrt(v**2.0 + c**2.0 - 2*v * c * math.cos(angle_panel_mast_radians - angle1))
 		return total_length
 
 	def _actuator_voltage_to_position_(self, pin_num, voltage): 
