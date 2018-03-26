@@ -13,7 +13,7 @@ def serve():
 	tracker_pb2_grpc.add_TrackerControllerServicer_to_server(tracker.SmartBoxTrackerController(), server)
 	weather_pb2_grpc.add_WeatherControllerServicer_to_server(weather.SmartBoxWeatherController(), server)
 	temperature_pb2_grpc.add_TemperatureControllerServicer_to_server(temperature.SmartBoxTemperatureController(), server)
-	light_pb2_grpc.add_LightControllerServicer_to_server(light.SmartBoxLightController(), server)
+	lights_pb2_grpc.add_LightControllerServicer_to_server(light.SmartBoxLightController(), server)
 	
 	server.add_insecure_port('[::]:50051')
 	server.start()
