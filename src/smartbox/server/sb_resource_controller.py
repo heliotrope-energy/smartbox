@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from concurrent import futures
+import argparse, os
 
 import time, grpc
 from smartbox_msgs import tracker_pb2_grpc, weather_pb2_grpc, temperature_pb2_grpc, \
@@ -9,8 +10,9 @@ import logging
 from tls_smtp_handler import TlsSMTPHandler
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24	
 
-def serve():
-	logging.basicConfig(format='[%(asctime)s]  %(levelname)s: %(message)s')
+def serve(log_dir):
+	log_path = os.path.join(log_dir, "resource_controller.log")
+	logging.basicConfig(filename=log_path, format='[%(asctime)s]  %(levelname)s: %(message)s')
 	logger = logging.getLogger(__name__)
 	gm = TlsSMTPHandler(("smtp.gmail.com", 587), 'heliotrope.bugger@gmail.com', ['brawner@gmail.com'], 'Server is not having a good day', ('heliotrope.bugger@gmail.com', 's6u#jW^8gMYUV^bf'))
 	gm.setLevel(logging.ERROR)
@@ -48,6 +50,14 @@ def serve():
 
 
 if __name__ == '__main__':
-	serve()
+	parser = argparse.ArgumentParser(description='Store tracker data to a directory')
+	parser.add_argument('--log_dir', metavar='-l', type=str, default="$HOME",
+					help='Logging directory, defaults to $HOME')
+
+	args = parser.parse_args()
+	log_dir = os.path.expanduser(args.log_dir)
+	if not os.path.exists(log_dir):
+		os.makedirs(log_dir)
+	serve(log_dir)
 
 
