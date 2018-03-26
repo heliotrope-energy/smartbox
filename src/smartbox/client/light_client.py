@@ -20,4 +20,8 @@ class LightClient:
 		status = response.status == lights_pb2.LightResponse.ON
 		return status
 
+	def toggle(self):
+		cur_status = self.get_light_status()
+		self.set_light_status(not cur_status)
+		return self.get_light_status()
 	

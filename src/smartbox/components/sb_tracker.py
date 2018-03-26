@@ -53,8 +53,8 @@ class SmartBoxTracker:
 		"""
 			Returns the position in degrees of the East-West direction
 		"""
-		pos_ns = self.get_ew_position()
-		return self._calculate_ew_angle_from_position(pos_ns)
+		pos_ew = self.get_ew_position()
+		return self._calculate_ew_angle_from_position(pos_ew)
 		
 
 	def get_ns_limits(self):
