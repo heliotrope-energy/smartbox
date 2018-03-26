@@ -1,31 +1,14 @@
-#!/usr/bin/env python
+import copy
 from queue import Queue
-from concurrent import futures
 from threading import Thread
-import time, copy
 
-import grpc
+import tracker_pb2
+import tracker_pb2_grpc
 
-from smartbox.sb_tracker import SmartBoxTracker
-from smartbox.sb_charge_controller import SmartBoxChargeController
-from smartbox.sb_light import SmartBoxLight
-
-import smartbox_resource_controller_pb2
-import smartbox_resource_controller_pb2_grpc
-
-
-_ONE_DAY_IN_SECONDS = 60 * 60 * 24
-
-
-class SmartBoxResourceController(smartbox_resource_controller_pb2_grpc.SmartBoxResourceControllerServicer):
-	accumulated_energy_at_control_start = 0.0
-	controlling_security_level = -1
-	security_level_queue = Queue()
-
+class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 	def __init__(self):
 		self.charge_controller = SmartBoxChargeController()
 		self.tracker_controller = SmartBoxTracker()
-		self.light = SmartBoxLight()
 		self.energy_collected_at_start = 0.0
 		self.energy_collected_at_current_time = 0.0
 		self.energy_expended_at_start = 0.0
@@ -33,7 +16,7 @@ class SmartBoxResourceController(smartbox_resource_controller_pb2_grpc.SmartBoxR
 		self.charge_controller_poller = \
 			Thread(target = self._get_charge_controller_data)
 		self.charge_controller_poller.start()
-
+		
 
 	def get_tracker_status(self, request, context):
 		return self._get_tracker_status_message_()
@@ -85,16 +68,6 @@ class SmartBoxResourceController(smartbox_resource_controller_pb2_grpc.SmartBoxR
 		self.tracker_controller.stow()
 		return smartbox_resource_controller_pb2.StowResponse(message="Success")
 
-	def set_light(self, request, context):
-		if request.light == smartbox_resource_controller_pb2.LightRequest.ON:
-			self.light.turn_on()
-		elif request.light == smartbox_resource_controller_pb2.LightRequest.OFF:
-			self.light.turn_off()
-		if self.light.is_light_on():
-			status = smartbox_resource_controller_pb2.LightResponse.ON
-		else:
-			status = smartbox_resource_controller_pb2.LightResponse.OFF
-		return smartbox_resource_controller_pb2.LightResponse(status = status)
 
 	def _get_tracker_status_message_(self):
 		response = smartbox_resource_controller_pb2.TrackerSystemStatusResponse()
@@ -124,24 +97,4 @@ class SmartBoxResourceController(smartbox_resource_controller_pb2_grpc.SmartBoxR
 	def _get_charge_controller_data(self):
 		while True:
 			self.data, self.charge_data = self.charge_controller.get_all_data()
-			time.sleep(1)	
-
-	
-
-def serve():
-	server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-	smartbox_resource_controller_pb2_grpc.add_SmartBoxResourceControllerServicer_to_server(SmartBoxResourceController(), server)
-	server.add_insecure_port('[::]:50051')
-	server.start()
-	print("Starting resource controller server")
-	try:
-		while True:
-			time.sleep(_ONE_DAY_IN_SECONDS)
-	except KeyboardInterrupt:
-		server.stop(0)
-
-
-if __name__ == '__main__':
-	serve()
-
-
+			time.sleep(1)
