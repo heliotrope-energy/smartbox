@@ -1,5 +1,5 @@
-import weather_pb2
-import weather_pb2_grpc
+from smartbox_msgs import weather_pb2
+from smartbox_msgs import weather_pb2_grpc
 
 from sb_weather_station import SmartBoxWeatherStation
 
@@ -9,8 +9,8 @@ class SmartboxWeatherController(weather_pb2_grpc.WeatherControllerServicer):
 
 	def get_weather(self, request, context):
 		weather = self.weather.get_recent_weather()
-		response = smartbox_resource_controller_pb2.WeatherResponse()
-		if len(weather) = 0:
+		response = weather_pb2.WeatherResponse()
+		if len(weather) == 0:
 			return response
 
 		response.date = weather['date']
