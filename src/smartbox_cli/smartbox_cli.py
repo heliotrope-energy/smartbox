@@ -24,7 +24,7 @@ def display_info(stdscr):
 
 	ns_moving = "MOVING" if client.tracker.is_ns_moving() else ""
 	ew_moving = "MOVING" if client.tracker.is_ew_moving() else ""
-	light_on = "ON" if client.light.is_light_on() else "OFF"
+	light_on = "ON" if client.light.get_light_status() else "OFF"
 
 	stdscr.addstr(15, 0, "NS position: {:.3f} in  Angle:  {:.3f}\t{}".format(ns_position, ns_angle, ns_moving))
 	stdscr.addstr(16, 0, "EW position: {:.3f} in  Angle:  {:.3f}\t{}".format(ew_position, ew_angle, ew_moving))
