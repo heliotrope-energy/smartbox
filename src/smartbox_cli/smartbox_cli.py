@@ -1,7 +1,7 @@
 from smartbox.client.resource_controller_client import SmartBoxResourceControllerClient
 import curses
 
-client = SmartBoxResourceControllerClient()
+client = SmartBoxResourceControllerClient(20)
 
 def display_help(stdscr):
 	help_message = ""
