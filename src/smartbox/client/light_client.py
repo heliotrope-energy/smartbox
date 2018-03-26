@@ -1,10 +1,11 @@
 #!/usr/bin/env python
-import light_pb2
-import light_pb2_grpc
+from smartbox_msgs import lights_pb2
+from smartbox_msgs import lights_pb2_grpc
 
 class LightClient:
-	def __init__(self, stub):
-		self.stub = stub
+	def __init__(self, channel):
+		self.channel = channel
+		self.stub = lights_pb2_grpc.LightControllerStub(channel)
 
 	def get_light_status(self):
 		request = light_pb2.LightRequest()

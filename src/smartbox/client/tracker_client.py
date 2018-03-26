@@ -1,9 +1,10 @@
 #!/usr/bin/env python
-import tracker_pb2
-import tracker_pb2_grpc
+from smartbox_msgs import tracker_pb2
+from smartbox_msgs import tracker_pb2_grpc
 
 class TrackerClient:
-	def __init__(self, stub, authority_level):
+	def __init__(self, channel, authority_level):
+		self.channel = channel
 		self.authority_level = authority_level
 		self.stub = tracker_pb2_grpc.TrackerControllerStub(self.channel)
 

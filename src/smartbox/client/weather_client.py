@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-import weather_pb2
-import weather_pb2_grpc
+from smartbox_msgs import weather_pb2
+from smartbox_msgs import weather_pb2_grpc
 
 class WeatherClient:
 	def __init__(self, channel):

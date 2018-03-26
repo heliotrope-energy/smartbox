@@ -2,13 +2,13 @@
 import urllib3, cv2
 import numpy as np
 
-import camera_pb2
-import camera_pb2_grpc
+# from smartbox_msgs import camera_pb2
+# from smartbox_msgs import camera_pb2_grpc
 
 class CameraClient:
 	def __init__(self, channel):
 		self.channel = channel
-		self.stub = camera_pb2_grpc.CameraControllerStub(self.channel)
+		#self.stub = camera_pb2_grpc.CameraControllerStub(self.channel)
 		self.http = urllib3.PoolManager()
 		self.image_url = "http://138.16.161.117/images/image.png"
 		

@@ -2,7 +2,7 @@
 import temperature_pb2
 import temperature_pb2_grpc
 
-class PanelTemperaturesClient:
+class PanelTemperatureClient:
 	def __init__(self, channel):
 		self.channel = channel
 		self.stub = temperature_pb2_grpc.TemperatureControllerStub(self.channel)

@@ -1,20 +1,19 @@
 #!/usr/bin/env python
 import grpc
 
-from sb_tracker_client import TrackerClient
-from sb_charge_controller_client import ChargeControllerClient
-from sb_weather_client import WeatherClient
-from sb_light_client import LightClient
-from sb_panel_temperature_client import PanelTemperatureClient
-from sb_camera import CameraClient
+from tracker_client import TrackerClient
+from weather_client import WeatherClient
+from light_client import LightClient
+from panel_temperature_client import PanelTemperatureClient
+from camera_client import CameraClient
 
 
 class SmartBoxResourceControllerClient():
-	def __init__(self, security_level):
+	def __init__(self, authority_level):
 		self.channel = grpc.insecure_channel('138.16.161.117:50051')
 		#self.stub = smartbox_resource_controller_pb2_grpc.SmartBoxResourceControllerStub(self.channel)
 		
-		self.tracker = TrackerClient(self.channel)
+		self.tracker = TrackerClient(self.channel, authority_level)
 		self.weather = WeatherClient(self.channel)
 		self.light = LightClient(self.channel)
 		self.panel_temps = PanelTemperatureClient(self.channel)
