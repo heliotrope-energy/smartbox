@@ -1,5 +1,8 @@
 #!/usr/bin/env python
-import urllib3, cv2
+from smartbox_msgs import image_pb2
+from smartbox_msgs import image_pb2_grpc
+
+import cv2
 import numpy as np
 
 # from smartbox_msgs import camera_pb2
@@ -8,16 +11,14 @@ import numpy as np
 class CameraClient:
 	def __init__(self, channel):
 		self.channel = channel
-		#self.stub = camera_pb2_grpc.CameraControllerStub(self.channel)
-		self.http = urllib3.PoolManager()
-		self.image_url = "http://138.16.161.117/images/image.png"
-	
+		self.stub = image_pb2_grpc.CameraControllerStub(self.channel)
+		
 	def get_image(self):
 		"""
 			Gets the current image from the tracker. If for some reason the images
 			are stale, this method will return a None.
 		"""
-		resp = self.http.request('GET', self.image_url)
-		image = np.asarray(bytearray(resp.data), dtype="uint8")
-		image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+		msg = self.stub.get_current_image(image_pb2.CameraImageRequest())
+		nparr = np.fromstring(msg.data, np.uint8)
+		image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 		return image
