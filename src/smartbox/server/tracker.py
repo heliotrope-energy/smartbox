@@ -2,8 +2,8 @@ import copy
 from queue import Queue
 from threading import Thread
 
-from smartbox.msgs import tracker_pb2
-from smartbox.msgs import tracker_pb2_grpc
+from smartbox_msgs import tracker_pb2
+from smartbox_msgs import tracker_pb2_grpc
 
 class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 	def __init__(self):

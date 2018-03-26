@@ -1,5 +1,5 @@
-from smartbox.msgs import light_pb2
-from smartbox.msgs import light_pb2_grpc
+from smartbox_msgs import light_pb2
+from smartbox_msgs import light_pb2_grpc
 
 class SmartBoxLightController(light_pb2_grpc.LightControllerServicer):
 	def __init(self):

@@ -2,7 +2,7 @@
 from concurrent import futures
 
 import time, grpc
-from smartbox.msgs import tracker_pb2_grpc, weather_pb2_grpc, temperature_pb2_grpc, light_pb2_grpc
+from smartbox_msgs import tracker_pb2_grpc, weather_pb2_grpc, temperature_pb2_grpc, light_pb2_grpc
 
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24	
