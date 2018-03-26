@@ -24,53 +24,53 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 	def request_control(self, request, context):
 		if self.controlling_security_level == -1:
 			self.controlling_security_level = request.security_level
-			return smartbox_resource_controller_pb2.RequestControlResponse(message="Success")
+			return tracker_pb2.RequestControlResponse(message="Success")
 		elif request.security_level < self.controlling_security_level:
 			self.security_level_queue.put(self.controlling_security_level)
 			self.controlling_security_level = request.security_level
-			return smartbox_resource_controller_pb2.RequestControlResponse(message="Success")
+			return tracker_pb2.RequestControlResponse(message="Success")
 		elif request.security_level >= self.controlling_security_level:
-			return smartbox_resource_controller_pb2.RequestControlResponse(message="Failure", why_failure_id=smartbox_resource_controller_pb2.RequestControlResponse.INSUFFICIENT_SECURITY_LEVEL)
+			return tracker_pb2.RequestControlResponse(message="Failure", why_failure_id=tracker_pb2.RequestControlResponse.INSUFFICIENT_SECURITY_LEVEL)
 
 	def relinquish_control(self, request, context):
 		self.controlling_security_level = -1
-		return smartbox_resource_controller_pb2.RequestControlResponse(message="Success")
+		return tracker_pb2.RequestControlResponse(message="Success")
 
 	def move_panel(self, request, context):
 		move_type = request.move_type
-		if move_type == smartbox_resource_controller_pb2.MoveRequest.DURATION:
+		if move_type == tracker_pb2.MoveRequest.DURATION:
 			direction = request.direction
-			if direction == smartbox_resource_controller_pb2.NORTH:
+			if direction == tracker_pb2.NORTH:
 				self.tracker_controller.move_north()
-			elif direction == smartbox_resource_controller_pb2.SOUTH:
+			elif direction == tracker_pb2.SOUTH:
 				self.tracker_controller.move_south()
-			elif direction == smartbox_resource_controller_pb2.EAST:
+			elif direction == tracker_pb2.EAST:
 				self.tracker_controller.move_east()
-			elif direction == smartbox_resource_controller_pb2.WEST:
+			elif direction == tracker_pb2.WEST:
 				self.tracker_controller.move_west()
 
-		elif move_type == smartbox_resource_controller_pb2.MoveRequest.POSITION:
+		elif move_type == tracker_pb2.MoveRequest.POSITION:
 			ns_position = request.position.ns
 			ew_position = request.position.ew
 			self.tracker_controller.move_panel_to_linear_position(ns_position, ew_position)
-		elif move_type == smartbox_resource_controller_pb2.MoveRequest.ANGLE:
+		elif move_type == tracker_pb2.MoveRequest.ANGLE:
 			ns_angle = request.angle.ns
 			ew_angle = request.angle.ew
 			self.tracker_controller.move_panel_to_angular_position(ns_angle, ew_angle)
-		return smartbox_resource_controller_pb2.MoveResponse()
+		return tracker_pb2.MoveResponse()
 
 
 	def stop(self, request, context):
 		self.tracker_controller.stop()
-		return smartbox_resource_controller_pb2.StopResponse(message="Success")
+		return tracker_pb2.StopResponse(message="Success")
 
 	def stow(self, request, context):
 		self.tracker_controller.stow()
-		return smartbox_resource_controller_pb2.StowResponse(message="Success")
+		return tracker_pb2.StowResponse(message="Success")
 
 
 	def _get_tracker_status_message_(self):
-		response = smartbox_resource_controller_pb2.TrackerSystemStatusResponse()
+		response = tracker_pb2.TrackerSystemStatusResponse()
 		charge_data = copy.copy(self.charge_data)
 
 		response.tracker.position.ns = self.tracker_controller.get_ns_position()

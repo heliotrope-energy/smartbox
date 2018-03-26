@@ -1,17 +1,17 @@
 from smartbox_msgs import lights_pb2
 from smartbox_msgs import lights_pb2_grpc
 
-class SmartBoxLightController(light_pb2_grpc.LightControllerServicer):
+class SmartBoxLightController(lights_pb2_grpc.LightControllerServicer):
 	def __init(self):
 		self.light = SmartBoxLight()
 
 	def set_light(self, request, context):
-		if request.light == smartbox_resource_controller_pb2.LightRequest.ON:
+		if request.light == lights_pb2.LightRequest.ON:
 			self.light.turn_on()
-		elif request.light == smartbox_resource_controller_pb2.LightRequest.OFF:
+		elif request.light == lights_pb2.LightRequest.OFF:
 			self.light.turn_off()
 		if self.light.is_light_on():
-			status = smartbox_resource_controller_pb2.LightResponse.ON
+			status = lights_pb2.LightResponse.ON
 		else:
-			status = smartbox_resource_controller_pb2.LightResponse.OFF
-		return smartbox_resource_controller_pb2.LightResponse(status = status)
+			status = lights_pb2.LightResponse.OFF
+		return lights_pb2.LightResponse(status = status)
