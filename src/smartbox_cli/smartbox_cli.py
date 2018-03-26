@@ -1,12 +1,7 @@
-from smartbox.sb_tracker import SmartBoxTracker
-from smartbox.sb_light import SmartBoxLight
-from smartbox.sb_charge_controller import SmartBoxChargeController
+from smartbox.client.resource_controller_client import SmartBoxResourceControllerClient
 import curses
 
-
-tracker = SmartBoxTracker()
-light = SmartBoxLight()
-controller = SmartBoxChargeController()
+client = SmartBoxResourceControllerClient()
 
 def display_help(stdscr):
 	help_message = ""
@@ -15,21 +10,21 @@ def display_help(stdscr):
 	stdscr.addstr(0, 0, help_message)
 
 def display_info(stdscr):
-	ew_position = tracker.get_ew_position()
-	ew_angle = tracker.get_ew_angle()
-	ns_position = tracker.get_ns_position()
-	ns_angle = tracker.get_ns_angle()
+	ew_position = client.tracker.get_ew_position()
+	ew_angle = client.tracker.get_ew_angle()
+	ns_position = client.tracker.get_ns_position()
+	ns_angle = client.tracker.get_ns_angle()
 
-	battery_voltage = controller.get_battery_voltage()
-	panel_voltage = controller.get_solar_panel_voltage()
-	load_voltage = controller.get_load_voltage()
-	charge_current = controller.get_charging_current()
-	load_current = controller.get_load_current()
-	charge_state = controller.get_charge_state()
+	battery_voltage = client.tracker.get_battery_voltage()
+	panel_voltage = client.tracker.get_solar_panel_voltage()
+	load_voltage = client.tracker.get_load_voltage()
+	charge_current = client.tracker.get_charging_current()
+	load_current = client.tracker.get_load_current()
+	charge_state = client.tracker.get_charge_state()
 
-	ns_moving = "MOVING" if tracker.is_ns_moving() else ""
-	ew_moving = "MOVING" if tracker.is_ew_moving() else ""
-	light_on = "ON" if light.is_light_on() else "OFF"
+	ns_moving = "MOVING" if client.tracker.is_ns_moving() else ""
+	ew_moving = "MOVING" if client.tracker.is_ew_moving() else ""
+	light_on = "ON" if client.light.is_light_on() else "OFF"
 
 	stdscr.addstr(15, 0, "NS position: {:.3f} in  Angle:  {:.3f}\t{}".format(ns_position, ns_angle, ns_moving))
 	stdscr.addstr(16, 0, "EW position: {:.3f} in  Angle:  {:.3f}\t{}".format(ew_position, ew_angle, ew_moving))
@@ -51,33 +46,33 @@ def handle_key(stdscr, key_press):
 def move_north(stdscr):
 	stdscr.addstr(0, 70, "North")
 	stdscr.refresh()
-	tracker.move_north()
+	client.tracker.move_north()
 
 def move_south(stdscr):
 	stdscr.addstr(0, 70, "South")
 	stdscr.refresh()
-	tracker.move_south()
+	client.tracker.move_south()
 
 def move_east(stdscr):
 	stdscr.addstr(0, 70, "East")
 	stdscr.refresh()
-	tracker.move_east()
+	client.tracker.move_east()
 
 def move_west(stdscr):
 	stdscr.addstr(0, 70, "West")
 	stdscr.refresh()
-	tracker.move_west()
+	client.tracker.move_west()
 
 def stow(stdscr):
-	tracker.stow()
+	client.tracker.stow()
 
 def stop(stdscr):
 	stdscr.addstr(0, 70, "Stop")
 	stdscr.refresh()
-	tracker.stop()
+	client.tracker.stop()
 
 def toggle_light(stdscr):
-	light.toggle()
+	client.light.toggle()
 
 def get_float_input(stdscr):
 	stdscr.addstr(25, 0, " " * 80)
@@ -106,7 +101,7 @@ def move_to_linear_position(stdscr):
 	stdscr.addstr(5, 70, str(ns_pos))
 	stdscr.addstr(6, 70, str(ew_pos))
 	stdscr.refresh()
-	tracker.move_panel_to_linear_position(ns_pos, ew_pos)
+	client.tracker.move_panel_to_linear_position(ns_pos, ew_pos)
 
 
 def move_to_angular_position(stdscr):
@@ -123,7 +118,7 @@ def move_to_angular_position(stdscr):
 	stdscr.addstr(5, 70, str(ns_pos))
 	stdscr.addstr(6, 70, str(ew_pos))
 	stdscr.refresh()
-	tracker.move_panel_to_angular_position(ns_pos, ew_pos)
+	client.tracker.move_panel_to_angular_position(ns_pos, ew_pos)
 
 def draw_screen(stdscr):
 	stdscr.clear()
