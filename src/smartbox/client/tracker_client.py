@@ -158,6 +158,9 @@ class TrackerClient:
 		status = self._request_status_()
 		return status.charge_controller.charge_state
 
+	def get_tracker_data(self):
+		return self._request_status_()
+
 	def _request_status_(self):
 		request = tracker_pb2.TrackerSystemStatusRequest(message = "hello")
 		return self.stub.get_tracker_status(request)
