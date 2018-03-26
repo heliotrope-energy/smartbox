@@ -11,7 +11,9 @@ class CameraClient:
 		#self.stub = camera_pb2_grpc.CameraControllerStub(self.channel)
 		self.http = urllib3.PoolManager()
 		self.image_url = "http://138.16.161.117/images/image.png"
-		
+		self.width = 640
+		self.height = 480
+		self.num_channels = 3
 
 
 	
