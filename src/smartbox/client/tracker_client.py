@@ -8,6 +8,25 @@ class TrackerClient:
 		self.authority_level = authority_level
 		self.stub = tracker_pb2_grpc.TrackerControllerStub(self.channel)
 
+	def request_control(self):
+		"""
+			Request control of the tracker for movement. 
+
+			returns: True if request was successful, otherwise false
+		"""
+		resp = self._request_control_()
+		return resp.success == tracker_pb2.SUCCESS
+
+	def relinquish_control(self):
+		"""
+			Relinquishes control of the tracker. Be a polite user and please
+			relinquish.
+
+			returns: True if request was success, which it should always be
+		"""
+		resp = self._relinquish_control_()
+		return resp.success == tracker_pb2.SUCCESS
+
 	def get_ns_position(self):
 		"""
 			Returns the position in inches of the North-South Actuator
@@ -38,33 +57,33 @@ class TrackerClient:
 
 	def get_ns_limits(self):
 		"""
-			TODO
+			Returns safe limits of NS actuator
 		"""
 		return [0.0, 6.0]
 
 	def get_ew_limits(self):
 		"""
-			TODO
+			Returns safe limits of the EW actuator
 		"""
 		return [0.0, 12.0]
 
 	def is_panel_moving(self):
 		"""
-			Returns status of 
+			Returns whether the panel is moving in either direction
 		"""
 		msg = self._request_status_()
 		return msg.tracker.move_status.ns or msg.tracker.move_status.ew
 
 	def is_ns_moving(self):
 		"""
-
+			Returns whether the panel is moving in the NS direction
 		"""
 		msg = self._request_status_()
 		return msg.tracker.move_status.ns
 
 	def is_ew_moving(self):
 		"""
-
+			Returns whether the panel is moving in the EW diretion
 		"""
 		msg = self._request_status_()
 		return msg.tracker.move_status.ew
@@ -135,30 +154,53 @@ class TrackerClient:
 		self.stub.stop(request)
 
 	def get_battery_voltage(self):
+		"""
+			Gets the current battery voltage as measured by the charge controller
+		"""
 		status = self._request_status_()
 		return status.charge_controller.battery_voltage
 
 	def get_solar_panel_voltage(self):
+		"""
+			Gets the current solar panel array voltage as measured by the charge controller
+		"""
 		status = self._request_status_()
 		return status.charge_controller.array_voltage
 
 	def get_load_voltage(self):
+		"""
+			Gets the current voltage applied to the load as measured by the charge controller
+		"""
 		status = self._request_status_()
 		return status.charge_controller.load_voltage
 
 	def get_charging_current(self):
+		"""
+			Gets the amount of current that is charging the battery
+		"""
 		status = self._request_status_()
 		return status.charge_controller.charge_current
 
 	def get_load_current(self):
+		"""
+			Gets the amount of current applied to the load
+		"""
 		status = self._request_status_()
 		return status.charge_controller.load_current
 
 	def get_charge_status(self):
+		"""	
+			Gets the current status of the charge controller. Check the smartbox_msgs
+			for enum details.
+		"""
 		status = self._request_status_()
 		return status.charge_controller.charge_state
 
 	def get_tracker_data(self):
+		"""
+			Returns the complete status message of the tracker. Check the smartbox_msgs
+			for message details.
+		"""
 		return self._request_status_()
 
 	def _request_status_(self):

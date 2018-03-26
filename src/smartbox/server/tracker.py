@@ -28,13 +28,13 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 	def request_control(self, request, context):
 		if self.controlling_security_level == -1:
 			self.controlling_security_level = request.security_level
-			return tracker_pb2.RequestControlResponse(message="Success")
+			return tracker_pb2.RequestControlResponse(message="Success", success=tracker_pb2.SUCCESS)
 		elif request.security_level < self.controlling_security_level:
 			self.security_level_queue.put(self.controlling_security_level)
 			self.controlling_security_level = request.security_level
-			return tracker_pb2.RequestControlResponse(message="Success")
+			return tracker_pb2.RequestControlResponse(message="Success", success=tracker_pb2.SUCCESS)
 		elif request.security_level >= self.controlling_security_level:
-			return tracker_pb2.RequestControlResponse(message="Failure", why_failure_id=tracker_pb2.RequestControlResponse.INSUFFICIENT_SECURITY_LEVEL)
+			return tracker_pb2.RequestControlResponse(message="Failure", success=tracker_pb2.INSUFFICIENT_SECURITY_LEVEL)
 
 	def relinquish_control(self, request, context):
 		self.controlling_security_level = -1

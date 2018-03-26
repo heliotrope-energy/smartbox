@@ -11,13 +11,12 @@ class CameraClient:
 		#self.stub = camera_pb2_grpc.CameraControllerStub(self.channel)
 		self.http = urllib3.PoolManager()
 		self.image_url = "http://138.16.161.117/images/image.png"
-		self.width = 640
-		self.height = 480
-		self.num_channels = 3
-
-
 	
 	def get_image(self):
+		"""
+			Gets the current image from the tracker. If for some reason the images
+			are stale, this method will return a None.
+		"""
 		resp = self.http.request('GET', self.image_url)
 		image = np.asarray(bytearray(resp.data), dtype="uint8")
 		image = cv2.imdecode(image, cv2.IMREAD_COLOR)

@@ -8,6 +8,10 @@ class WeatherClient:
 		self.stub = weather_pb2_grpc.WeatherControllerStub(self.channel)
 
 	def get_weather(self):
+		"""
+			Returns the message as a protobuf message. Check smartbox_msgs 
+			for message details
+		"""
 		return self._request_weather_()
 
 	def _request_weather_(self):
