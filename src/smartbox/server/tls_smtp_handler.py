@@ -10,7 +10,6 @@ class TlsSMTPHandler(logging.handlers.SMTPHandler):
         """
         try:
             import smtplib
-            import string # for tls add this line
             try:
                 from email.utils import formatdate
             except ImportError:
@@ -22,7 +21,7 @@ class TlsSMTPHandler(logging.handlers.SMTPHandler):
             msg = self.format(record)
             msg = "From: %s\r\nTo: %s\r\nSubject: %s\r\nDate: %s\r\n\r\n%s" % (
                             self.fromaddr,
-                            string.join(self.toaddrs, ","),
+                            ",".join(self.toaddrs),
                             self.getSubject(record),
                             formatdate(), msg)
             if self.username:
@@ -36,15 +35,13 @@ class TlsSMTPHandler(logging.handlers.SMTPHandler):
             raise
         except:
             self.handleError(record)
- 
-logger = logging.getLogger()
- 
-gm = TlsSMTPHandler(("smtp.gmail.com", 587), 'heliotrope.bugger@gmail.com', ['brawner@gmail.com'], 'Server is not having a good day', ('heliotrope.bugger@gmail.com', 's6u#jW^8gMYUV^bf'))
-gm.setLevel(logging.ERROR)
- 
-logger.addHandler(gm)
- 
-try:
-    1/0
-except:
-    logger.exception('FFFFFFFFFFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUU-')
+
+if __name__ == "__main__":
+    logger = logging.getLogger()
+    gm = TlsSMTPHandler(("smtp.gmail.com", 587), 'heliotrope.bugger@gmail.com', ['brawner@gmail.com'], 'Server is not having a good day', ('heliotrope.bugger@gmail.com', 's6u#jW^8gMYUV^bf'))
+    gm.setLevel(logging.ERROR)
+    logger.addHandler(gm)
+    try:
+        1/0
+    except:
+        logger.exception('FFFFFFFFFFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUU-')
