@@ -179,6 +179,7 @@ class SmartBoxTracker:
 
 
 	def _calculate_angle_from_position_(self, vert_dist, mount_point_dist, act_offset, total_length_actuator):
+		return 0.0
 		panel_mount_point_to_mast = math.sqrt(vert_dist ** 2.0 + act_offset ** 2.0)
 		angle1 = math.atan(act_offset / vert_dist)
 
