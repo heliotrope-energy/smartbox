@@ -10,7 +10,7 @@ class SmartBoxWeatherController(weather_pb2_grpc.WeatherControllerServicer):
 		self.weather = SmartBoxWeatherStation()
 		self.logger = logging.getLogger(__name__)
 
-	def get_weather(self, request, context):
+	def weather_report(self, request, context):
 		self.logger.info("Weather request received")
 		response = weather_pb2.WeatherResponse()
 		

@@ -1,6 +1,6 @@
 import copy, time, logging
 from queue import Queue
-from threading import Thread
+from threading import Thread, RLock
 
 from smartbox_msgs import tracker_pb2
 from smartbox_msgs import tracker_pb2_grpc
@@ -22,6 +22,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.controlling_security_level = -1
 
 		self.logger = logging.getLogger(__name__)
+		self.charge_controller_lock = RLock()
 		
 
 	def get_tracker_status(self, request, context):
@@ -89,33 +90,33 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 
 	def _get_tracker_status_message_(self):
 		response = tracker_pb2.TrackerSystemStatusResponse()
-		charge_data = copy.copy(self.charge_data)
+		with self.charge_controller_lock:
+			response.tracker.position.ns = self.tracker_controller.get_ns_position()
+			response.tracker.position.ew = self.tracker_controller.get_ew_position()
+			response.tracker.angle.ns = self.tracker_controller.get_ns_angle()
+			response.tracker.angle.ew = self.tracker_controller.get_ew_angle()
+			response.tracker.move_status.ns= self.tracker_controller.is_ns_moving()
+			response.tracker.move_status.ns = self.tracker_controller.is_ew_moving()
+			response.tracker.current_controlling_level = self.controlling_security_level
 
-		response.tracker.position.ns = self.tracker_controller.get_ns_position()
-		response.tracker.position.ew = self.tracker_controller.get_ew_position()
-		response.tracker.angle.ns = self.tracker_controller.get_ns_angle()
-		response.tracker.angle.ew = self.tracker_controller.get_ew_angle()
-		response.tracker.move_status.ns= self.tracker_controller.is_ns_moving()
-		response.tracker.move_status.ns = self.tracker_controller.is_ew_moving()
-		response.tracker.current_controlling_level = self.controlling_security_level
-
-		response.charge_controller.battery_voltage = charge_data[SmartBoxChargeController.ADC_VB_F]
-		response.charge_controller.array_voltage = charge_data[SmartBoxChargeController.ADC_VA_F]
-		response.charge_controller.load_voltage = charge_data[SmartBoxChargeController.ADC_VL_F]
-		response.charge_controller.charge_current = charge_data[SmartBoxChargeController.ADC_IC_F]
-		response.charge_controller.load_current = charge_data[SmartBoxChargeController.ADC_IL_F]
-		response.charge_controller.charge_state = charge_data[SmartBoxChargeController.CHARGE_STATE]
-		response.charge_controller.energy_collected = self.energy_collected_at_current_time - \
-			self.energy_collected_at_start
-		response.charge_controller.energy_expended = self.energy_expended_at_current_time	- \
-			self.energy_expended_at_start
+			response.charge_controller.battery_voltage = self.charge_data[SmartBoxChargeController.ADC_VB_F]
+			response.charge_controller.array_voltage = self.charge_data[SmartBoxChargeController.ADC_VA_F]
+			response.charge_controller.load_voltage = self.charge_data[SmartBoxChargeController.ADC_VL_F]
+			response.charge_controller.charge_current = self.charge_data[SmartBoxChargeController.ADC_IC_F]
+			response.charge_controller.load_current = self.charge_data[SmartBoxChargeController.ADC_IL_F]
+			response.charge_controller.charge_state = self.charge_data[SmartBoxChargeController.CHARGE_STATE]
+			response.charge_controller.energy_collected = self.energy_collected_at_current_time - \
+				self.energy_collected_at_start
+			response.charge_controller.energy_expended = self.energy_expended_at_current_time	- \
+				self.energy_expended_at_start
 
 		return response
 
 	def _get_charge_controller_data(self):
 		while True:
 			try:
-				self.data, self.charge_data = self.charge_controller.get_all_data()
+				with self.charge_controller_lock:
+					self.data, self.charge_data = self.charge_controller.get_all_data()
 			except Exception as e:
 				self.logger.error("Retrieving charge controller failed")
 				self.logger.error(e, exc_info = True)
