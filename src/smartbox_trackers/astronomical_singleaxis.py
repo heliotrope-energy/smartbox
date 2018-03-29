@@ -51,6 +51,6 @@ if __name__ == "__main__":
     client = SmartBoxResourceControllerClient(101)
     tracker = AstronomicalTrackerSingleAxis(client, interval=10)
     while True:
-        tracker.run_step()
+        tracker.run_step(None, None)
         print("step finished")
         time.sleep(tracker.interval*60)

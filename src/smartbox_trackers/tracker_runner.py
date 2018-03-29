@@ -75,17 +75,20 @@ class TrackerRunner():
         data['load_current'] = [self.client.tracker.get_load_current()]
         #trackers state data
         data['current_tracker'] = [self.current_tracker]
-        data['ew_angle'] = self.client.tracker.get_ew_angle()
-        data['ns_angle'] = self.client.tracker.get_ns_angle()
+        data['ew_angle'] = [self.client.tracker.get_ew_angle()]
+        data['ns_angle'] = [self.client.tracker.get_ns_angle()]
         #TODO: weather data
 
-        # print(self.client.weather.get_weather())
+        print(self.client.weather.get_weather())
 
         data['wind_speed'] = None
         data['wind_direction'] = None
         data['weather_last_updated'] = None
 
         #TODO: weather forecast + satellite data
+
+
+        #TODO: panel temperature 
 
         return data
 
