@@ -1,5 +1,7 @@
 #not committing API-config
 api_config.py
 
+*.pyc
+.DS_Store
 
 __pycache__/
