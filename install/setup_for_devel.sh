@@ -14,10 +14,9 @@ echo "Pulling files from github"
 git pull
 if [[ $PYTHONPATH = *"/opt/heliotrope"* ]];then
 	cd ../src
-	export PYTHONPATH=$PWD
 	echo "Update PYTHONPATH for development"
 fi
 if [[ $PYTHONPATH != *"smartbox/src"* ]]; then
 	cd ../src
-	export PYTHONPATH=$PWD
+	export PYTHONPATH=$PWD:$PWD/smartbox_msgs
 fi

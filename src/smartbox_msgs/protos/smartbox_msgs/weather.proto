@@ -1,0 +1,64 @@
+syntax = "proto3";
+package smartbox_msgs;
+
+service WeatherController {
+	rpc weather_report (WeatherRequest) returns (WeatherResponse) {}
+}
+
+
+message TemperatureReport {
+	double outdoor = 1;
+	double indoor = 2;
+	double feels_like = 3;
+	double dew_point = 4;
+}
+
+message PressureReport {
+	double relative = 1;
+	double absolute = 2;	
+}
+
+message WindReport {
+	double direction = 1;
+	double speed = 2;
+	double gust = 3;
+	double max_daily_gust = 4;
+}
+
+
+message HumidityReport {
+	double humidity_percent = 1;
+	double humidity_indoor = 2;
+}
+
+message RainReport {
+	double hourly = 1;
+	double daily = 2;
+	double weekly = 3;
+	double monthly = 4;
+	double total = 5;
+	string last = 6;
+}
+
+
+message SolarReport {
+	double uv = 1;
+	double radiation = 2;
+}
+
+message WeatherRequest {
+	string message = 1;
+}
+
+message WeatherResponse {
+	string date = 1;
+	int32 date_utc = 2;
+	
+	TemperatureReport temperature = 3;
+	WindReport wind = 4;
+	PressureReport pressure = 5;
+	HumidityReport humidity = 6;
+	RainReport rain = 7;
+	SolarReport solar = 8;
+}
+

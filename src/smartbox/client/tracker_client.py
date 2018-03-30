@@ -1,18 +1,31 @@
 #!/usr/bin/env python
-import grpc, urllib3, cv2
-import numpy as np
+from smartbox_msgs import tracker_pb2
+from smartbox_msgs import tracker_pb2_grpc
 
-import smartbox_resource_controller_pb2
-import smartbox_resource_controller_pb2_grpc
+class TrackerClient:
+	def __init__(self, channel, authority_level):
+		self.channel = channel
+		self.authority_level = authority_level
+		self.stub = tracker_pb2_grpc.TrackerControllerStub(self.channel)
 
-class SmartBoxResourceControllerClient():
-	def __init__(self, security_level):
-		self.channel = grpc.insecure_channel('138.16.161.117:50051')
-		self.image_url = "http://138.16.161.117/images/image.png"
-		self.stub = smartbox_resource_controller_pb2_grpc.SmartBoxResourceControllerStub(self.channel)
-		self.security_level = security_level
-		self.http = urllib3.PoolManager()
+	def request_control(self):
+		"""
+			Request control of the tracker for movement. 
 
+			returns: True if request was successful, otherwise false
+		"""
+		resp = self._request_control_()
+		return resp.success == tracker_pb2.SUCCESS
+
+	def relinquish_control(self):
+		"""
+			Relinquishes control of the tracker. Be a polite user and please
+			relinquish.
+
+			returns: True if request was success, which it should always be
+		"""
+		resp = self._relinquish_control_()
+		return resp.success == tracker_pb2.SUCCESS
 
 	def get_ns_position(self):
 		"""
@@ -30,7 +43,6 @@ class SmartBoxResourceControllerClient():
 
 	def get_ns_angle(self):
 		"""
-			TODO
 			Returns the position in degrees of the North-south direction
 		"""
 		msg = self._request_status_()
@@ -38,7 +50,6 @@ class SmartBoxResourceControllerClient():
 
 	def get_ew_angle(self):
 		"""
-			TODO
 			Returns the position in degrees of the East-West direction
 		"""
 		msg = self._request_status_()
@@ -46,34 +57,33 @@ class SmartBoxResourceControllerClient():
 
 	def get_ns_limits(self):
 		"""
-			TODO
+			Returns safe limits of NS actuator
 		"""
 		return [0.0, 6.0]
 
 	def get_ew_limits(self):
 		"""
-			TODO
+			Returns safe limits of the EW actuator
 		"""
 		return [0.0, 12.0]
 
 	def is_panel_moving(self):
 		"""
-			TODO
-			Returns status of 
+			Returns whether the panel is moving in either direction
 		"""
 		msg = self._request_status_()
 		return msg.tracker.move_status.ns or msg.tracker.move_status.ew
 
 	def is_ns_moving(self):
 		"""
-
+			Returns whether the panel is moving in the NS direction
 		"""
 		msg = self._request_status_()
 		return msg.tracker.move_status.ns
 
 	def is_ew_moving(self):
 		"""
-
+			Returns whether the panel is moving in the EW diretion
 		"""
 		msg = self._request_status_()
 		return msg.tracker.move_status.ew
@@ -103,7 +113,7 @@ class SmartBoxResourceControllerClient():
 		"""
 			Moves the panel to a safe wind-stow position
 		"""
-		request = smartbox_resource_controller_pb2.StowRequest(message="Flat please")
+		request = tracker_pb2.StowRequest(message="Flat please")
 		self.stub.stow(request)
 
 	def move_north(self):
@@ -111,7 +121,7 @@ class SmartBoxResourceControllerClient():
 			Moves the panel to face north. Call stop_ns() or stop() to stop 
 			the movement
 		"""
-		self._request_direction_move_(direction=smartbox_resource_controller_pb2.MovePanelRequest.NORTH)
+		self._request_direction_move_(direction=tracker_pb2.NORTH)
 		
 
 	def move_south(self):
@@ -120,127 +130,104 @@ class SmartBoxResourceControllerClient():
 			the movement
 		"""
 
-		self._request_direction_move_(direction=smartbox_resource_controller_pb2.MovePanelRequest.SOUTH)
+		self._request_direction_move_(direction=tracker_pb2.SOUTH)
 		
 	def move_east(self):
 		"""
 			Moves the panel to face east. Call stop_ew() or stop() to stop 
 			the movement
 		"""
-		self._request_direction_move_(direction=smartbox_resource_controller_pb2.MovePanelRequest.EAST)
+		self._request_direction_move_(direction=tracker_pb2.EAST)
 		
 	def move_west(self):
 		"""
 			Moves the panel to face west. Call stop_ew() or stop() to stop 
 			the movement
 		"""
-		self._request_direction_move_(direction=smartbox_resource_controller_pb2.MovePanelRequest.WEST)
+		self._request_direction_move_(direction=tracker_pb2.WEST)
 
 	def stop(self):
 		"""
 			Stops the movement of both axes
 		"""
-		request = smartbox_resource_controller_pb2.StopRequest(message="stop")
+		request = tracker_pb2.StopRequest(message="stop")
 		self.stub.stop(request)
 
-	def get_light_status(self):
-		request = smartbox_resource_controller_pb2.LightRequest()
-		response = self.stub.set_light(request)
-		status = response.status == smartbox_resource_controller_pb2.LightResponse.ON
-		return status
-
-	def set_light_status(self, turn_light_on):
-		status = smartbox_resource_controller_pb2.LightRequest.ON if turn_light_on else smartbox_resource_controller_pb2.LightRequest.OFF
-		request = smartbox_resource_controller_pb2.LightRequest(light = status)
-		response = self.stub.set_light(request)
-		status = response.status == smartbox_resource_controller_pb2.LightResponse.ON
-		return status
-
 	def get_battery_voltage(self):
+		"""
+			Gets the current battery voltage as measured by the charge controller
+		"""
 		status = self._request_status_()
 		return status.charge_controller.battery_voltage
 
 	def get_solar_panel_voltage(self):
+		"""
+			Gets the current solar panel array voltage as measured by the charge controller
+		"""
 		status = self._request_status_()
 		return status.charge_controller.array_voltage
 
 	def get_load_voltage(self):
+		"""
+			Gets the current voltage applied to the load as measured by the charge controller
+		"""
 		status = self._request_status_()
 		return status.charge_controller.load_voltage
 
 	def get_charging_current(self):
+		"""
+			Gets the amount of current that is charging the battery
+		"""
 		status = self._request_status_()
 		return status.charge_controller.charge_current
 
 	def get_load_current(self):
+		"""
+			Gets the amount of current applied to the load
+		"""
 		status = self._request_status_()
 		return status.charge_controller.load_current
 
 	def get_charge_status(self):
+		"""	
+			Gets the current status of the charge controller. Check the smartbox_msgs
+			for enum details.
+		"""
 		status = self._request_status_()
 		return status.charge_controller.charge_state
 
-	def get_image(self):
-		resp = self.http.request('GET', self.image_url)
-		image = np.asarray(bytearray(resp.data, dtype="uint8"))
-		image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-		return image
+	def get_tracker_data(self):
+		"""
+			Returns the complete status message of the tracker. Check the smartbox_msgs
+			for message details.
+		"""
+		return self._request_status_()
 
 	def _request_status_(self):
-		request = smartbox_resource_controller_pb2.TrackerSystemStatusRequest(message = "hello")
+		request = tracker_pb2.TrackerSystemStatusRequest(message = "hello")
 		return self.stub.get_tracker_status(request)
 
 	def _request_control_(self):
-		request = smartbox_resource_controller_pb2.RequestControlRequest(message="Control please", security_level = self.security_level)
+		request = tracker_pb2.RequestControlRequest(message="Control please", security_level = self.security_level)
 		return self.stub.request_control(request)
 
 	def _relinquish_control_(self):
-		request = smartbox_resource_controller_pb2.RelinquishControl(message="All done")
+		request = tracker_pb2.RelinquishControl(message="All done")
 		return self.stub.request_control(request)
 
 	def _request_direction_move_(self, direction):
-		request = smartbox_resource_controller_pb2.MoveRequest(move_type = smartbox_resource_controller_pb2.MoveRequest.DIRECTION)
+		request = tracker_pb2.MoveRequest(move_type = tracker_pb2.MoveRequest.DURATION)
 		request.direction = direction
 		return self.stub.move_panel(request)
 
 	def _request_position_move_(self, pos_ns, pos_ew):
-		request = smartbox_resource_controller_pb2.MoveRequest(move_type = smartbox_resource_controller_pb2.MoveRequest.POSITION)
+		request = tracker_pb2.MoveRequest(move_type = tracker_pb2.MoveRequest.POSITION)
 		request.position.ns = pos_ns
 		request.position.ew = pos_ew
 		return self.stub.move_panel(request)
 
 	def _request_angular_move_(self, angle_ns, angle_ew):
-		request = smartbox_resource_controller_pb2.MoveRequest(move_type = smartbox_resource_controller_pb2.MoveRequest.ANGLE)
+		request = tracker_pb2.MoveRequest(move_type = tracker_pb2.MoveRequest.ANGLE)
 		request.angle.ns = angle_ns
 		request.angle.ew = angle_ew
 		return self.stub.move_panel(request)
-
-if __name__ == "__main__":
-	client = SmartBoxResourceControllerClient(101)
-	print(client.get_ns_position())
-	print(client.get_ew_position())
-	print(client.get_ew_angle())
-	print(client.get_ew_angle())
-	print(client.is_ew_moving())
-	print(client.is_ns_moving())
-	#print(client.move_panel_to_linear_position(4.4, 1))
-	# print(client.move_panel_to_angular_position(0.0, 0.0))
-	# print(client.stow())
-	# print(client.stop())
-	print(client.get_light_status())
-	print(client.set_light_status(True))
-	print(client.get_light_status())
-	print(client.set_light_status(False))
-	print(client.get_light_status())
-	print(client.get_battery_voltage())
-	print(client.get_solar_panel_voltage())
-	print(client.get_load_voltage())
-	print(client.get_charging_current())
-	print(client.get_load_current())
-	print(client.get_charge_status())
-
-	
-
-
-
-
