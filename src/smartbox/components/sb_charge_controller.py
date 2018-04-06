@@ -38,9 +38,9 @@ registers = {
     0x0024: ["alarm bitfield - LO word", None, lambda n: n],
     0x0025: ["dip switch settings", None, lambda n: n],
     0x0026: ["SOC LED state", None, lambda n: n],
-    0x0027: ["Charge output power", "W", lambda n: n*989.5*2**16],
+    0x0027: ["Charge output power", "W", lambda n: n*989.5*2**-16],
     0x0028: ["Array Vmp found during sweep", "V", lambda n: n*100*2**-15],
-    0x0029: ["Array Pmax(output) found during sweep", "W", lambda n: n*989.5 * 2**16],
+    0x0029: ["Array Pmax(output) found during sweep", "W", lambda n: n*989.5 * 2**-16],
     0x002A: ["Array Voc found during sweep", "V", lambda n: n * 100 * 2 **-15],
     0x002B: ["Vb minimum voltage - daily", "V", lambda n: n * 100 * 2**-15],
     0x002C: ["Vb maximum voltage - daily", "V", lambda n: n * 100 * 2 ** -15],
@@ -163,7 +163,8 @@ class SmartBoxChargeController:
         except modbus_tk.modbus.ModbusError as exc:
             print("%s- Code=%d", exc, exc.get_exception_code())
         except Exception as e:
-            print("Exception thrown getting result")
+            self.logger.error("Exception thrown getting result")
+            self.logger.error(e)
         return None
 
     def _get_all_register_values_(self):
@@ -172,9 +173,10 @@ class SmartBoxChargeController:
                 quantity_of_x= 0x0034 - self.start_addr + 1)
             return result
         except modbus_tk.modbus.ModbusError as exc:
-            print("%s- Code=%d", exc, exc.get_exception_code())
+            self.logger.error("%s- Code=%d", exc, exc.get_exception_code())
         except Exception as e:
-            print("Exception thrown getting result")
+            self.logger.error("Exception thrown getting result")
+            self.logger.error(e)
         return None
 
 
