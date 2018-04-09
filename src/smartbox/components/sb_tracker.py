@@ -187,11 +187,7 @@ class SmartBoxTracker:
 
 		v = math.sqrt(a ** 2.0 + b ** 2.0)
 		angle1 = math.atan(b / a)
-		try:
-			angle2 = math.acos((v**2.0 + c**2.0 - total_length_actuator ** 2.0) / (2 * v * c))
-		except:
-			self.logger.error("Domain issue I reckon a {}, b {}, c {} total length {}".format(a,b,c,total_length_actuator))
-			return 0.0
+		angle2 = math.acos((v**2.0 + c**2.0 - total_length_actuator ** 2.0) / (2 * v * c))
 		return 90.0 - 180.0 * (angle1 + angle2) / math.pi
 
 	def _calculate_ew_angle_from_position(self, extended_length):

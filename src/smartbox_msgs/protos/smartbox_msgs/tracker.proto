@@ -56,6 +56,55 @@ message TrackerStatus {
 	int64 current_controlling_level = 4;
 }	
 
+message ChargeControllerDetails {
+	double t_hs = 1;
+	double t_batt = 2;
+	double t_amb = 3;
+	double t_rts = 4;
+
+	uint16 array_fault = 5;
+	double vb_f = 6;
+	double vb_ref = 7;
+
+	double ahc_r = 8;
+	double ahc_t = 9;
+	double kwhc = 10;
+	double load_state = 11;
+	uint16 load_fault = 12;
+	double v_lvd = 13;
+
+	double ahl_r = 14;
+	double ahl_t = 15;
+
+	double hourmeter = 16;
+	uint32 alarm = 17;
+
+	uint16 dip_switch = 18;
+	uint16 led_state = 19;
+	double power_out = 20;
+
+	double sweep_vmp = 21;
+	double sweep_pmax = 22;
+	double sweep_voc = 23;
+
+	double vb_min_daily = 24;
+	double vb_max_daily = 25;
+
+	double ahc_daily = 26;
+	double ahl_daily = 27;
+
+	uint16 array_fault_daily = 28;
+	uint16 load_fault_daily = 29;
+
+	uint32 alarm = 30;
+	double vb_min = 31;
+	double vb_max = 32;
+	uint16 lighting_should_be_on = 33;
+
+	double va_ref_fixed = 34;
+	double va_ref_fixed_ptc = 35;
+}
+
 message ChargeControllerStatus {
 	double battery_voltage = 1;
 	double array_voltage = 2;
@@ -66,6 +115,8 @@ message ChargeControllerStatus {
 	ChargeState charge_state = 6;
 	double energy_collected = 7;
 	double energy_expended = 8;
+
+	ChargeControllerDetails details = 9;
 }
 
 message RequestControlRequest {

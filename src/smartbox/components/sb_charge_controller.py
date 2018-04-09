@@ -5,54 +5,7 @@ import modbus_tk.modbus_rtu as modbus_rtu
 
 PORT = '/dev/ttyUSB0'
 
-
-registers = {
-    0x0008: ["Battery Voltage", "V",lambda n: (n * 100 * 2**-15)],
-    0x0009: ["Array voltage", "V", lambda n: (n * 100 * 2**-15)],
-    0x000A: ["Load Voltage", "V", lambda n: (n * 100 * 2 ** -15)],
-    0x000B: ["Charging current", "A", lambda n: (n * 79.16 * 2**-15)],
-    0x000C: ["Load Current", "C", lambda n: (n * 79.16 * 2 ** -15)],
-    0x000D: ["Heatsink temperature","C", lambda n: (n)],
-    0x000E: ["Battery temperature", "C", lambda n: (n)],
-    0x000F: ["Ambient temperature", "C", lambda n: (n)],
-    0x0010: ["Remote battery temperature", "C", lambda n: (n)],
-    0x0011: ["Charge state", None, lambda n: n],
-    0x0012: ["Array fault bitfield", None, lambda n: n],
-    0x0013: ["Battery voltage, slow filter", "V", lambda n: n*100*2**-15],
-    0x0014: ["Battery regulator reference voltage", "V", lambda n: n*96.667*2**-15],
-    0x0015: ["Ah charge resetable, HI word", "Ah", lambda n: n * 0.1],
-    0x0016: ["Ah charge resetable, LO word", None, lambda n: n],
-    0x0017: ["Ah charge total, HI word", "Ah", lambda n: n * 0.1],
-    0x0018: ["Ah charge total, LO word", None, lambda n: n],
-    0x0019: ["kWh charge (resetable?)", "kWh", lambda n: n*0.1],
-    0x001A: ["Load state", None, lambda n: n],
-    0x001B: ["Load fault bitfield", None, lambda n: n],
-    0x001C: ["Load current compensated LVD voltage", "V", lambda n: n*100*2**-15],
-    0x001D: ["Ah load resetable, HI word", "Ah", lambda n: n*0.1],
-    0x001E: ["Ah load resetable, LO word", None, lambda n: n],
-    0x001F: ["Ah load total, HI word", "Ah", lambda n: n*0.1],
-    0x0020: ["Ah load total, LO word", None, lambda n: n],
-    0x0021: ["hourmeter, HI word","Ah", lambda n: n*0.1],
-    0x0022: ["hourmeter, LO word", None, lambda n: n],
-    0x0023: ["alarm bitfield - HI word", None, lambda n: n],
-    0x0024: ["alarm bitfield - LO word", None, lambda n: n],
-    0x0025: ["dip switch settings", None, lambda n: n],
-    0x0026: ["SOC LED state", None, lambda n: n],
-    0x0027: ["Charge output power", "W", lambda n: n*989.5*2**-16],
-    0x0028: ["Array Vmp found during sweep", "V", lambda n: n*100*2**-15],
-    0x0029: ["Array Pmax(output) found during sweep", "W", lambda n: n*989.5 * 2**-16],
-    0x002A: ["Array Voc found during sweep", "V", lambda n: n * 100 * 2 **-15],
-    0x002B: ["Vb minimum voltage - daily", "V", lambda n: n * 100 * 2**-15],
-    0x002C: ["Vb maximum voltage - daily", "V", lambda n: n * 100 * 2 ** -15],
-    0x002D: ["Ah charge - daily", "Ah", lambda n: n * 0.1],
-    0x002E: ["Ah load - daily", "Ah", lambda n: n * 0.1],
-    0x002F: ["Array fault bitfield - daily", None, lambda n: n],
-    0x0030: ["Load fault bitfield - daily", None, lambda n: n],
-    0x0031: ["alarm bitfield - daily, HI word", None, lambda n: n],
-    0x0032: ["alarm bitfield - daily, LO word", None, lambda n: n],
-    0x0033: ["Minimum battery voltage", "V", lambda n: n*100*2**-15],
-    0x0034: ["Maximum battery voltage", "V", lambda n: n * 100 * 2 **-15],
-}
+Register = namedtuple('Register', ['description', 'units', 'address', 'HI_address', 'LO_address', 'conversion_func'], verbose=True)
 
 charge_states = {
     0: "START",
@@ -77,28 +30,49 @@ class SmartBoxChargeController:
     FLOAT = 7
     EQUALIZE = 8
 
-    ADC_VB_F = 0x0008
-    ADC_VA_F = 0x0009
-    ADC_VL_F = 0x000A
-    ADC_IC_F = 0x000B
-    ADC_IL_F = 0x000C
-    T_HS = 0x000D
-    T_BATT = 0x000E
-    T_AMB = 0x000F
-    T_RTS = 0x0010
-    CHARGE_STATE = 0x0011
-    ARRAY_FAULT = 0x0012
-    VB_F = 0x0013
-    VB_REF = 0x0014
-    AHC_R_HI = 0x0015
-    AHC_R_LO = 0x0016
-    AHC_T_HI = 0x0017
-    AHC_T_LO = 0x0018
-    KWHC = 0x0019
-
-
-
-
+    registers = {
+        "ADC_VB_F": Register(description = "Battery Voltage", units ="V", address=0x0008, conversion_func = lambda n: (n * 100 * 2**-15)),
+        "ADC_VA_F": Register(description = "Array Voltage", units ="V", address=0x0009, conversion_func = lambda n: (n * 100 * 2**-15)),
+        "ADC_VL_F": Register(description = "Load Voltage", units ="V", address=0x000A, conversion_func = lambda n: (n * 100 * 2**-15)),
+        "ADC_IC_F": Register(description = "Charging current", units ="A", address=0x000B, conversion_func = lambda n: (n * 79.16 * 2**-15)),
+        "ADC_IL_F": Register(description = "Load Current", units ="A", address=0x000C, conversion_func = lambda n: (n * 79.16 * 2**-15)),
+        "T_HS": Register(description = "Heatsink temperature", units ="C", address=0x000D, conversion_func = lambda n: n),
+        "T_BATT": Register(description = "Battery temperature", units ="C", address=0x000E, conversion_func = lambda n: n),
+        "T_AMB": Register(description = "Ambient temperature", units ="C", address=0x000F, conversion_func = lambda n: n),
+        "T_RTS": Register(description = "Remote battery temperature", units ="C", address=0x0010, conversion_func = lambda n: n),
+        "CHARGE_STATE": Register(description = "Charge state", units ="C", address=0x0011, conversion_func = lambda n: n),
+        "ARRAY_FAULT": Register(description = "Array fault bitfield", units ="C", address=0x0012, conversion_func = lambda n: n),
+        "VB_F": Register(description = "Battery voltage, slow filter", units ="V", address=0x0013, conversion_func = lambda n: n*100*2**-15),
+        "VB_REF": Register(description = "Battery regulator reference voltage", units ="V", address=0x0014, conversion_func = lambda n: n*96.667*2**-15),
+        "AHC_R": Register(description = "Ah charge resettable", units ="Ah", HI_address=0x0015, LO_address=0x0016, conversion_func = lambda hi, lo: ((hi << 16) + lo) * 0.1),
+        "AHC_T": Register(description = "Ah charge total", units ="Ah", HI_address=0x0017, LO_address=0x0018, conversion_func = lambda hi, lo: ((hi << 16) + lo) * 0.1),
+        "KWHC": Register(description = "kWh charge (resetable?)", units ="KWh", address=0x0019, conversion_func = lambda n: n*96.667*2**-15),
+        "LOAD_STATE": Register(description = "Load state",  address=0x001A, conversion_func = lambda n: n),
+        "LOAD_FAULT": Register(description = "Load fault bitfield",  address=0x001B, conversion_func = lambda n: n),
+        "V_LVD": Register(description = "Load current compensated LVD voltage", units ="V", address=0x001C, conversion_func = lambda n: n*100*2**-15),
+        "AHL_R": Register(description = "Ah load resettable", units ="Ah", HI_address=0x001D, LO_address=0x001E, conversion_func = lambda hi, lo: ((hi << 16) + lo) * 0.1),
+        "AHL_T": Register(description = "Ah load total", units ="Ah", HI_address=0x001F, LO_address=0x0020, conversion_func = lambda hi, lo: ((hi << 16) + lo) * 0.1),
+        "HOURMETER": Register(description = "Hourmeter", units ="h", HI_address=0x0021, LO_address=0x0022, conversion_func = lambda hi, lo: ((hi << 16) + lo) * 0.1),
+        "ALARM": Register(description = "Alarm bitfield", HI_address=0x0023, LO_address=0x0024, conversion_func = lambda hi, lo: ((hi << 16) + lo)),
+        "DIP_SWITCH": Register(description = "DIP switch settings",  address=0x0025, conversion_func = lambda n: n),
+        "LED_STATE": Register(description = "SOC LED state",  address=0x0026, conversion_func = lambda n: n),
+        "POWER_OUT": Register(description = "Charge output power",  units = "W", address=0x0027, conversion_func = lambda n: n*989.5*2**-16),
+        "SWEEP_VMP": Register(description = "Array Vmp found during sweep", units="V",  address=0x0028, conversion_func = lambda n: n*100*2**-15),
+        "SWEEP_PMAX": Register(description = "Array Pmax found during sweep", units="W",  address=0x0029, conversion_func = lambda n: n*989.5 * 2**-16),
+        "SWEEP_VOC": Register(description = "Array Voc found during sweep", units="V",  address=0x002A, conversion_func = lambda n: n*100*2**-15),
+        "VB_MIN_DAILY": Register(description = "Vb minimum voltage - daily", units="V",  address=0x002B, conversion_func = lambda n: n*100*2**-15),
+        "VB_MAX_DAILY": Register(description = "Vb maximum voltage - daily", units="V",  address=0x002C, conversion_func = lambda n: n*100*2**-15),
+        "AHC_DAILY": Register(description = "Ah charge - daily", units="V",  address=0x002D, conversion_func = lambda n: n * 0.1),
+        "AHL_DAILY": Register(description = "Ah load - daily", units="V",  address=0x002E, conversion_func = lambda n: n * 0.1),
+        "ARRAY_FAULT_DAILY": Register(description = "Array fault bitfield - daily", address=0x002F, conversion_func = lambda n: n),
+        "LOAD_FAULT_DAILY": Register(description = "Load fault bitfield - daily",   address=0x0030, conversion_func = lambda n: n),
+        "ALARM_DAILY": Register(description = "Alarm bitfield - daily", HI_address=0x0031, LO_address=0x0032, conversion_func = lambda hi, lo: ((hi << 16) + lo)),
+        "VB_MIN": Register(description = "Minimum battery voltage", units="V",  address=0x0033, conversion_func = lambda n: n*100*2**-15),
+        "VB_MAX": Register(description = "Maximum battery voltage", units="V",  address=0x0034, conversion_func = lambda n: n*100*2**-15),
+        "LIGHTING_SHOULD_BE_ON": Register(description = "Lighting should be on", units="V",  address=0x0038, conversion_func = lambda n: n),
+        "VA_REF_FIXED": Register(description = "Array Voltage Reference Fixed", units="V",  address=0x0039, conversion_func = lambda n: n*100*2**-15),
+        "VA_REF_FIXED_PTC": Register(description = "Array Voltage Referenc Fixed Percent", units="V",  address=0x003A, conversion_func = lambda n: n*100*2**-8),
+    }
 
     def __init__(self):
         self.logger = logging.getLogger(__name__)
@@ -110,6 +84,9 @@ class SmartBoxChargeController:
             self.maximum_message_bytes = 256
         except modbus_tk.modbus.ModbusError as exc:
             logger.error("%s- Code=%d", exc, exc.get_exception_code())
+
+    def is_connected(self):
+        return self.server._serial.is_open
 
     def get_battery_voltage(self):
         return self._get_register_(0x0008, registers[0x0008][2])
@@ -127,9 +104,6 @@ class SmartBoxChargeController:
         return self._get_register_(0x000C, registers[0x000C][2])
 
     def get_charge_state_name(self):
-        """
-            TODO, this reg value actually hase 8 different states
-        """
         value = self._get_register_(0x0011, registers[0x0011][2])
         return charge_states[value]
 
@@ -140,18 +114,22 @@ class SmartBoxChargeController:
     def get_all_data(self):
         register_values = self._get_all_register_values_()
         data = {}
-        data_by_addr = {}
         if register_values is None:
-            return data, data_by_addr
+            return data
 
-        for addr, (desc, units, conversion) in registers.items():
-            offset = addr - self.start_addr
-            reg_value = register_values[offset]
-            units_str = "" if units is None else units
-            full_description = desc + " " + units_str
-            data[full_description] = conversion(reg_value)
-            data_by_addr[addr] = conversion(reg_value)
-        return data, data_by_addr
+        for var_name, register in self.registers.items():
+            if register.address is None:
+                hi_offset = register.HI_address - self.start_addr
+                lo_offset = register.LO_address - self.start_addr
+                value = register.conversion_func(register_values[hi_offset], register_values[lo_offset])
+            else:
+                offset = register.address - self.start_addr
+                reg_value = register_values[offset]
+                value = register.conversion_func(reg_value)
+            units_str = "" if register.units is None else register.units
+            full_description = register.description + units_str
+            data[var_name] = (full_description, value)
+        return data
 
     def _get_register_(self, address, conversion_func, default_value = 0.0):
         reg_value = self._get_register_value_(address)
@@ -183,6 +161,8 @@ class SmartBoxChargeController:
             self.logger.error(e)
         return None
 
+    def _append_two_registers_(self, HI, LO, conversion_func):
+        return conversion_func((HI << 16) + LO)
 
 
 def main():
