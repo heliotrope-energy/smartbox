@@ -101,11 +101,15 @@ class SmartBoxChargeController:
 
 
     def __init__(self):
-        self.server = modbus_rtu.RtuMaster(serial.Serial(port=PORT, baudrate=9600, bytesize=8, parity='N', stopbits=2, xonxoff=0))
-        self.server.set_timeout(5.0)
-        self.server.set_verbose(True)
-        self.start_addr=0x0008
-        self.maximum_message_bytes = 256
+        self.logger = logging.getLogger(__name__)
+        try:
+            self.server = modbus_rtu.RtuMaster(serial.Serial(port=PORT, baudrate=9600, bytesize=8, parity='N', stopbits=2, xonxoff=0))
+            self.server.set_timeout(5.0)
+            self.server.set_verbose(True)
+            self.start_addr=0x0008
+            self.maximum_message_bytes = 256
+        except modbus_tk.modbus.ModbusError as exc:
+            logger.error("%s- Code=%d", exc, exc.get_exception_code())
 
     def get_battery_voltage(self):
         return self._get_register_(0x0008, registers[0x0008][2])
@@ -161,7 +165,7 @@ class SmartBoxChargeController:
                 quantity_of_x= 1)
             return result[0]
         except modbus_tk.modbus.ModbusError as exc:
-            print("%s- Code=%d", exc, exc.get_exception_code())
+            self.logger.error("%s- Code=%d", exc, exc.get_exception_code())
         except Exception as e:
             self.logger.error("Exception thrown getting result")
             self.logger.error(e)
