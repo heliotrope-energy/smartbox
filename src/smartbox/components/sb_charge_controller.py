@@ -71,7 +71,7 @@ class SmartBoxChargeController:
         "VB_MAX": Register(description = "Maximum battery voltage", units="V",  address=0x0034, conversion_func = lambda n: n*100*2**-15),
         "LIGHTING_SHOULD_BE_ON": Register(description = "Lighting should be on", units="V",  address=0x0038, conversion_func = lambda n: n),
         "VA_REF_FIXED": Register(description = "Array Voltage Reference Fixed", units="V",  address=0x0039, conversion_func = lambda n: n*100*2**-15),
-        "VA_REF_FIXED_PTC": Register(description = "Array Voltage Referenc Fixed Percent", units="V",  address=0x003A, conversion_func = lambda n: n*100*2**-8),
+        "VA_REF_FIXED_PTC": Register(description = "Array Voltage Reference Fixed Percent", units="V",  address=0x003A, conversion_func = lambda n: n*100*2**-8),
     }
 
     def __init__(self):

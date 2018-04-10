@@ -279,7 +279,8 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			if self.controlling_client is not None:
 				self.authority_queue.put((self.controlling_client.authority_level, self.controlling_client))
 			self.controlling_client = controlling_client
-			self.load_amphours_at_start = self.charge_data["AHL_T"][1]
+			if "AHL_T" in self.charge_data:
+				self.load_amphours_at_start = self.charge_data["AHL_T"][1]
 			if "KWHC" in self.charge_data:
 				self.energy_collected_at_start = self.charge_data["KWHC"][1]
 
