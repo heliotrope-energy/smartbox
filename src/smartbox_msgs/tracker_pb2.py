@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='tracker.proto',
   package='smartbox_msgs',
   syntax='proto3',
-  serialized_pb=_b('\n\rtracker.proto\x12\rsmartbox_msgs\"-\n\x1aTrackerSystemStatusRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\"\n\x08Position\x12\n\n\x02ns\x18\x01 \x01(\x01\x12\n\n\x02\x65w\x18\x02 \x01(\x01\"$\n\nMoveStatus\x12\n\n\x02ns\x18\x01 \x01(\x08\x12\n\n\x02\x65w\x18\x02 \x01(\x08\"\xb5\x01\n\rTrackerStatus\x12)\n\x08position\x18\x01 \x01(\x0b\x32\x17.smartbox_msgs.Position\x12&\n\x05\x61ngle\x18\x02 \x01(\x0b\x32\x17.smartbox_msgs.Position\x12.\n\x0bmove_status\x18\x03 \x01(\x0b\x32\x19.smartbox_msgs.MoveStatus\x12!\n\x19\x63urrent_controlling_level\x18\x04 \x01(\x03\"\xf1\x01\n\x16\x43hargeControllerStatus\x12\x17\n\x0f\x62\x61ttery_voltage\x18\x01 \x01(\x01\x12\x15\n\rarray_voltage\x18\x02 \x01(\x01\x12\x14\n\x0cload_voltage\x18\x03 \x01(\x01\x12\x16\n\x0e\x63harge_current\x18\x04 \x01(\x01\x12\x14\n\x0cload_current\x18\x05 \x01(\x01\x12\x30\n\x0c\x63harge_state\x18\x06 \x01(\x0e\x32\x1a.smartbox_msgs.ChargeState\x12\x18\n\x10\x65nergy_collected\x18\x07 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x08 \x01(\x01\"@\n\x15RequestControlRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x16\n\x0esecurity_level\x18\x02 \x01(\x04\"d\n\x16RequestControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x39\n\x07success\x18\x02 \x01(\x0e\x32(.smartbox_msgs.ControlRequestSuccessFlag\"+\n\x18RelinquishControlRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x9a\x01\n\x19RelinquishControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x18\n\x10\x65nergy_collected\x18\x02 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x03 \x01(\x01\x12\x39\n\x07success\x18\x04 \x01(\x0e\x32(.smartbox_msgs.ControlRequestSuccessFlag\"\x9a\x02\n\x0bMoveRequest\x12\x36\n\tmove_type\x18\x01 \x01(\x0e\x32#.smartbox_msgs.MoveRequest.MoveType\x12+\n\tdirection\x18\x02 \x01(\x0e\x32\x18.smartbox_msgs.DIRECTION\x12\x15\n\rmove_duration\x18\x03 \x01(\x01\x12)\n\x08position\x18\x04 \x01(\x0b\x32\x17.smartbox_msgs.Position\x12&\n\x05\x61ngle\x18\x05 \x01(\x0b\x32\x17.smartbox_msgs.Position\"<\n\x08MoveType\x12\t\n\x05UNSET\x10\x00\x12\x0c\n\x08\x44URATION\x10\x01\x12\x0c\n\x08POSITION\x10\x02\x12\t\n\x05\x41NGLE\x10\x03\"Z\n\x0cMoveResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x39\n\x07success\x18\x02 \x01(\x0e\x32(.smartbox_msgs.ControlRequestSuccessFlag\"\x1e\n\x0bStopRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"Z\n\x0cStopResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x39\n\x07success\x18\x02 \x01(\x0e\x32(.smartbox_msgs.ControlRequestSuccessFlag\"\x1e\n\x0bStowRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"Z\n\x0cStowResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x39\n\x07success\x18\x02 \x01(\x0e\x32(.smartbox_msgs.ControlRequestSuccessFlag\"\x8e\x01\n\x1bTrackerSystemStatusResponse\x12-\n\x07tracker\x18\x01 \x01(\x0b\x32\x1c.smartbox_msgs.TrackerStatus\x12@\n\x11\x63harge_controller\x18\x02 \x01(\x0b\x32%.smartbox_msgs.ChargeControllerStatus*5\n\tDIRECTION\x12\t\n\x05NORTH\x10\x00\x12\x08\n\x04\x45\x41ST\x10\x01\x12\t\n\x05SOUTH\x10\x02\x12\x08\n\x04WEST\x10\x03*\x89\x01\n\x0b\x43hargeState\x12\t\n\x05START\x10\x00\x12\x0f\n\x0bNIGHT_CHECK\x10\x01\x12\x0e\n\nDISCONNECT\x10\x02\x12\t\n\x05NIGHT\x10\x03\x12\t\n\x05\x46\x41ULT\x10\x04\x12\x0f\n\x0b\x42ULK_CHARGE\x10\x05\x12\x0e\n\nABSORBTION\x10\x06\x12\t\n\x05\x46LOAT\x10\x07\x12\x0c\n\x08\x45QUALIZE\x10\x08*V\n\x19\x43ontrolRequestSuccessFlag\x12\x0b\n\x07SUCCESS\x10\x00\x12\x1f\n\x1bINSUFFICIENT_SECURITY_LEVEL\x10\x01\x12\x0b\n\x07\x46\x41ILURE\x10\x02\x32\x9e\x04\n\x11TrackerController\x12m\n\x12get_tracker_status\x12).smartbox_msgs.TrackerSystemStatusRequest\x1a*.smartbox_msgs.TrackerSystemStatusResponse\"\x00\x12`\n\x0frequest_control\x12$.smartbox_msgs.RequestControlRequest\x1a%.smartbox_msgs.RequestControlResponse\"\x00\x12i\n\x12relinquish_control\x12\'.smartbox_msgs.RelinquishControlRequest\x1a(.smartbox_msgs.RelinquishControlResponse\"\x00\x12G\n\nmove_panel\x12\x1a.smartbox_msgs.MoveRequest\x1a\x1b.smartbox_msgs.MoveResponse\"\x00\x12\x41\n\x04stop\x12\x1a.smartbox_msgs.StopRequest\x1a\x1b.smartbox_msgs.StopResponse\"\x00\x12\x41\n\x04stow\x12\x1a.smartbox_msgs.StowRequest\x1a\x1b.smartbox_msgs.StowResponse\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\rtracker.proto\x12\rsmartbox_msgs\"0\n\x1aTrackerSystemStatusRequest\x12\x12\n\ncontrol_id\x18\x01 \x01(\t\"\"\n\x08Position\x12\n\n\x02ns\x18\x01 \x01(\x01\x12\n\n\x02\x65w\x18\x02 \x01(\x01\"$\n\nMoveStatus\x12\n\n\x02ns\x18\x01 \x01(\x08\x12\n\n\x02\x65w\x18\x02 \x01(\x08\"\xec\x01\n\rTrackerStatus\x12)\n\x08position\x18\x01 \x01(\x0b\x32\x17.smartbox_msgs.Position\x12&\n\x05\x61ngle\x18\x02 \x01(\x0b\x32\x17.smartbox_msgs.Position\x12.\n\x0bmove_status\x18\x03 \x01(\x0b\x32\x19.smartbox_msgs.MoveStatus\x12\x1d\n\x15\x63ontrolling_authority\x18\x04 \x01(\x03\x12\x1a\n\x12\x63ontrolling_client\x18\x05 \x01(\t\x12\x1d\n\x15is_controlling_client\x18\x06 \x01(\x08\"\xaa\x05\n\x17\x43hargeControllerDetails\x12\x0c\n\x04t_hs\x18\x01 \x01(\x01\x12\x0e\n\x06t_batt\x18\x02 \x01(\x01\x12\r\n\x05t_amb\x18\x03 \x01(\x01\x12\r\n\x05t_rts\x18\x04 \x01(\x01\x12\x13\n\x0b\x61rray_fault\x18\x05 \x01(\r\x12\x0c\n\x04vb_f\x18\x06 \x01(\x01\x12\x0e\n\x06vb_ref\x18\x07 \x01(\x01\x12\r\n\x05\x61hc_r\x18\x08 \x01(\x01\x12\r\n\x05\x61hc_t\x18\t \x01(\x01\x12\x0c\n\x04kwhc\x18\n \x01(\x01\x12\x12\n\nload_state\x18\x0b \x01(\x01\x12\x12\n\nload_fault\x18\x0c \x01(\r\x12\r\n\x05v_lvd\x18\r \x01(\x01\x12\r\n\x05\x61hl_r\x18\x0e \x01(\x01\x12\r\n\x05\x61hl_t\x18\x0f \x01(\x01\x12\x11\n\thourmeter\x18\x10 \x01(\x01\x12\r\n\x05\x61larm\x18\x11 \x01(\r\x12\x12\n\ndip_switch\x18\x12 \x01(\r\x12\x11\n\tled_state\x18\x13 \x01(\r\x12\x11\n\tpower_out\x18\x14 \x01(\x01\x12\x11\n\tsweep_vmp\x18\x15 \x01(\x01\x12\x12\n\nsweep_pmax\x18\x16 \x01(\x01\x12\x11\n\tsweep_voc\x18\x17 \x01(\x01\x12\x14\n\x0cvb_min_daily\x18\x18 \x01(\x01\x12\x14\n\x0cvb_max_daily\x18\x19 \x01(\x01\x12\x11\n\tahc_daily\x18\x1a \x01(\x01\x12\x11\n\tahl_daily\x18\x1b \x01(\x01\x12\x19\n\x11\x61rray_fault_daily\x18\x1c \x01(\r\x12\x18\n\x10load_fault_daily\x18\x1d \x01(\r\x12\x13\n\x0b\x61larm_daily\x18\x1e \x01(\r\x12\x0e\n\x06vb_min\x18\x1f \x01(\x01\x12\x0e\n\x06vb_max\x18  \x01(\x01\x12\x1d\n\x15lighting_should_be_on\x18! \x01(\r\x12\x14\n\x0cva_ref_fixed\x18\" \x01(\x01\x12\x18\n\x10va_ref_fixed_ptc\x18# \x01(\x01\"\xaa\x02\n\x16\x43hargeControllerStatus\x12\x17\n\x0f\x62\x61ttery_voltage\x18\x01 \x01(\x01\x12\x15\n\rarray_voltage\x18\x02 \x01(\x01\x12\x14\n\x0cload_voltage\x18\x03 \x01(\x01\x12\x16\n\x0e\x63harge_current\x18\x04 \x01(\x01\x12\x14\n\x0cload_current\x18\x05 \x01(\x01\x12\x30\n\x0c\x63harge_state\x18\x06 \x01(\x0e\x32\x1a.smartbox_msgs.ChargeState\x12\x18\n\x10\x65nergy_collected\x18\x07 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x08 \x01(\x01\x12\x37\n\x07\x64\x65tails\x18\t \x01(\x0b\x32&.smartbox_msgs.ChargeControllerDetails\"D\n\x15RequestControlRequest\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\x16\n\x0esecurity_level\x18\x02 \x01(\x04\"x\n\x16RequestControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x39\n\x07success\x18\x02 \x01(\x0e\x32(.smartbox_msgs.ControlRequestSuccessFlag\x12\x12\n\ncontrol_id\x18\x03 \x01(\t\".\n\x18RelinquishControlRequest\x12\x12\n\ncontrol_id\x18\x01 \x01(\t\"\x9a\x01\n\x19RelinquishControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x18\n\x10\x65nergy_collected\x18\x02 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x03 \x01(\x01\x12\x39\n\x07success\x18\x04 \x01(\x0e\x32(.smartbox_msgs.ControlRequestSuccessFlag\"\xce\x02\n\x0e\x43ontrolRequest\x12\x17\n\x0f\x61uthority_level\x18\x01 \x01(\x04\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x39\n\tmove_type\x18\x03 \x01(\x0e\x32&.smartbox_msgs.ControlRequest.MoveType\x12+\n\tdirection\x18\x04 \x01(\x0e\x32\x18.smartbox_msgs.DIRECTION\x12\x15\n\rmove_duration\x18\x05 \x01(\x01\x12)\n\x08position\x18\x06 \x01(\x0b\x32\x17.smartbox_msgs.Position\x12&\n\x05\x61ngle\x18\x07 \x01(\x0b\x32\x17.smartbox_msgs.Position\"<\n\x08MoveType\x12\t\n\x05UNSET\x10\x00\x12\x0c\n\x08\x44URATION\x10\x01\x12\x0c\n\x08POSITION\x10\x02\x12\t\n\x05\x41NGLE\x10\x03\"]\n\x0f\x43ontrolResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x39\n\x07success\x18\x02 \x01(\x0e\x32(.smartbox_msgs.ControlRequestSuccessFlag\";\n\x0bStopRequest\x12\x17\n\x0f\x61uthority_level\x18\x01 \x01(\x04\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\"Z\n\x0cStopResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x39\n\x07success\x18\x02 \x01(\x0e\x32(.smartbox_msgs.ControlRequestSuccessFlag\";\n\x0bStowRequest\x12\x17\n\x0f\x61uthority_level\x18\x01 \x01(\x04\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\"Z\n\x0cStowResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x39\n\x07success\x18\x02 \x01(\x0e\x32(.smartbox_msgs.ControlRequestSuccessFlag\"\x8e\x01\n\x1bTrackerSystemStatusResponse\x12-\n\x07tracker\x18\x01 \x01(\x0b\x32\x1c.smartbox_msgs.TrackerStatus\x12@\n\x11\x63harge_controller\x18\x02 \x01(\x0b\x32%.smartbox_msgs.ChargeControllerStatus*5\n\tDIRECTION\x12\t\n\x05NORTH\x10\x00\x12\x08\n\x04\x45\x41ST\x10\x01\x12\t\n\x05SOUTH\x10\x02\x12\x08\n\x04WEST\x10\x03*\x89\x01\n\x0b\x43hargeState\x12\t\n\x05START\x10\x00\x12\x0f\n\x0bNIGHT_CHECK\x10\x01\x12\x0e\n\nDISCONNECT\x10\x02\x12\t\n\x05NIGHT\x10\x03\x12\t\n\x05\x46\x41ULT\x10\x04\x12\x0f\n\x0b\x42ULK_CHARGE\x10\x05\x12\x0e\n\nABSORBTION\x10\x06\x12\t\n\x05\x46LOAT\x10\x07\x12\x0c\n\x08\x45QUALIZE\x10\x08*V\n\x19\x43ontrolRequestSuccessFlag\x12\x0b\n\x07SUCCESS\x10\x00\x12\x1f\n\x1bINSUFFICIENT_SECURITY_LEVEL\x10\x01\x12\x0b\n\x07\x46\x41ILURE\x10\x02\x32\xcd\x03\n\x11TrackerController\x12m\n\x12get_tracker_status\x12).smartbox_msgs.TrackerSystemStatusRequest\x1a*.smartbox_msgs.TrackerSystemStatusResponse\"\x00\x12V\n\x0ftracker_control\x12\x1d.smartbox_msgs.ControlRequest\x1a\x1e.smartbox_msgs.ControlResponse\"\x00(\x01\x30\x01\x12k\n\x0etracker_status\x12).smartbox_msgs.TrackerSystemStatusRequest\x1a*.smartbox_msgs.TrackerSystemStatusResponse\"\x00\x30\x01\x12\x41\n\x04stop\x12\x1a.smartbox_msgs.StopRequest\x1a\x1b.smartbox_msgs.StopResponse\"\x00\x12\x41\n\x04stow\x12\x1a.smartbox_msgs.StowRequest\x1a\x1b.smartbox_msgs.StowResponse\"\x00\x62\x06proto3')
 )
 
 _DIRECTION = _descriptor.EnumDescriptor(
@@ -48,8 +48,8 @@ _DIRECTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1721,
-  serialized_end=1774,
+  serialized_start=2661,
+  serialized_end=2714,
 )
 _sym_db.RegisterEnumDescriptor(_DIRECTION)
 
@@ -99,8 +99,8 @@ _CHARGESTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1777,
-  serialized_end=1914,
+  serialized_start=2717,
+  serialized_end=2854,
 )
 _sym_db.RegisterEnumDescriptor(_CHARGESTATE)
 
@@ -126,8 +126,8 @@ _CONTROLREQUESTSUCCESSFLAG = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1916,
-  serialized_end=2002,
+  serialized_start=2856,
+  serialized_end=2942,
 )
 _sym_db.RegisterEnumDescriptor(_CONTROLREQUESTSUCCESSFLAG)
 
@@ -150,9 +150,9 @@ INSUFFICIENT_SECURITY_LEVEL = 1
 FAILURE = 2
 
 
-_MOVEREQUEST_MOVETYPE = _descriptor.EnumDescriptor(
+_CONTROLREQUEST_MOVETYPE = _descriptor.EnumDescriptor(
   name='MoveType',
-  full_name='smartbox_msgs.MoveRequest.MoveType',
+  full_name='smartbox_msgs.ControlRequest.MoveType',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -175,10 +175,10 @@ _MOVEREQUEST_MOVETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1174,
-  serialized_end=1234,
+  serialized_start=2053,
+  serialized_end=2113,
 )
-_sym_db.RegisterEnumDescriptor(_MOVEREQUEST_MOVETYPE)
+_sym_db.RegisterEnumDescriptor(_CONTROLREQUEST_MOVETYPE)
 
 
 _TRACKERSYSTEMSTATUSREQUEST = _descriptor.Descriptor(
@@ -189,7 +189,7 @@ _TRACKERSYSTEMSTATUSREQUEST = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='smartbox_msgs.TrackerSystemStatusRequest.message', index=0,
+      name='control_id', full_name='smartbox_msgs.TrackerSystemStatusRequest.control_id', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -208,7 +208,7 @@ _TRACKERSYSTEMSTATUSREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=32,
-  serialized_end=77,
+  serialized_end=80,
 )
 
 
@@ -245,8 +245,8 @@ _POSITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=79,
-  serialized_end=113,
+  serialized_start=82,
+  serialized_end=116,
 )
 
 
@@ -283,8 +283,8 @@ _MOVESTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=115,
-  serialized_end=151,
+  serialized_start=118,
+  serialized_end=154,
 )
 
 
@@ -317,9 +317,23 @@ _TRACKERSTATUS = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='current_controlling_level', full_name='smartbox_msgs.TrackerStatus.current_controlling_level', index=3,
+      name='controlling_authority', full_name='smartbox_msgs.TrackerStatus.controlling_authority', index=3,
       number=4, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='controlling_client', full_name='smartbox_msgs.TrackerStatus.controlling_client', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='is_controlling_client', full_name='smartbox_msgs.TrackerStatus.is_controlling_client', index=5,
+      number=6, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
@@ -335,8 +349,277 @@ _TRACKERSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=154,
-  serialized_end=335,
+  serialized_start=157,
+  serialized_end=393,
+)
+
+
+_CHARGECONTROLLERDETAILS = _descriptor.Descriptor(
+  name='ChargeControllerDetails',
+  full_name='smartbox_msgs.ChargeControllerDetails',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='t_hs', full_name='smartbox_msgs.ChargeControllerDetails.t_hs', index=0,
+      number=1, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='t_batt', full_name='smartbox_msgs.ChargeControllerDetails.t_batt', index=1,
+      number=2, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='t_amb', full_name='smartbox_msgs.ChargeControllerDetails.t_amb', index=2,
+      number=3, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='t_rts', full_name='smartbox_msgs.ChargeControllerDetails.t_rts', index=3,
+      number=4, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='array_fault', full_name='smartbox_msgs.ChargeControllerDetails.array_fault', index=4,
+      number=5, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='vb_f', full_name='smartbox_msgs.ChargeControllerDetails.vb_f', index=5,
+      number=6, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='vb_ref', full_name='smartbox_msgs.ChargeControllerDetails.vb_ref', index=6,
+      number=7, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='ahc_r', full_name='smartbox_msgs.ChargeControllerDetails.ahc_r', index=7,
+      number=8, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='ahc_t', full_name='smartbox_msgs.ChargeControllerDetails.ahc_t', index=8,
+      number=9, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='kwhc', full_name='smartbox_msgs.ChargeControllerDetails.kwhc', index=9,
+      number=10, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='load_state', full_name='smartbox_msgs.ChargeControllerDetails.load_state', index=10,
+      number=11, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='load_fault', full_name='smartbox_msgs.ChargeControllerDetails.load_fault', index=11,
+      number=12, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='v_lvd', full_name='smartbox_msgs.ChargeControllerDetails.v_lvd', index=12,
+      number=13, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='ahl_r', full_name='smartbox_msgs.ChargeControllerDetails.ahl_r', index=13,
+      number=14, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='ahl_t', full_name='smartbox_msgs.ChargeControllerDetails.ahl_t', index=14,
+      number=15, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='hourmeter', full_name='smartbox_msgs.ChargeControllerDetails.hourmeter', index=15,
+      number=16, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='alarm', full_name='smartbox_msgs.ChargeControllerDetails.alarm', index=16,
+      number=17, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='dip_switch', full_name='smartbox_msgs.ChargeControllerDetails.dip_switch', index=17,
+      number=18, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='led_state', full_name='smartbox_msgs.ChargeControllerDetails.led_state', index=18,
+      number=19, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='power_out', full_name='smartbox_msgs.ChargeControllerDetails.power_out', index=19,
+      number=20, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='sweep_vmp', full_name='smartbox_msgs.ChargeControllerDetails.sweep_vmp', index=20,
+      number=21, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='sweep_pmax', full_name='smartbox_msgs.ChargeControllerDetails.sweep_pmax', index=21,
+      number=22, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='sweep_voc', full_name='smartbox_msgs.ChargeControllerDetails.sweep_voc', index=22,
+      number=23, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='vb_min_daily', full_name='smartbox_msgs.ChargeControllerDetails.vb_min_daily', index=23,
+      number=24, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='vb_max_daily', full_name='smartbox_msgs.ChargeControllerDetails.vb_max_daily', index=24,
+      number=25, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='ahc_daily', full_name='smartbox_msgs.ChargeControllerDetails.ahc_daily', index=25,
+      number=26, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='ahl_daily', full_name='smartbox_msgs.ChargeControllerDetails.ahl_daily', index=26,
+      number=27, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='array_fault_daily', full_name='smartbox_msgs.ChargeControllerDetails.array_fault_daily', index=27,
+      number=28, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='load_fault_daily', full_name='smartbox_msgs.ChargeControllerDetails.load_fault_daily', index=28,
+      number=29, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='alarm_daily', full_name='smartbox_msgs.ChargeControllerDetails.alarm_daily', index=29,
+      number=30, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='vb_min', full_name='smartbox_msgs.ChargeControllerDetails.vb_min', index=30,
+      number=31, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='vb_max', full_name='smartbox_msgs.ChargeControllerDetails.vb_max', index=31,
+      number=32, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='lighting_should_be_on', full_name='smartbox_msgs.ChargeControllerDetails.lighting_should_be_on', index=32,
+      number=33, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='va_ref_fixed', full_name='smartbox_msgs.ChargeControllerDetails.va_ref_fixed', index=33,
+      number=34, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='va_ref_fixed_ptc', full_name='smartbox_msgs.ChargeControllerDetails.va_ref_fixed_ptc', index=34,
+      number=35, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=396,
+  serialized_end=1078,
 )
 
 
@@ -403,6 +686,13 @@ _CHARGECONTROLLERSTATUS = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='details', full_name='smartbox_msgs.ChargeControllerStatus.details', index=8,
+      number=9, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -415,8 +705,8 @@ _CHARGECONTROLLERSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=338,
-  serialized_end=579,
+  serialized_start=1081,
+  serialized_end=1379,
 )
 
 
@@ -428,7 +718,7 @@ _REQUESTCONTROLREQUEST = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='smartbox_msgs.RequestControlRequest.message', index=0,
+      name='description', full_name='smartbox_msgs.RequestControlRequest.description', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -453,8 +743,8 @@ _REQUESTCONTROLREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=581,
-  serialized_end=645,
+  serialized_start=1381,
+  serialized_end=1449,
 )
 
 
@@ -479,6 +769,13 @@ _REQUESTCONTROLRESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='control_id', full_name='smartbox_msgs.RequestControlResponse.control_id', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -491,8 +788,8 @@ _REQUESTCONTROLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=647,
-  serialized_end=747,
+  serialized_start=1451,
+  serialized_end=1571,
 )
 
 
@@ -504,7 +801,7 @@ _RELINQUISHCONTROLREQUEST = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='smartbox_msgs.RelinquishControlRequest.message', index=0,
+      name='control_id', full_name='smartbox_msgs.RelinquishControlRequest.control_id', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -522,8 +819,8 @@ _RELINQUISHCONTROLREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=749,
-  serialized_end=792,
+  serialized_start=1573,
+  serialized_end=1619,
 )
 
 
@@ -574,49 +871,63 @@ _RELINQUISHCONTROLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=795,
-  serialized_end=949,
+  serialized_start=1622,
+  serialized_end=1776,
 )
 
 
-_MOVEREQUEST = _descriptor.Descriptor(
-  name='MoveRequest',
-  full_name='smartbox_msgs.MoveRequest',
+_CONTROLREQUEST = _descriptor.Descriptor(
+  name='ControlRequest',
+  full_name='smartbox_msgs.ControlRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='move_type', full_name='smartbox_msgs.MoveRequest.move_type', index=0,
-      number=1, type=14, cpp_type=8, label=1,
+      name='authority_level', full_name='smartbox_msgs.ControlRequest.authority_level', index=0,
+      number=1, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='direction', full_name='smartbox_msgs.MoveRequest.direction', index=1,
-      number=2, type=14, cpp_type=8, label=1,
+      name='description', full_name='smartbox_msgs.ControlRequest.description', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='move_type', full_name='smartbox_msgs.ControlRequest.move_type', index=2,
+      number=3, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='move_duration', full_name='smartbox_msgs.MoveRequest.move_duration', index=2,
-      number=3, type=1, cpp_type=5, label=1,
+      name='direction', full_name='smartbox_msgs.ControlRequest.direction', index=3,
+      number=4, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='move_duration', full_name='smartbox_msgs.ControlRequest.move_duration', index=4,
+      number=5, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='position', full_name='smartbox_msgs.MoveRequest.position', index=3,
-      number=4, type=11, cpp_type=10, label=1,
+      name='position', full_name='smartbox_msgs.ControlRequest.position', index=5,
+      number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='angle', full_name='smartbox_msgs.MoveRequest.angle', index=4,
-      number=5, type=11, cpp_type=10, label=1,
+      name='angle', full_name='smartbox_msgs.ControlRequest.angle', index=6,
+      number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -626,7 +937,7 @@ _MOVEREQUEST = _descriptor.Descriptor(
   ],
   nested_types=[],
   enum_types=[
-    _MOVEREQUEST_MOVETYPE,
+    _CONTROLREQUEST_MOVETYPE,
   ],
   options=None,
   is_extendable=False,
@@ -634,27 +945,27 @@ _MOVEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=952,
-  serialized_end=1234,
+  serialized_start=1779,
+  serialized_end=2113,
 )
 
 
-_MOVERESPONSE = _descriptor.Descriptor(
-  name='MoveResponse',
-  full_name='smartbox_msgs.MoveResponse',
+_CONTROLRESPONSE = _descriptor.Descriptor(
+  name='ControlResponse',
+  full_name='smartbox_msgs.ControlResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='smartbox_msgs.MoveResponse.message', index=0,
+      name='message', full_name='smartbox_msgs.ControlResponse.message', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='success', full_name='smartbox_msgs.MoveResponse.success', index=1,
+      name='success', full_name='smartbox_msgs.ControlResponse.success', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -672,8 +983,8 @@ _MOVERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1236,
-  serialized_end=1326,
+  serialized_start=2115,
+  serialized_end=2208,
 )
 
 
@@ -685,8 +996,15 @@ _STOPREQUEST = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='smartbox_msgs.StopRequest.message', index=0,
-      number=1, type=9, cpp_type=9, label=1,
+      name='authority_level', full_name='smartbox_msgs.StopRequest.authority_level', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='description', full_name='smartbox_msgs.StopRequest.description', index=1,
+      number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -703,8 +1021,8 @@ _STOPREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1328,
-  serialized_end=1358,
+  serialized_start=2210,
+  serialized_end=2269,
 )
 
 
@@ -741,8 +1059,8 @@ _STOPRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1360,
-  serialized_end=1450,
+  serialized_start=2271,
+  serialized_end=2361,
 )
 
 
@@ -754,8 +1072,15 @@ _STOWREQUEST = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='smartbox_msgs.StowRequest.message', index=0,
-      number=1, type=9, cpp_type=9, label=1,
+      name='authority_level', full_name='smartbox_msgs.StowRequest.authority_level', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='description', full_name='smartbox_msgs.StowRequest.description', index=1,
+      number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -772,8 +1097,8 @@ _STOWREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1452,
-  serialized_end=1482,
+  serialized_start=2363,
+  serialized_end=2422,
 )
 
 
@@ -810,8 +1135,8 @@ _STOWRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1484,
-  serialized_end=1574,
+  serialized_start=2424,
+  serialized_end=2514,
 )
 
 
@@ -848,22 +1173,23 @@ _TRACKERSYSTEMSTATUSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1577,
-  serialized_end=1719,
+  serialized_start=2517,
+  serialized_end=2659,
 )
 
 _TRACKERSTATUS.fields_by_name['position'].message_type = _POSITION
 _TRACKERSTATUS.fields_by_name['angle'].message_type = _POSITION
 _TRACKERSTATUS.fields_by_name['move_status'].message_type = _MOVESTATUS
 _CHARGECONTROLLERSTATUS.fields_by_name['charge_state'].enum_type = _CHARGESTATE
+_CHARGECONTROLLERSTATUS.fields_by_name['details'].message_type = _CHARGECONTROLLERDETAILS
 _REQUESTCONTROLRESPONSE.fields_by_name['success'].enum_type = _CONTROLREQUESTSUCCESSFLAG
 _RELINQUISHCONTROLRESPONSE.fields_by_name['success'].enum_type = _CONTROLREQUESTSUCCESSFLAG
-_MOVEREQUEST.fields_by_name['move_type'].enum_type = _MOVEREQUEST_MOVETYPE
-_MOVEREQUEST.fields_by_name['direction'].enum_type = _DIRECTION
-_MOVEREQUEST.fields_by_name['position'].message_type = _POSITION
-_MOVEREQUEST.fields_by_name['angle'].message_type = _POSITION
-_MOVEREQUEST_MOVETYPE.containing_type = _MOVEREQUEST
-_MOVERESPONSE.fields_by_name['success'].enum_type = _CONTROLREQUESTSUCCESSFLAG
+_CONTROLREQUEST.fields_by_name['move_type'].enum_type = _CONTROLREQUEST_MOVETYPE
+_CONTROLREQUEST.fields_by_name['direction'].enum_type = _DIRECTION
+_CONTROLREQUEST.fields_by_name['position'].message_type = _POSITION
+_CONTROLREQUEST.fields_by_name['angle'].message_type = _POSITION
+_CONTROLREQUEST_MOVETYPE.containing_type = _CONTROLREQUEST
+_CONTROLRESPONSE.fields_by_name['success'].enum_type = _CONTROLREQUESTSUCCESSFLAG
 _STOPRESPONSE.fields_by_name['success'].enum_type = _CONTROLREQUESTSUCCESSFLAG
 _STOWRESPONSE.fields_by_name['success'].enum_type = _CONTROLREQUESTSUCCESSFLAG
 _TRACKERSYSTEMSTATUSRESPONSE.fields_by_name['tracker'].message_type = _TRACKERSTATUS
@@ -872,13 +1198,14 @@ DESCRIPTOR.message_types_by_name['TrackerSystemStatusRequest'] = _TRACKERSYSTEMS
 DESCRIPTOR.message_types_by_name['Position'] = _POSITION
 DESCRIPTOR.message_types_by_name['MoveStatus'] = _MOVESTATUS
 DESCRIPTOR.message_types_by_name['TrackerStatus'] = _TRACKERSTATUS
+DESCRIPTOR.message_types_by_name['ChargeControllerDetails'] = _CHARGECONTROLLERDETAILS
 DESCRIPTOR.message_types_by_name['ChargeControllerStatus'] = _CHARGECONTROLLERSTATUS
 DESCRIPTOR.message_types_by_name['RequestControlRequest'] = _REQUESTCONTROLREQUEST
 DESCRIPTOR.message_types_by_name['RequestControlResponse'] = _REQUESTCONTROLRESPONSE
 DESCRIPTOR.message_types_by_name['RelinquishControlRequest'] = _RELINQUISHCONTROLREQUEST
 DESCRIPTOR.message_types_by_name['RelinquishControlResponse'] = _RELINQUISHCONTROLRESPONSE
-DESCRIPTOR.message_types_by_name['MoveRequest'] = _MOVEREQUEST
-DESCRIPTOR.message_types_by_name['MoveResponse'] = _MOVERESPONSE
+DESCRIPTOR.message_types_by_name['ControlRequest'] = _CONTROLREQUEST
+DESCRIPTOR.message_types_by_name['ControlResponse'] = _CONTROLRESPONSE
 DESCRIPTOR.message_types_by_name['StopRequest'] = _STOPREQUEST
 DESCRIPTOR.message_types_by_name['StopResponse'] = _STOPRESPONSE
 DESCRIPTOR.message_types_by_name['StowRequest'] = _STOWREQUEST
@@ -917,6 +1244,13 @@ TrackerStatus = _reflection.GeneratedProtocolMessageType('TrackerStatus', (_mess
   ))
 _sym_db.RegisterMessage(TrackerStatus)
 
+ChargeControllerDetails = _reflection.GeneratedProtocolMessageType('ChargeControllerDetails', (_message.Message,), dict(
+  DESCRIPTOR = _CHARGECONTROLLERDETAILS,
+  __module__ = 'tracker_pb2'
+  # @@protoc_insertion_point(class_scope:smartbox_msgs.ChargeControllerDetails)
+  ))
+_sym_db.RegisterMessage(ChargeControllerDetails)
+
 ChargeControllerStatus = _reflection.GeneratedProtocolMessageType('ChargeControllerStatus', (_message.Message,), dict(
   DESCRIPTOR = _CHARGECONTROLLERSTATUS,
   __module__ = 'tracker_pb2'
@@ -952,19 +1286,19 @@ RelinquishControlResponse = _reflection.GeneratedProtocolMessageType('Relinquish
   ))
 _sym_db.RegisterMessage(RelinquishControlResponse)
 
-MoveRequest = _reflection.GeneratedProtocolMessageType('MoveRequest', (_message.Message,), dict(
-  DESCRIPTOR = _MOVEREQUEST,
+ControlRequest = _reflection.GeneratedProtocolMessageType('ControlRequest', (_message.Message,), dict(
+  DESCRIPTOR = _CONTROLREQUEST,
   __module__ = 'tracker_pb2'
-  # @@protoc_insertion_point(class_scope:smartbox_msgs.MoveRequest)
+  # @@protoc_insertion_point(class_scope:smartbox_msgs.ControlRequest)
   ))
-_sym_db.RegisterMessage(MoveRequest)
+_sym_db.RegisterMessage(ControlRequest)
 
-MoveResponse = _reflection.GeneratedProtocolMessageType('MoveResponse', (_message.Message,), dict(
-  DESCRIPTOR = _MOVERESPONSE,
+ControlResponse = _reflection.GeneratedProtocolMessageType('ControlResponse', (_message.Message,), dict(
+  DESCRIPTOR = _CONTROLRESPONSE,
   __module__ = 'tracker_pb2'
-  # @@protoc_insertion_point(class_scope:smartbox_msgs.MoveResponse)
+  # @@protoc_insertion_point(class_scope:smartbox_msgs.ControlResponse)
   ))
-_sym_db.RegisterMessage(MoveResponse)
+_sym_db.RegisterMessage(ControlResponse)
 
 StopRequest = _reflection.GeneratedProtocolMessageType('StopRequest', (_message.Message,), dict(
   DESCRIPTOR = _STOPREQUEST,
@@ -1009,8 +1343,8 @@ _TRACKERCONTROLLER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   options=None,
-  serialized_start=2005,
-  serialized_end=2547,
+  serialized_start=2945,
+  serialized_end=3406,
   methods=[
   _descriptor.MethodDescriptor(
     name='get_tracker_status',
@@ -1022,36 +1356,27 @@ _TRACKERCONTROLLER = _descriptor.ServiceDescriptor(
     options=None,
   ),
   _descriptor.MethodDescriptor(
-    name='request_control',
-    full_name='smartbox_msgs.TrackerController.request_control',
+    name='tracker_control',
+    full_name='smartbox_msgs.TrackerController.tracker_control',
     index=1,
     containing_service=None,
-    input_type=_REQUESTCONTROLREQUEST,
-    output_type=_REQUESTCONTROLRESPONSE,
+    input_type=_CONTROLREQUEST,
+    output_type=_CONTROLRESPONSE,
     options=None,
   ),
   _descriptor.MethodDescriptor(
-    name='relinquish_control',
-    full_name='smartbox_msgs.TrackerController.relinquish_control',
+    name='tracker_status',
+    full_name='smartbox_msgs.TrackerController.tracker_status',
     index=2,
     containing_service=None,
-    input_type=_RELINQUISHCONTROLREQUEST,
-    output_type=_RELINQUISHCONTROLRESPONSE,
-    options=None,
-  ),
-  _descriptor.MethodDescriptor(
-    name='move_panel',
-    full_name='smartbox_msgs.TrackerController.move_panel',
-    index=3,
-    containing_service=None,
-    input_type=_MOVEREQUEST,
-    output_type=_MOVERESPONSE,
+    input_type=_TRACKERSYSTEMSTATUSREQUEST,
+    output_type=_TRACKERSYSTEMSTATUSRESPONSE,
     options=None,
   ),
   _descriptor.MethodDescriptor(
     name='stop',
     full_name='smartbox_msgs.TrackerController.stop',
-    index=4,
+    index=3,
     containing_service=None,
     input_type=_STOPREQUEST,
     output_type=_STOPRESPONSE,
@@ -1060,7 +1385,7 @@ _TRACKERCONTROLLER = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='stow',
     full_name='smartbox_msgs.TrackerController.stow',
-    index=5,
+    index=4,
     containing_service=None,
     input_type=_STOWREQUEST,
     output_type=_STOWRESPONSE,

@@ -2,7 +2,7 @@ import serial
 import modbus_tk
 import modbus_tk.defines as cst
 import modbus_tk.modbus_rtu as modbus_rtu
-
+from collections import namedtuple
 PORT = '/dev/ttyUSB0'
 
 Register = namedtuple('Register', ['description', 'units', 'address', 'HI_address', 'LO_address', 'conversion_func'], verbose=True)

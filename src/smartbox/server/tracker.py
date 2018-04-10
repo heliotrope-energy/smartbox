@@ -1,6 +1,7 @@
-import copy, time, logging
-from queue import Queue
+import copy, time, logging, datetime
+from queue import PriorityQueue
 from threading import Thread, RLock
+from collections import namedtuple
 
 from smartbox_msgs import tracker_pb2
 from smartbox_msgs import tracker_pb2_grpc
@@ -9,6 +10,7 @@ from smartbox.components.sb_charge_controller import SmartBoxChargeController
 from smartbox.components.sb_tracker import SmartBoxTracker
 
 import pandas as pd
+
 """
 Clients choose their own authority level
 
@@ -24,6 +26,10 @@ handed back, or just reset?
 
 
 """
+
+ControllingClient = namedtuple('ControllingClient', ['description', 'id', 'authority_level', 'collected', 'expended'])
+LEDGER_PATH = "/home/brawner/ledger.csv"
+
 class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 	def __init__(self):
 		self.charge_controller = SmartBoxChargeController()
@@ -32,80 +38,136 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.energy_collected_at_current_time = 0.0
 		self.energy_expended_at_start = 0.0
 		self.energy_expended_at_current_time = 0.0
-		self.charge_controller_poller = \
-			Thread(target = self._get_charge_controller_data)
-		self.charge_controller_poller.start()
-		self.controlling_authority = -1
-
+		
 		self.logger = logging.getLogger(__name__)
 		self.charge_controller_lock = RLock()
 
-		self.energy_ledger = pd.DataFrame(columns=["ID","Authority","KWH Collected", "Ah Total Load", "V Load"])
-		
+		if os.path.exists(LEDGER_PATH):
+			self.energy_ledger = pd.from_csv(LEDGER_PATH)
+		else:
+			self.energy_ledger = pd.DataFrame(columns=\
+				["ID", "Timestamp", 'KWHC', 'ADC_I_F','ADC_V_F'])
+		self.controlling_client = None
+		self.authority_queue = PriorityQueue()
+
+		self.charge_controller_poller = \
+			Thread(target = self._get_charge_controller_data_)
+		self.charge_controller_poller.start()
 
 	def get_tracker_status(self, request, context):
 		return self._get_tracker_status_message_()
 
-	def request_control(self, request, context):
-		if self.controlling_authority == -1:
-			self._process_control_change_(request.security_level)
-			self.logger.info("Someone requested access control and it was granted because no one had control")
-			return tracker_pb2.RequestControlResponse(message="Success", success=tracker_pb2.SUCCESS)
-		elif request.security_level < self.controlling_authority:
-			
-			self._process_control_change_(request.security_level)
-			self.logger.info("Someone requested access, it was granted and it was taken from someone else")
-			return tracker_pb2.RequestControlResponse(message="Success", success=tracker_pb2.SUCCESS)
+	def tracker_status(self, request, context):
+		sleep_duration = 1.0 / request.rate
+		while self.is_ok():
+			yield self._get_tracker_status_message_()
+			time.sleep(sleep_duration)
+
+	def _is_ok_(self):
+		return True
+
+	def tracker_control(self, request_iterator, context):
+		tracker_id = None
+		
+		for request in request_iterator:
+			if tracker_id is None:
+				tracker_id = self._request_control_change_(request)
+				if tracker_id is None:
+					return tracker_pb2.MoveResponse(message="Failure", \
+				success=tracker_pb2.INSUFFICIENT_SECURITY_LEVEL)
+			if tracker_id != self.controlling_client.id:
+				yield tracker_pb2.MoveResponse(\
+					message = "Failure. This client no longer has control, but it may be returned", \
+					success = tracker_pb2.FAILURE)
+			else:
+				yield self._process_move_request_(request)
+		self._process_relinquish_request_()
+
+	def _request_control_change_(self, request):
+		if self.controlling_client is None:
+			new_id = self._process_control_change_(request)
+			self.logger.info("Access control granted to {}".format(new_id))
+			return new_id
+		elif request.authority_level < self.controlling_client.authority_level:
+			prev_id = self.controlling_client.id
+			new_id = self._process_control_change_(request)
+			self.logger.info("Access control granted to {}. Taken from {}".format(new_id, prev_id))
+			return new_id
 		elif request.security_level >= self.controlling_authority:
-			self.logger.info("Someone requested access control but another process has control")
-			return tracker_pb2.RequestControlResponse(message="Failure", success=tracker_pb2.INSUFFICIENT_SECURITY_LEVEL)
+			self.logger.info("Access control denied. {} has control".format(self.controlling_client.id))
+			return None
+			
+
+	# def request_control(self, request, context):
+	# 	if self.controlling_client is None:
+	# 		new_id = self._process_control_change_(request)
+	# 		self.logger.info("Access control granted to {}".format(new_id))
+	# 		return tracker_pb2.RequestControlResponse(message="Success", control_id=new_id, \
+	# 			success=tracker_pb2.SUCCESS)
+	# 	elif request.authority_level < self.controlling_client.authority_level:
+	# 		prev_id = self.controlling_client.id
+	# 		new_id = self._process_control_change_(request)
+	# 		self.logger.info("Access control granted to {}. Taken from {}".format(new_id, prev_id))
+	# 		return tracker_pb2.RequestControlResponse(message="Success", control_id=new_id, \
+	# 			success=tracker_pb2.SUCCESS)
+	# 	elif request.security_level >= self.controlling_authority:
+	# 		self.logger.info("Access control denied. {} has control".format(self.controlling_client.id))
+	# 		return tracker_pb2.RequestControlResponse(message="Failure", \
+	# 			success=tracker_pb2.INSUFFICIENT_SECURITY_LEVEL)
 
 		
-	def relinquish_control(self, request, context):
-		self.controlling_authority = -1
-		self.logger.info("Control was relinquished")
-		return tracker_pb2.RequestControlResponse(message="Success")
+	# def relinquish_control(self, request, context):
+	# 	if self.controlling_client is None:
+	# 		self.logger.warn("A relinquish request was received but no one currently had control. Spooky")
+	# 		return tracker_pb2.RequestControlResponse(message="Error", success=tracker_pb2.ERROR)
+	# 	if request.control_id != self.controlling_client.id:
+	# 		self.logger.warn("A client requested to relinquish control but a different client had control. Bad robot")
+	# 		return tracker_pb2.RequestControlResponse(message="Error", success=tracker_pb2.ERROR)
+		
+	# 	collected, expended = self._process_relinquish_request_()
+	# 	return tracker_pb2.RequestControlResponse(message="Success",\
+	# 		energy_expended = expended, energy_collected = collected, success=tracker_pb2.SUCCESS)
+	
+	
 
-	def move_panel(self, request, context):
-		move_type = request.move_type
-		if move_type == tracker_pb2.MoveRequest.DURATION:
-			direction = request.direction
-			if direction == tracker_pb2.NORTH:
-				self.logger.info("Moving north called")
-				self.tracker_controller.move_north()
-			elif direction == tracker_pb2.SOUTH:
-				self.logger.info("Moving south called")
-				self.tracker_controller.move_south()
-			elif direction == tracker_pb2.EAST:
-				self.logger.info("Moving east called")
-				self.tracker_controller.move_east()
-			elif direction == tracker_pb2.WEST:
-				self.logger.info("Moving west called")
-				self.tracker_controller.move_west()
+	# def move_panel(self, request, context):
+	# 	if self.controlling_client is None:
+	# 		self.logger.warn("A move request was received but no one currently had control. Bad robot")
+	# 		return tracker_pb2.MoveResponse(message="Error", success=tracker_pb2.ERROR)
+	# 	if request.control_id != self.controlling_client.id:
+	# 		self.logger.warn("A client requested to move the panel but a different client had control. Bad robot")
+	# 		return tracker_pb2.MoveResponse(message="Error", success=tracker_pb2.ERROR)	
 
-		elif move_type == tracker_pb2.MoveRequest.POSITION:
-			ns_position = request.position.ns
-			ew_position = request.position.ew
-			self.logger.info("Position move to {} {} called".format(ns_position, ew_position))
-			self.tracker_controller.move_panel_to_linear_position(ns_position, ew_position)
-		elif move_type == tracker_pb2.MoveRequest.ANGLE:
-			ns_angle = request.angle.ns
-			ew_angle = request.angle.ew
-			self.logger.info("Angular move to {} {} called".format(ns_angle, ew_angle))
-			self.tracker_controller.move_panel_to_angular_position(ns_angle, ew_angle)
-		return tracker_pb2.MoveResponse()
-
+	# 	self._process_move_request_(request)
+	# 	return tracker_pb2.MoveResponse(message="Success")
 
 	def stop(self, request, context):
+		tracker_id = self._request_control_change_(request)
+		if tracker_id is None:
+			self.logger.warn("A client requested to stop the panel but a different client had control. Bad robot")
+			return tracker_pb2.StopResponse(message="Error", success=tracker_pb2.ERROR)
+		
 		self.tracker_controller.stop()
 		self.logger.info("Stop called")
 		return tracker_pb2.StopResponse(message="Success")
 
 	def stow(self, request, context):
+		tracker_id = self._request_control_change_(request)
+		if tracker_id is None:
+			self.logger.warn("A client requested to stow the panel but a different client had control. Bad robot")
+			return tracker_pb2.StowResponse(message="Error", success=tracker_pb2.ERROR)
+		
 		self.tracker_controller.stow()
 		self.logger.info("Stow called")
 		return tracker_pb2.StowResponse(message="Success")
 
+	def _get_unique_id_(self, description):
+		count = 1
+		unique_id = description + "_{}".format(count)
+		while unique_id in self.control_ids:
+			count += 1
+			description + "_{}".format(count)
+		return description
 
 	def _get_tracker_status_message_(self):
 		response = tracker_pb2.TrackerSystemStatusResponse()
@@ -116,7 +178,9 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			response.tracker.angle.ew = self.tracker_controller.get_ew_angle()
 			response.tracker.move_status.ns= self.tracker_controller.is_ns_moving()
 			response.tracker.move_status.ns = self.tracker_controller.is_ew_moving()
-			response.tracker.current_controlling_level = self.controlling_authority
+			if self.controlling_client is not None:
+				response.tracker.controlling_client = self.controlling_client.description
+				response.tracker.controlling_authority = self.controlling_client.authority_level
 
 			response.charge_controller.battery_voltage = self.charge_data["ADC_VB_F"]
 			response.charge_controller.array_voltage = self.charge_data["ADC_VA_F"]
@@ -158,23 +222,28 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			response.charge_controller.details.vb_max_daily = self.charge_data["VB_MAX_DAILY"]
 			response.charge_controller.details.ahc_daily = self.charge_data["AHC_DAILY"]
 			response.charge_controller.details.ahl_daily = self.charge_data["AHL_DAILY"]
-			response.charge_controller.details.array_fault_daily = self.charge_data["ARRAY_FAULT_DAILY"]
-			response.charge_controller.details.load_fault_daily = self.charge_data["LOAD_FAULT_DAILY"]
+			response.charge_controller.details.array_fault_daily = \
+				self.charge_data["ARRAY_FAULT_DAILY"]
+			response.charge_controller.details.load_fault_daily = \
+				self.charge_data["LOAD_FAULT_DAILY"]
 
 			response.charge_controller.details.alarm = self.charge_data["ALARM_DAILY"]
 			response.charge_controller.details.vb_min = self.charge_data["VB_MIN"]
 			response.charge_controller.details.vb_max = self.charge_data["VB_MAX"]
 			
-			response.charge_controller.lighting_should_be_on = self.charge_data["LIGHTING_SHOULD_BE_ON"]
-			response.charge_controller.va_ref_fixed = self.charge_data["VA_REF_FIXED"]
-			response.charge_controller.va_ref_fixed_ptc = self.charge_data["VA_REF_FIXED_PTC"]
+			response.charge_controller.details.lighting_should_be_on = \
+				self.charge_data["LIGHTING_SHOULD_BE_ON"]
+			response.charge_controller.details.va_ref_fixed = \
+				self.charge_data["VA_REF_FIXED"]
+			response.charge_controller.details.va_ref_fixed_ptc = \
+				self.charge_data["VA_REF_FIXED_PTC"]
 			
     
-			response.charge_controller.energy_collected = self.energy_collected_at_current_time - \
+    		response.charge_controller.energy_collected = self.energy_collected_at_current_time - \
 				self.energy_collected_at_start
 			response.charge_controller.energy_expended = self.energy_expended_at_current_time	- \
 				self.energy_expended_at_start
-
+			
 		return response
 
 	def _get_cc_attr_safe_(self, attr):
@@ -185,35 +254,84 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 
 	def _add_update_to_energy_ledger(self):
 		self.energy_ledger.to_csv("/home/brawner/ledger.csv")
-		["ID","Authority","KWH Collected", "Ah Total Load", "V Load"]
-
-
+		
 		self.energy_ledger = self.energy_ledger.append({
-			"ID": self.controlling_id,
-			"Authority": self.controlling_authority,
-			"KWH Collected": self.charge_data(SmartBoxChargeController.KWHC), 
-			"Ah Total Load": self.charge_data(SmartBoxChargeController.ADC_I_F), 
-			"V Load": self.charge_data(SmartBoxChargeController.ADC_V_F),
+			"ID": self.controlling_client.id,
+			"Timestamp": str(datetime.datetime.now()),
+			"KWHC": self.charge_data["KWHC"], 
+			"ADC_I_F": self.charge_data["ADC_I_F"], 
+			"ADC_V_F": self.charge_data["ADC_V_F"],
 			})
 
-	def _process_control_change_(self, authority_level, context):
-		if self.controlling_authority != -1:
-			self.authority_queue.put((self.controlling_security_level, self.energy_ledger, self.controlling_context))
-
-		with self.charge_controller_lock:		
-			self.controlling_context = context
-			self.controlling_authority = authority_level
-
+	def _process_control_change_(self, request):
+		new_id = self._get_unique_id_(request.description)
+		controlling_client = \
+			ControllingClient(description=request.description, \
+				id=new_id, authority_level = request.authority_level)
+		with self.charge_controller_lock:
+			if self.controlling_client is not None:
+				self.authority_queue.put((self.controlling_client.authority_level, self.controlling_client))
+			self.controlling_client = controlling_client
 			self.energy_expended_at_start = 0.0
 			self.energy_collected_at_start = self.charge_data["KWHC"]
+		return new_id
+
+	def _process_move_request_(self, request):
+		move_type = request.move_type
+		if move_type == tracker_pb2.MoveRequest.DURATION:
+			direction = request.direction
+			if direction == tracker_pb2.NORTH:
+				self.logger.info("Moving north called")
+				self.tracker_controller.move_north()
+			elif direction == tracker_pb2.SOUTH:
+				self.logger.info("Moving south called")
+				self.tracker_controller.move_south()
+			elif direction == tracker_pb2.EAST:
+				self.logger.info("Moving east called")
+				self.tracker_controller.move_east()
+			elif direction == tracker_pb2.WEST:
+				self.logger.info("Moving west called")
+				self.tracker_controller.move_west()
+
+		elif move_type == tracker_pb2.MoveRequest.POSITION:
+			ns_position = request.position.ns
+			ew_position = request.position.ew
+			self.logger.info("Position move to {} {} called".format(ns_position, ew_position))
+			self.tracker_controller.move_panel_to_linear_position(ns_position, ew_position)
+		elif move_type == tracker_pb2.MoveRequest.ANGLE:
+			ns_angle = request.angle.ns
+			ew_angle = request.angle.ew
+			self.logger.info("Angular move to {} {} called".format(ns_angle, ew_angle))
+			self.tracker_controller.move_panel_to_angular_position(ns_angle, ew_angle)
+		return tracker_pb2.MoveResponse()
+
+	def _process_relinquish_request_(self):
+		energy_collected = self.energy_collected_at_current_time - self.energy_collected_at_start
+		energy_expended = self.energy_expended_at_current_time - self.energy_expended_at_start
+		previous = self.controlling_client
+		self.logger.info("Control was relinquished by {} Collected {:.3f} Expended {:.3f}".format(\
+			previous.description, previous.collected, previous.expended))
+		with self.charge_controller_lock:
+			if not self.authority_queue.empty():
+				self.controlling_client = self.authority_queue.get()
+				self.energy_collected_at_start = \
+					self.energy_collected_at_current_time - self.controlling_client.collected
+				self.energy_expended_at_start = \
+					self.energy_expended_at_current_time - self.controlling_client.expended
+				self.logger.info("Control was returned to {}".format(self.controlling_client.description))
+			else:
+				self.controlling_client = None
+		return energy_collected, energy_expended
 	
 
-	def _get_charge_controller_data(self):
+	def _get_charge_controller_data_(self):
 		while True:
 			try:
 				with self.charge_controller_lock:
 					self.charge_data = self.charge_controller.get_all_data()
 					self.energy_collected_at_current_time = self.charge_data["KWHC"]
+					if self.controlling_client is not None:
+						self._add_update_to_energy_ledger()
 			except Exception as e:
 				self.logger.error("Retrieving charge controller failed")
 				self.logger.error(e, exc_info = True)
