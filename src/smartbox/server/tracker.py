@@ -43,7 +43,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.control_ids = set()
 
 		if os.path.exists(LEDGER_PATH):
-			self.energy_ledger = pd.from_csv(LEDGER_PATH)
+			self.energy_ledger = pd.read_csv(LEDGER_PATH)
 		else:
 			self.energy_ledger = pd.DataFrame(columns=\
 				["ID", "Timestamp", 'KWHC', 'ADC_I_F','ADC_V_F'])
