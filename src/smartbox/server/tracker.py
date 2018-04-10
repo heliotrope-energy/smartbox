@@ -283,7 +283,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		new_id = self._get_unique_id_(request.description)
 		controlling_client = \
 			ControllingClient(description=request.description, \
-				id=new_id, authority_level = request.authority_level)
+				client_id=new_id, authority_level = request.authority_level)
 		with self.charge_controller_lock:
 			if self.controlling_client is not None:
 				self.authority_queue.put((self.controlling_client.authority_level, self.controlling_client))
