@@ -1,4 +1,4 @@
-import serial
+import serial, logging
 import modbus_tk
 import modbus_tk.defines as cst
 import modbus_tk.modbus_rtu as modbus_rtu
