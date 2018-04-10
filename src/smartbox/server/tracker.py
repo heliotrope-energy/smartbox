@@ -94,7 +94,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			new_id = self._process_control_change_(request)
 			self.logger.info("Access control granted to {}. Taken from {}".format(new_id, prev_id))
 			return new_id
-		elif request.security_level >= self.controlling_authority:
+		elif request.authority_level >= self.controlling_authority:
 			self.logger.info("Access control denied. {} has control".format(self.controlling_client.id))
 			return None
 			
