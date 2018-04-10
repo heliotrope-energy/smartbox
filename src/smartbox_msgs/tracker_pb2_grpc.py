@@ -29,16 +29,6 @@ class TrackerControllerStub(object):
         request_serializer=tracker__pb2.TrackerSystemStatusRequest.SerializeToString,
         response_deserializer=tracker__pb2.TrackerSystemStatusResponse.FromString,
         )
-    self.stop = channel.unary_unary(
-        '/smartbox_msgs.TrackerController/stop',
-        request_serializer=tracker__pb2.StopRequest.SerializeToString,
-        response_deserializer=tracker__pb2.StopResponse.FromString,
-        )
-    self.stow = channel.unary_unary(
-        '/smartbox_msgs.TrackerController/stow',
-        request_serializer=tracker__pb2.StowRequest.SerializeToString,
-        response_deserializer=tracker__pb2.StowResponse.FromString,
-        )
 
 
 class TrackerControllerServicer(object):
@@ -66,22 +56,6 @@ class TrackerControllerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def stop(self, request, context):
-    """rpc request_control (RequestControlRequest) returns (RequestControlResponse) {}
-    rpc relinquish_control (RelinquishControlRequest) returns (RelinquishControlResponse) {}
-    rpc move_panel (MoveRequest) returns (MoveResponse) {}
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def stow(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
 
 def add_TrackerControllerServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -99,16 +73,6 @@ def add_TrackerControllerServicer_to_server(servicer, server):
           servicer.tracker_status,
           request_deserializer=tracker__pb2.TrackerSystemStatusRequest.FromString,
           response_serializer=tracker__pb2.TrackerSystemStatusResponse.SerializeToString,
-      ),
-      'stop': grpc.unary_unary_rpc_method_handler(
-          servicer.stop,
-          request_deserializer=tracker__pb2.StopRequest.FromString,
-          response_serializer=tracker__pb2.StopResponse.SerializeToString,
-      ),
-      'stow': grpc.unary_unary_rpc_method_handler(
-          servicer.stow,
-          request_deserializer=tracker__pb2.StowRequest.FromString,
-          response_serializer=tracker__pb2.StowResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

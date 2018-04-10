@@ -8,8 +8,8 @@ service TrackerController {
 	//rpc request_control (RequestControlRequest) returns (RequestControlResponse) {}
 	//rpc relinquish_control (RelinquishControlRequest) returns (RelinquishControlResponse) {}
 	//rpc move_panel (MoveRequest) returns (MoveResponse) {}
-	rpc stop (StopRequest) returns (StopResponse) {}
-	rpc stow (StowRequest) returns (StowResponse) {}
+	//rpc stop (StopRequest) returns (StopResponse) {}
+	//rpc stow (StowRequest) returns (StowResponse) {}
 }
 
 enum DIRECTION {
@@ -152,6 +152,8 @@ message ControlRequest {
 		DURATION = 1;
 		POSITION = 2;
 		ANGLE = 3;
+		STOW = 4;
+		STOP = 5;
 	}
 	uint64 authority_level = 1;
 	string description = 2;
@@ -164,26 +166,6 @@ message ControlRequest {
 }
 
 message ControlResponse {
-	string message = 1;
-	ControlRequestSuccessFlag success = 2;
-}
-
-message StopRequest {
-	uint64 authority_level = 1;
-	string description = 2;
-}
-
-message StopResponse {
-	string message = 1;
-	ControlRequestSuccessFlag success = 2;
-}
-
-message StowRequest {
-	uint64 authority_level = 1;
-	string description = 2;
-}
-
-message StowResponse {
 	string message = 1;
 	ControlRequestSuccessFlag success = 2;
 }

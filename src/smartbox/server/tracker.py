@@ -74,10 +74,10 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			if tracker_id is None:
 				tracker_id = self._request_control_change_(request)
 				if tracker_id is None:
-					return tracker_pb2.MoveResponse(message="Failure", \
+					return tracker_pb2.ControlResponse(message="Failure", \
 				success=tracker_pb2.INSUFFICIENT_SECURITY_LEVEL)
 			if tracker_id != self.controlling_client.id:
-				yield tracker_pb2.MoveResponse(\
+				yield tracker_pb2.ControlResponse(\
 					message = "Failure. This client no longer has control, but it may be returned", \
 					success = tracker_pb2.FAILURE)
 			else:
@@ -142,25 +142,25 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 	# 	self._process_move_request_(request)
 	# 	return tracker_pb2.MoveResponse(message="Success")
 
-	def stop(self, request, context):
-		tracker_id = self._request_control_change_(request)
-		if tracker_id is None:
-			self.logger.warn("A client requested to stop the panel but a different client had control. Bad robot")
-			return tracker_pb2.StopResponse(message="Error", success=tracker_pb2.ERROR)
+	# def stop(self, request, context):
+	# 	tracker_id = self._request_control_change_(request)
+	# 	if tracker_id is None:
+	# 		self.logger.warn("A client requested to stop the panel but a different client had control. Bad robot")
+	# 		return tracker_pb2.StopResponse(message="Error", success=tracker_pb2.ERROR)
 		
-		self.tracker_controller.stop()
-		self.logger.info("Stop called")
-		return tracker_pb2.StopResponse(message="Success")
+	# 	self.tracker_controller.stop()
+	# 	self.logger.info("Stop called")
+	# 	return tracker_pb2.StopResponse(message="Success")
 
-	def stow(self, request, context):
-		tracker_id = self._request_control_change_(request)
-		if tracker_id is None:
-			self.logger.warn("A client requested to stow the panel but a different client had control. Bad robot")
-			return tracker_pb2.StowResponse(message="Error", success=tracker_pb2.ERROR)
+	# def stow(self, request, context):
+	# 	tracker_id = self._request_control_change_(request)
+	# 	if tracker_id is None:
+	# 		self.logger.warn("A client requested to stow the panel but a different client had control. Bad robot")
+	# 		return tracker_pb2.StowResponse(message="Error", success=tracker_pb2.ERROR)
 		
-		self.tracker_controller.stow()
-		self.logger.info("Stow called")
-		return tracker_pb2.StowResponse(message="Success")
+	# 	self.tracker_controller.stow()
+	# 	self.logger.info("Stow called")
+	# 	return tracker_pb2.StowResponse(message="Success")
 
 	def _get_unique_id_(self, description):
 		count = 1
@@ -289,7 +289,13 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 
 	def _process_move_request_(self, request):
 		move_type = request.move_type
-		if move_type == tracker_pb2.MoveRequest.DURATION:
+		if move_type == tracker_pb2.ControlRequest.STOP:
+			self.tracker_controller.stop()
+			self.logger.info("Tracker stopped")
+		elif move_type == tracker_pb2.ControlRequest.STOW;
+			self.tracker.stow()
+			self.logger.info("Tracker stowed")
+		elif move_type == tracker_pb2.ControlRequest.DURATION:
 			direction = request.direction
 			if direction == tracker_pb2.NORTH:
 				self.logger.info("Moving north called")
@@ -304,17 +310,17 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 				self.logger.info("Moving west called")
 				self.tracker_controller.move_west()
 
-		elif move_type == tracker_pb2.MoveRequest.POSITION:
+		elif move_type == tracker_pb2.ControlRequest.POSITION:
 			ns_position = request.position.ns
 			ew_position = request.position.ew
 			self.logger.info("Position move to {} {} called".format(ns_position, ew_position))
 			self.tracker_controller.move_panel_to_linear_position(ns_position, ew_position)
-		elif move_type == tracker_pb2.MoveRequest.ANGLE:
+		elif move_type == tracker_pb2.ControlRequest.ANGLE:
 			ns_angle = request.angle.ns
 			ew_angle = request.angle.ew
 			self.logger.info("Angular move to {} {} called".format(ns_angle, ew_angle))
 			self.tracker_controller.move_panel_to_angular_position(ns_angle, ew_angle)
-		return tracker_pb2.MoveResponse()
+		return tracker_pb2.ControlResponse()
 
 	def _process_relinquish_request_(self):
 		energy_collected = self.energy_collected_at_current_time - self.energy_collected_at_start
