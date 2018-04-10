@@ -85,7 +85,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 				if tracker_id is None:
 					return tracker_pb2.ControlResponse(message="Failure", \
 				success=tracker_pb2.INSUFFICIENT_SECURITY_LEVEL)
-			if tracker_id != self.controlling_client.id:
+			if tracker_id != self.controlling_client.client_id:
 				yield tracker_pb2.ControlResponse(\
 					message = "Failure. This client no longer has control, but it may be returned", \
 					success = tracker_pb2.FAILURE)
@@ -99,12 +99,12 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			self.logger.info("Access control granted to {}".format(new_id))
 			return new_id
 		elif request.authority_level < self.controlling_client.authority_level:
-			prev_id = self.controlling_client.id
+			prev_id = self.controlling_client.client_id
 			new_id = self._process_control_change_(request)
 			self.logger.info("Access control granted to {}. Taken from {}".format(new_id, prev_id))
 			return new_id
 		elif request.authority_level >= self.controlling_authority:
-			self.logger.info("Access control denied. {} has control".format(self.controlling_client.id))
+			self.logger.info("Access control denied. {} has control".format(self.controlling_client.client_id))
 			return None
 			
 
@@ -272,7 +272,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		if len(self.charge_data) == 0:
 			return
 		self.energy_ledger = self.energy_ledger.append({
-			"ID": self.controlling_client.id,
+			"ID": self.controlling_client.client_id,
 			"Timestamp": str(datetime.datetime.now()),
 			"KWHC": self.charge_data["KWHC"], 
 			"ADC_I_F": self.charge_data["ADC_I_F"], 
