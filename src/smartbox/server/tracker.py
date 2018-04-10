@@ -314,6 +314,9 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 	def _process_relinquish_request_(self):
 		energy_collected = self.energy_collected_at_current_time - self.energy_collected_at_start
 		energy_expended = self.energy_expended_at_current_time - self.energy_expended_at_start
+		if self.controlling_client is None:
+			self.logger.error("There is no controlling client to relinquish control. Spooky")
+			return 0.0, 0.0
 		previous = self.controlling_client
 		self.logger.info("Control was relinquished by {} Collected {:.3f} Expended {:.3f}".format(\
 			previous.description, previous.collected, previous.expended))
