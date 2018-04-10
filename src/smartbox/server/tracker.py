@@ -56,7 +56,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			self.energy_ledger = pd.read_csv(LEDGER_PATH)
 		else:
 			self.energy_ledger = pd.DataFrame(columns=\
-				["ID", "Timestamp", 'KWHC', 'ADC_IC_F', 'ADC_VC_F','ADC_IL_F','ADC_V_F', "AHL_T"])
+				["ID", "Timestamp", "Collected", "Expended"] + list(SmartBoxChargeController.registers.keys()))
 		self.controlling_client = None
 		self.authority_queue = PriorityQueue()
 
@@ -269,18 +269,14 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.energy_ledger.to_csv("/home/brawner/ledger.csv")
 		self.controlling_client.collected = self.energy_collected_at_current_time - self.energy_collected_at_start
 		self.controlling_client.expended = self.energy_expended
-		if len(self.charge_data) == 0:
-			return
-		self.energy_ledger = self.energy_ledger.append({
+		
+		client_info = {
 			"ID": self.controlling_client.client_id,
 			"Timestamp": str(datetime.datetime.now()),
-			"KWHC": self.charge_data["KWHC"], 
-			"ADC_VC_F": self.charge_data["ADC_VC_F"],
-			"ADC_IC_F": self.charge_data["ADC_IC_F"],
-			"ADC_IL_F": self.charge_data["ADC_IL_F"],
-			"AHL_T": self.charge_data["AHL_T"],
-			"ADC_V_F": self.charge_data["ADC_V_F"],
-			})
+			"Collected": self.controlling_client.collected,
+			"Expended": self.controlling_client.expended}
+
+		self.energy_ledger = self.energy_ledger.append( {**client_info, **self.charge_data})
 
 	def _process_control_change_(self, request):
 		new_id = self._get_unique_id_(request.description)
