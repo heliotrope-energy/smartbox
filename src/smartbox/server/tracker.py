@@ -37,6 +37,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.energy_collected_at_start = 0.0
 		self.energy_collected_at_current_time = 0.0
 		self.energy_expended = 0.0
+		self.load_amphours_at_previous = 0.0
 		
 		self.logger = logging.getLogger(__name__)
 		self.charge_controller_lock = RLock()
@@ -339,9 +340,10 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 	
 
 	def _calculate_incremental_energy_expended_(self):
-		increment = self.charge_data["ADC_VL_F"][1] * \
-			(self.charge_data["AHL_T"][1] - self.load_amphours_at_previous)
-		self.load_amphours_at_previous = self.charge_data["AHL_T"][1]
+		if len(self.charge_data) > 0:
+			increment = self.charge_data["ADC_VL_F"][1] * \
+				(self.charge_data["AHL_T"][1] - self.load_amphours_at_previous)
+			self.load_amphours_at_previous = self.charge_data["AHL_T"][1]
 		return increment
 
 	def _get_charge_controller_data_(self):
