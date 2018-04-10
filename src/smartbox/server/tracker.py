@@ -182,61 +182,61 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 				response.tracker.controlling_client = self.controlling_client.description
 				response.tracker.controlling_authority = self.controlling_client.authority_level
 
-			response.charge_controller.battery_voltage = self.charge_data["ADC_VB_F"]
-			response.charge_controller.array_voltage = self.charge_data["ADC_VA_F"]
-			response.charge_controller.load_voltage = self.charge_data["ADC_VL_F"]
-			response.charge_controller.charge_current = self.charge_data["ADC_IC_F"]
-			response.charge_controller.load_current = self.charge_data["ADC_IL_F"]
-			response.charge_controller.charge_state = self.charge_data["CHARGE_STATE"]
+			response.charge_controller.battery_voltage = self.charge_data["ADC_VB_F"][1]
+			response.charge_controller.array_voltage = self.charge_data["ADC_VA_F"][1]
+			response.charge_controller.load_voltage = self.charge_data["ADC_VL_F"][1]
+			response.charge_controller.charge_current = self.charge_data["ADC_IC_F"][1]
+			response.charge_controller.load_current = self.charge_data["ADC_IL_F"][1]
+			response.charge_controller.charge_state = self.charge_data["CHARGE_STATE"][1]
 
 
-			response.charge_controller.details.t_hs = self.charge_data["T_HS"]
-			response.charge_controller.details.t_batt = self.charge_data["T_BATT"]
-			response.charge_controller.details.t_amb = self.charge_data["T_AMB"]
-			response.charge_controller.details.t_rts = self.charge_data["T_RTS"]
-			response.charge_controller.details.array_fault = self.charge_data["ARRAY_FAULT"]
-			response.charge_controller.details.vb_f = self.charge_data["VB_F"]
-			response.charge_controller.details.vb_ref = self.charge_data["VB_REF"]
+			response.charge_controller.details.t_hs = self.charge_data["T_HS"][1]
+			response.charge_controller.details.t_batt = self.charge_data["T_BATT"][1]
+			response.charge_controller.details.t_amb = self.charge_data["T_AMB"][1]
+			response.charge_controller.details.t_rts = self.charge_data["T_RTS"][1]
+			response.charge_controller.details.array_fault = self.charge_data["ARRAY_FAULT"][1]
+			response.charge_controller.details.vb_f = self.charge_data["VB_F"][1]
+			response.charge_controller.details.vb_ref = self.charge_data["VB_REF"][1]
 
-			response.charge_controller.details.ahc_r = self.charge_data["AHC_R"]
-			response.charge_controller.details.ahc_t = self.charge_data["AHC_T"]
+			response.charge_controller.details.ahc_r = self.charge_data["AHC_R"][1]
+			response.charge_controller.details.ahc_t = self.charge_data["AHC_T"][1]
 
-			response.charge_controller.details.kwhc = self.charge_data["KWHC"]
-			response.charge_controller.details.load_state = self.charge_data["LOAD_STATE"]
-			response.charge_controller.details.load_fault = self.charge_data["LOAD_FAULT"]
-			response.charge_controller.details.v_lvd = self.charge_data["V_LVD"]
+			response.charge_controller.details.kwhc = self.charge_data["KWHC"][1]
+			response.charge_controller.details.load_state = self.charge_data["LOAD_STATE"][1]
+			response.charge_controller.details.load_fault = self.charge_data["LOAD_FAULT"][1]
+			response.charge_controller.details.v_lvd = self.charge_data["V_LVD"][1]
 
-			response.charge_controller.details.ahl_r = self.charge_data["AHL_R"]
-			response.charge_controller.details.ahl_t = self.charge_data["AHL_T"]
-			response.charge_controller.details.hourmeter = self.charge_data["HOURMETER"]
-			response.charge_controller.details.alarm = self.charge_data["ALARM"]
+			response.charge_controller.details.ahl_r = self.charge_data["AHL_R"][1]
+			response.charge_controller.details.ahl_t = self.charge_data["AHL_T"][1]
+			response.charge_controller.details.hourmeter = self.charge_data["HOURMETER"][1]
+			response.charge_controller.details.alarm = self.charge_data["ALARM"][1]
 
 
-			response.charge_controller.details.dip_switch = self.charge_data["DIP_SWITCH"]
-			response.charge_controller.details.led_state = self.charge_data["LED_STATE"]
-			response.charge_controller.details.power_out = self.charge_data["POWER_OUT"]
-			response.charge_controller.details.sweep_vmp = self.charge_data["SWEEP_VMP"]
-			response.charge_controller.details.sweep_pmax = self.charge_data["SWEEP_PMAX"]
-			response.charge_controller.details.sweep_voc = self.charge_data["SWEEP_VOC"]
-			response.charge_controller.details.vb_min_daily = self.charge_data["VB_MIN_DAILY"]
-			response.charge_controller.details.vb_max_daily = self.charge_data["VB_MAX_DAILY"]
-			response.charge_controller.details.ahc_daily = self.charge_data["AHC_DAILY"]
-			response.charge_controller.details.ahl_daily = self.charge_data["AHL_DAILY"]
+			response.charge_controller.details.dip_switch = self.charge_data["DIP_SWITCH"][1]
+			response.charge_controller.details.led_state = self.charge_data["LED_STATE"][1]
+			response.charge_controller.details.power_out = self.charge_data["POWER_OUT"][1]
+			response.charge_controller.details.sweep_vmp = self.charge_data["SWEEP_VMP"][1]
+			response.charge_controller.details.sweep_pmax = self.charge_data["SWEEP_PMAX"][1]
+			response.charge_controller.details.sweep_voc = self.charge_data["SWEEP_VOC"][1]
+			response.charge_controller.details.vb_min_daily = self.charge_data["VB_MIN_DAILY"][1]
+			response.charge_controller.details.vb_max_daily = self.charge_data["VB_MAX_DAILY"][1]
+			response.charge_controller.details.ahc_daily = self.charge_data["AHC_DAILY"][1]
+			response.charge_controller.details.ahl_daily = self.charge_data["AHL_DAILY"][1]
 			response.charge_controller.details.array_fault_daily = \
-				self.charge_data["ARRAY_FAULT_DAILY"]
+				self.charge_data["ARRAY_FAULT_DAILY"][1]
 			response.charge_controller.details.load_fault_daily = \
-				self.charge_data["LOAD_FAULT_DAILY"]
+				self.charge_data["LOAD_FAULT_DAILY"][1]
 
-			response.charge_controller.details.alarm = self.charge_data["ALARM_DAILY"]
-			response.charge_controller.details.vb_min = self.charge_data["VB_MIN"]
-			response.charge_controller.details.vb_max = self.charge_data["VB_MAX"]
+			response.charge_controller.details.alarm = self.charge_data["ALARM_DAILY"][1]
+			response.charge_controller.details.vb_min = self.charge_data["VB_MIN"][1]
+			response.charge_controller.details.vb_max = self.charge_data["VB_MAX"][1]
 			
 			response.charge_controller.details.lighting_should_be_on = \
-				self.charge_data["LIGHTING_SHOULD_BE_ON"]
+				self.charge_data["LIGHTING_SHOULD_BE_ON"][1]
 			response.charge_controller.details.va_ref_fixed = \
-				self.charge_data["VA_REF_FIXED"]
+				self.charge_data["VA_REF_FIXED"][1]
 			response.charge_controller.details.va_ref_fixed_ptc = \
-				self.charge_data["VA_REF_FIXED_PTC"]
+				self.charge_data["VA_REF_FIXED_PTC"][1]
 			
 	
 			response.charge_controller.energy_collected = self.energy_collected_at_current_time - \
