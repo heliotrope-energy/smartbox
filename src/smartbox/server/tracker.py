@@ -337,7 +337,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		return energy_collected, energy_expended
 	
 
-	def _calculate_incremental_energy_expended(self):
+	def _calculate_incremental_energy_expended_(self):
 		increment = self.charge_data["ADC_VL_F"][1] * \
 			(self.charge_data["AHL_T"][1] - self.load_amphours_at_previous)
 		self.load_amphours_at_previous = self.charge_data["AHL_T"][1]
@@ -350,7 +350,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 					self.charge_data = self.charge_controller.get_all_data()
 					if "KWHC" in self.charge_data:
 						self.energy_collected_at_current_time = self.charge_data["KWHC"][1]
-						self.energy_expended += self._calculate_energy_expended()
+						self.energy_expended += self._calculate_incremental_energy_expended_()
 						
 					if self.controlling_client is not None:
 						self._add_update_to_energy_ledger()
