@@ -257,7 +257,8 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 
 	def _add_update_to_energy_ledger(self):
 		self.energy_ledger.to_csv("/home/brawner/ledger.csv")
-		
+		if len(self.charge_data) == 0:
+			return
 		self.energy_ledger = self.energy_ledger.append({
 			"ID": self.controlling_client.id,
 			"Timestamp": str(datetime.datetime.now()),
@@ -276,7 +277,9 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 				self.authority_queue.put((self.controlling_client.authority_level, self.controlling_client))
 			self.controlling_client = controlling_client
 			self.energy_expended_at_start = 0.0
-			self.energy_collected_at_start = self.charge_data["KWHC"]
+			if "KWHC" in self.charge_data:
+				self.energy_collected_at_start = self.charge_data["KWHC"]
+
 		return new_id
 
 	def _process_move_request_(self, request):
@@ -332,7 +335,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			try:
 				with self.charge_controller_lock:
 					self.charge_data = self.charge_controller.get_all_data()
-					if len(self.charge_data) > 0:
+					if "KWHC" in self.charge_data:
 						self.energy_collected_at_current_time = self.charge_data["KWHC"][1]
 					if self.controlling_client is not None:
 						self._add_update_to_energy_ledger()
