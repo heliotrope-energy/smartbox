@@ -152,7 +152,7 @@ class SmartBoxChargeController:
     def _get_all_register_values_(self):
         try:
             result = self.server.execute(1, cst.READ_HOLDING_REGISTERS, starting_address=0x0008, \
-                quantity_of_x= 0x0034 - self.start_addr + 1)
+                quantity_of_x= 0x003A - self.start_addr + 1)
             return result
         except modbus_tk.modbus.ModbusError as exc:
             self.logger.error("%s- Code=%d", exc, exc.get_exception_code())
