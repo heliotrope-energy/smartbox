@@ -94,6 +94,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self._process_relinquish_request_()
 
 	def _request_control_change_(self, request):
+		self.logger.info("Access control request initiated")
 		if self.controlling_client is None:
 			new_id = self._process_control_change_(request)
 			self.logger.info("Access control granted to {}".format(new_id))
