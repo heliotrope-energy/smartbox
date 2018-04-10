@@ -36,8 +36,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.tracker_controller = SmartBoxTracker()
 		self.energy_collected_at_start = 0.0
 		self.energy_collected_at_current_time = 0.0
-		self.energy_expended_at_start = 0.0
-		self.energy_expended_at_current_time = 0.0
+		self.energy_expended = 0.0
 		
 		self.logger = logging.getLogger(__name__)
 		self.charge_controller_lock = RLock()
@@ -246,8 +245,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 	
 			response.charge_controller.energy_collected = self.energy_collected_at_current_time - \
 				self.energy_collected_at_start
-			response.charge_controller.energy_expended = self.energy_expended_at_current_time	- \
-				self.energy_expended_at_start
+			response.charge_controller.energy_expended = self.energy_expended
 			
 		return response
 
@@ -261,8 +259,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.energy_ledger.to_csv("/home/brawner/ledger.csv")
 		self.controlling_client.collected = self.energy_collected_at_current_time - \
 				self.energy_collected_at_start
-		self.controlling_client.expended = self.energy_expended_at_current_time	- \
-				self.energy_expended_at_start
+		self.controlling_client.expended = self.energy_expended
 		if len(self.charge_data) == 0:
 			return
 		self.energy_ledger = self.energy_ledger.append({
@@ -282,9 +279,9 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			if self.controlling_client is not None:
 				self.authority_queue.put((self.controlling_client.authority_level, self.controlling_client))
 			self.controlling_client = controlling_client
-			self.energy_expended_at_start = 0.0
+			self.load_amphours_at_start = self.charge_data["AHL_T"][1]
 			if "KWHC" in self.charge_data:
-				self.energy_collected_at_start = self.charge_data["KWHC"]
+				self.energy_collected_at_start = self.charge_data["KWHC"][1]
 
 		return new_id
 
@@ -319,7 +316,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 
 	def _process_relinquish_request_(self):
 		energy_collected = self.energy_collected_at_current_time - self.energy_collected_at_start
-		energy_expended = self.energy_expended_at_current_time - self.energy_expended_at_start
+		energy_expended = self.energy_expended
 		if self.controlling_client is None:
 			self.logger.error("There is no controlling client to relinquish control. Spooky")
 			return 0.0, 0.0
@@ -331,13 +328,20 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 				self.controlling_client = self.authority_queue.get()
 				self.energy_collected_at_start = \
 					self.energy_collected_at_current_time - self.controlling_client.collected
-				self.energy_expended_at_start = \
-					self.energy_expended_at_current_time - self.controlling_client.expended
+				self.energy_expended = 0.0
+				if "AHL_T" in self.charge_data:
+					self.load_amphours_at_previous = self.charge_data["AHL_T"][1]
 				self.logger.info("Control was returned to {}".format(self.controlling_client.description))
 			else:
 				self.controlling_client = None
 		return energy_collected, energy_expended
 	
+
+	def _calculate_incremental_energy_expended(self):
+		increment = self.charge_data["ADC_VL_F"][1] * \
+			(self.charge_data["AHL_T"][1] - self.load_amphours_at_previous)
+		self.load_amphours_at_previous = self.charge_data["AHL_T"][1]
+		return increment
 
 	def _get_charge_controller_data_(self):
 		while True:
@@ -346,6 +350,8 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 					self.charge_data = self.charge_controller.get_all_data()
 					if "KWHC" in self.charge_data:
 						self.energy_collected_at_current_time = self.charge_data["KWHC"][1]
+						self.energy_expended += self._calculate_energy_expended()
+						
 					if self.controlling_client is not None:
 						self._add_update_to_energy_ledger()
 			except Exception as e:
