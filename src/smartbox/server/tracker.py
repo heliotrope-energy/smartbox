@@ -259,6 +259,10 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 
 	def _add_update_to_energy_ledger(self):
 		self.energy_ledger.to_csv("/home/brawner/ledger.csv")
+		self.controlling_client.collected = self.energy_collected_at_current_time - \
+				self.energy_collected_at_start
+		self.controlling_client.expended = self.energy_expended_at_current_time	- \
+				self.energy_expended_at_start
 		if len(self.charge_data) == 0:
 			return
 		self.energy_ledger = self.energy_ledger.append({
