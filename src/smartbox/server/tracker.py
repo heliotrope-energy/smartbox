@@ -41,6 +41,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		
 		self.logger = logging.getLogger(__name__)
 		self.charge_controller_lock = RLock()
+		self.control_ids = set()
 
 		if os.path.exists(LEDGER_PATH):
 			self.energy_ledger = pd.from_csv(LEDGER_PATH)
@@ -167,6 +168,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		while unique_id in self.control_ids:
 			count += 1
 			description + "_{}".format(count)
+		self.control_ids.add(unique_id)
 		return description
 
 	def _get_tracker_status_message_(self):
