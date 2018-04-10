@@ -329,7 +329,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			try:
 				with self.charge_controller_lock:
 					self.charge_data = self.charge_controller.get_all_data()
-					self.energy_collected_at_current_time = self.charge_data["KWHC"]
+					self.energy_collected_at_current_time = self.charge_data["KWHC"][1]
 					if self.controlling_client is not None:
 						self._add_update_to_energy_ledger()
 			except Exception as e:
