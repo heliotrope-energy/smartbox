@@ -56,7 +56,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			self.energy_ledger = pd.read_csv(LEDGER_PATH)
 		else:
 			self.energy_ledger = pd.DataFrame(columns=\
-				["ID", "Timestamp", 'KWHC', 'ADC_I_F','ADC_V_F'])
+				["ID", "Timestamp", 'KWHC', 'ADC_IC_F', 'ADC_VC_F','ADC_IL_F','ADC_V_F', "AHL_T"])
 		self.controlling_client = None
 		self.authority_queue = PriorityQueue()
 
@@ -275,7 +275,10 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			"ID": self.controlling_client.client_id,
 			"Timestamp": str(datetime.datetime.now()),
 			"KWHC": self.charge_data["KWHC"], 
-			"ADC_I_F": self.charge_data["ADC_I_F"], 
+			"ADC_VC_F": self.charge_data["ADC_VC_F"],
+			"ADC_IC_F": self.charge_data["ADC_IC_F"],
+			"ADC_IL_F": self.charge_data["ADC_IL_F"],
+			"AHL_T": self.charge_data["AHL_T"] 
 			"ADC_V_F": self.charge_data["ADC_V_F"],
 			})
 
