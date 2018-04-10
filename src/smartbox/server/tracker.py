@@ -278,7 +278,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			"ADC_VC_F": self.charge_data["ADC_VC_F"],
 			"ADC_IC_F": self.charge_data["ADC_IC_F"],
 			"ADC_IL_F": self.charge_data["ADC_IL_F"],
-			"AHL_T": self.charge_data["AHL_T"] 
+			"AHL_T": self.charge_data["AHL_T"],
 			"ADC_V_F": self.charge_data["ADC_V_F"],
 			})
 
