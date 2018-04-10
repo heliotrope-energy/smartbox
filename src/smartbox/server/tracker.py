@@ -69,7 +69,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 
 	def tracker_control(self, request_iterator, context):
 		tracker_id = None
-		
+		self.logger.info("Tracker control initiated")
 		for request in request_iterator:
 			if tracker_id is None:
 				tracker_id = self._request_control_change_(request)
@@ -293,7 +293,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			self.tracker_controller.stop()
 			self.logger.info("Tracker stopped")
 		elif move_type == tracker_pb2.ControlRequest.STOW:
-			self.tracker.stow()
+			self.tracker_controller.stow()
 			self.logger.info("Tracker stowed")
 		elif move_type == tracker_pb2.ControlRequest.DURATION:
 			direction = request.direction
