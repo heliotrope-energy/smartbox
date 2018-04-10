@@ -292,7 +292,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		if move_type == tracker_pb2.ControlRequest.STOP:
 			self.tracker_controller.stop()
 			self.logger.info("Tracker stopped")
-		elif move_type == tracker_pb2.ControlRequest.STOW;
+		elif move_type == tracker_pb2.ControlRequest.STOW:
 			self.tracker.stow()
 			self.logger.info("Tracker stowed")
 		elif move_type == tracker_pb2.ControlRequest.DURATION:
