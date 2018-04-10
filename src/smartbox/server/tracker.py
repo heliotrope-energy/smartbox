@@ -182,6 +182,9 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 				response.tracker.controlling_client = self.controlling_client.description
 				response.tracker.controlling_authority = self.controlling_client.authority_level
 
+			if len(self.charge_data) == 0:
+				return response
+
 			response.charge_controller.battery_voltage = self.charge_data["ADC_VB_F"][1]
 			response.charge_controller.array_voltage = self.charge_data["ADC_VA_F"][1]
 			response.charge_controller.load_voltage = self.charge_data["ADC_VL_F"][1]
@@ -329,7 +332,8 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			try:
 				with self.charge_controller_lock:
 					self.charge_data = self.charge_controller.get_all_data()
-					self.energy_collected_at_current_time = self.charge_data["KWHC"][1]
+					if len(self.charge_data) > 0:
+						self.energy_collected_at_current_time = self.charge_data["KWHC"][1]
 					if self.controlling_client is not None:
 						self._add_update_to_energy_ledger()
 			except Exception as e:
