@@ -6,7 +6,7 @@ from collections import namedtuple
 PORT = '/dev/ttyUSB0'
 
 Register = namedtuple('Register', ['description', 'units', 'address', 'HI_address', 'LO_address', 'conversion_func'], verbose=True)
-
+Register.__new__.__defaults__ = (None,) * len(Register._fields)
 charge_states = {
     0: "START",
     1: "NIGHT_CHECK",
