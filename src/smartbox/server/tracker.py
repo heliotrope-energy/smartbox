@@ -55,8 +55,8 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		if os.path.exists(LEDGER_PATH):
 			self.energy_ledger = pd.read_csv(LEDGER_PATH)
 		else:
-			self.energy_ledger = pd.DataFrame(columns=\
-				["ID", "Timestamp", "Collected", "Expended"] + list(SmartBoxChargeController.registers.keys()))
+			columns = ["ID", "Timestamp", "Collected", "Expended"] + list(SmartBoxChargeController.registers.keys())
+			self.energy_ledger = pd.DataFrame(columns=columns)
 		self.controlling_client = None
 		self.authority_queue = PriorityQueue()
 
@@ -276,7 +276,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			"Collected": self.controlling_client.collected,
 			"Expended": self.controlling_client.expended}
 
-		self.energy_ledger = self.energy_ledger.append( {**client_info, **self.charge_data})
+		self.energy_ledger = self.energy_ledger.append( {**client_info, **self.charge_data}, ignore_index=True)
 
 	def _process_control_change_(self, request):
 		new_id = self._get_unique_id_(request.description)
