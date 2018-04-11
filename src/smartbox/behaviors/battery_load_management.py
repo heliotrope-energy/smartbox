@@ -6,7 +6,7 @@ def process_for_state(client, logger):
 	charge_state = client.tracker.get_charge_status()
 	is_light_on = client.light.get_light_status()
 	batt_voltage = client.tracker.get_battery_voltage()
-
+	logger.info("Battery {} State {} Light {}".format(batt_voltage, charge_state, is_light_on))
 	if charge_state == tracker_pb2.FLOAT and not is_light_on:
 		logger.info("Charging state has reached floating, turning on light")
 		client.light.set_light_status(True)
@@ -23,7 +23,7 @@ def main():
 	args = parser.parse_args()
 	log_dir = os.path.expandvars(args.log_dir)
 	log_dir = os.path.expandvars(log_dir)
-	log_path = os.path.join(log_dir, "resource_controller.log")
+	log_path = os.path.join(log_dir, "battery_manager.log")
 	
 	client = SmartBoxResourceControllerClient(10, "Battery Manager")
 	logging.basicConfig(filename=log_path, format='[%(asctime)s] %(name)s %(levelname)s: %(message)s', level=logging.INFO)
