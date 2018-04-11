@@ -3,7 +3,7 @@ from smartbox_msgs import tracker_pb2
 import time, logging, os, argparse
 
 LIGHT_OFF_VOLTAGE = 12.5
-LIGHT_ON_VOLTAGE = 13.5
+LIGHT_ON_VOLTAGE = 14.0
 
 def get_tracker_data(client):
 	data = client.tracker.get_tracker_data()
