@@ -112,7 +112,6 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 					success = tracker_pb2.SUCCESS)
 		self.count += 1
 		for request in request_iterator:
-			self.logger.info("Request count {}".format(self.count))
 			if tracker_id != self.controlling_client.client_id:
 				self.logger.info("Client {} lost control, but it is still sending messages".format(tracker_id))
 				yield tracker_pb2.ControlResponse(\
