@@ -2,6 +2,8 @@ from smartbox.client.resource_controller_client import SmartBoxResourceControlle
 from smartbox_msgs import tracker_pb2
 import time, logging, os, argparse
 
+LIGHT_OFF_VOLTAGE = 12.5
+
 def process_for_state(client, logger):
 	charge_state = client.tracker.get_charge_status()
 	is_light_on = client.light.get_light_status()
@@ -11,9 +13,12 @@ def process_for_state(client, logger):
 		logger.info("Charging state has reached floating, turning on light")
 		client.light.set_light_status(True)
 	if charge_state == tracker_pb2.BULK_CHARGE:
-		if batt_voltage < 12.5:
+		if batt_voltage < LIGHT_OFF_VOLTAGE:
 			logger.info("Battery has been sufficiently depleted, turning off light")
 			client.light.set_light_status(False)
+	if is_light_on and batt_voltage < LIGHT_OFF_VOLTAGE:
+		logger.info("Battery has been sufficiently depleted, turning off light")
+		client.light.set_light_status(False)
 
 def main():
 	parser = argparse.ArgumentParser(description='Battery Manager')
