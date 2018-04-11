@@ -79,13 +79,14 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 	def tracker_control(self, request_iterator, context):
 		"""
 			TODO: There appears to be an issue with the handshaking. The for loop doesn't always enter.
+			Also, I don't think the iterators are exiting properly.
 		"""
 		self.logger.info("Tracker control initiated")
 		initial_request = next(request_iterator)
 		tracker_id = self._request_control_change_(initial_request)
 		if tracker_id is None:
 			return tracker_pb2.ControlResponse(message="Failure", \
-		success=tracker_pb2.INSUFFICIENT_SECURITY_LEVEL)
+				success=tracker_pb2.INSUFFICIENT_SECURITY_LEVEL)
 		yield tracker_pb2.ControlResponse(\
 					message = "This client has control", \
 					success = tracker_pb2.SUCCESS)
@@ -94,6 +95,9 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 				yield tracker_pb2.ControlResponse(\
 					message = "Failure. This client no longer has control, but it may be returned", \
 					success = tracker_pb2.FAILURE)
+			elif not self._is_ok_():
+				tracker_pb2.ControlResponse(message="Server is definitely not ok", \
+					success=tracker_pb2.FAILURE)
 			else:
 				yield self._process_move_request_(request)
 		self._process_relinquish_request_()
