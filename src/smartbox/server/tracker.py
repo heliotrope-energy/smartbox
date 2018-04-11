@@ -81,7 +81,8 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			TODO: There appears to be an issue with the handshaking. The for loop doesn't always enter.
 		"""
 		self.logger.info("Tracker control initiated")
-		tracker_id = self._request_control_change_(request)
+		initial_request = next(request_iterator)
+		tracker_id = self._request_control_change_(initial_request)
 		if tracker_id is None:
 			return tracker_pb2.ControlResponse(message="Failure", \
 		success=tracker_pb2.INSUFFICIENT_SECURITY_LEVEL)
