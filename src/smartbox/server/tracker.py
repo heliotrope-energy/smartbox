@@ -36,7 +36,6 @@ class ControllingClient:
 		self.authority_level = authority_level
 		self.collected = collected
 		self.expended = expended
-		self.count = 0
 
 LEDGER_PATH = "/home/brawner/ledger.csv"
 
@@ -64,6 +63,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.charge_controller_poller = \
 			Thread(target = self._get_charge_controller_data_)
 		self.charge_controller_poller.start()
+		self.count = 0
 
 	def get_tracker_status(self, request, context):
 		return self._get_tracker_status_message_()
