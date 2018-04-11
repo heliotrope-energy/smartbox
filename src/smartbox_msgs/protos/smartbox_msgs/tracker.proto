@@ -5,11 +5,20 @@ service TrackerController {
 	rpc get_tracker_status (TrackerSystemStatusRequest) returns (TrackerSystemStatusResponse) {}
 	rpc tracker_control (stream ControlRequest) returns (stream ControlResponse) {}
 	rpc tracker_status (TrackerSystemStatusRequest) returns (stream TrackerSystemStatusResponse) {}
+	rpc echo (stream ChatMessageRequest) returns (stream ChatMessageResponse) {}
 	//rpc request_control (RequestControlRequest) returns (RequestControlResponse) {}
 	//rpc relinquish_control (RelinquishControlRequest) returns (RelinquishControlResponse) {}
 	//rpc move_panel (MoveRequest) returns (MoveResponse) {}
 	//rpc stop (StopRequest) returns (StopResponse) {}
 	//rpc stow (StowRequest) returns (StowResponse) {}
+}
+
+message ChatMessageRequest {
+	string message = 1;
+}
+
+message ChatMessageResponse {
+	string message = 1;
 }
 
 enum DIRECTION {

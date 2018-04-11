@@ -29,6 +29,11 @@ class TrackerControllerStub(object):
         request_serializer=tracker__pb2.TrackerSystemStatusRequest.SerializeToString,
         response_deserializer=tracker__pb2.TrackerSystemStatusResponse.FromString,
         )
+    self.echo = channel.stream_stream(
+        '/smartbox_msgs.TrackerController/echo',
+        request_serializer=tracker__pb2.ChatMessageRequest.SerializeToString,
+        response_deserializer=tracker__pb2.ChatMessageResponse.FromString,
+        )
 
 
 class TrackerControllerServicer(object):
@@ -56,6 +61,13 @@ class TrackerControllerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def echo(self, request_iterator, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_TrackerControllerServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -73,6 +85,11 @@ def add_TrackerControllerServicer_to_server(servicer, server):
           servicer.tracker_status,
           request_deserializer=tracker__pb2.TrackerSystemStatusRequest.FromString,
           response_serializer=tracker__pb2.TrackerSystemStatusResponse.SerializeToString,
+      ),
+      'echo': grpc.stream_stream_rpc_method_handler(
+          servicer.echo,
+          request_deserializer=tracker__pb2.ChatMessageRequest.FromString,
+          response_serializer=tracker__pb2.ChatMessageResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
