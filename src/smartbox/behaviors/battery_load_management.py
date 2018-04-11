@@ -3,15 +3,21 @@ from smartbox_msgs import tracker_pb2
 import time, logging, os, argparse
 
 LIGHT_OFF_VOLTAGE = 12.5
+LIGHT_ON_VOLTAGE = 13.5
+
+def get_tracker_data(client):
+	data = client.get_tracker_data()
+	return data.charge_controller.battery_voltage, data.charge_controller.charge_current, data.charge_state, 
 
 def process_for_state(client, logger):
-	charge_state = client.tracker.get_charge_status()
+	batt_voltage, charge_current, charge_state = get_tracker_data(client)
 	is_light_on = client.light.get_light_status()
-	batt_voltage = client.tracker.get_battery_voltage()
-	logger.info("Battery {} Charge State {} Light on?{}".format(batt_voltage, charge_state, is_light_on))
+	logger.info("Battery {} Charge Current {} Charge State {} Light on? {}".format(batt_voltage, charge_current, charge_state, is_light_on))
+	
 	if charge_state == tracker_pb2.FLOAT and not is_light_on:
-		logger.info("Charging state has reached floating, turning on light")
-		client.light.set_light_status(True)
+		if batt_voltage > LIGHT_ON_VOLTAGE:
+			logger.info("Charging state has reached floating, turning on light")
+			client.light.set_light_status(True)
 	if charge_state == tracker_pb2.BULK_CHARGE:
 		if batt_voltage < LIGHT_OFF_VOLTAGE:
 			logger.info("Battery has been sufficiently depleted, turning off light")
