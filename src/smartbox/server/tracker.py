@@ -316,19 +316,24 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.energy_ledger = self.energy_ledger.append( {**client_info, **self.charge_data}, ignore_index=True)
 
 	def _process_control_change_(self, request):
+		self.logger.info("Processing control change")
 		new_id = self._get_unique_id_(request.description)
+		self.logger.info("Creating new ControllingClient")
 		controlling_client = \
 			ControllingClient(description=request.description, \
 				client_id=new_id, authority_level = request.authority_level)
+		self.logger.info("Acquiring lock")
 		with self.charge_controller_lock:
+			self.logger.info("Lock acquired")
 			if self.controlling_client is not None:
 				self.authority_queue.put((self.controlling_client.authority_level, self.controlling_client))
 			self.controlling_client = controlling_client
+			self.logger.info("Setting new controlling client")
 			if "AHL_T" in self.charge_data:
 				self.load_amphours_at_start = self.charge_data["AHL_T"][1]
 			if "KWHC" in self.charge_data:
 				self.energy_collected_at_start = self.charge_data["KWHC"][1]
-
+		self.logger.info("Control change processed")
 		return new_id
 
 	def _process_move_request_(self, request):
