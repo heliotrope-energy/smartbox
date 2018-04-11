@@ -96,25 +96,34 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.logger.info("Tracker control initiated")
 		context.add_callback(self._process_relinquish_request_)
 
+		self.logger.info("Processing initial request")
 		initial_request = next(request_iterator)
+		self.logger.info(initial_request)
 		tracker_id = self._request_control_change_(initial_request)
 		if tracker_id is None:
-			return tracker_pb2.ControlResponse(message="Failure", \
+			self.logger.info("Control request failed, terminating connection")
+			yield tracker_pb2.ControlResponse(message="Failure. Terminating connection", \
 				success=tracker_pb2.INSUFFICIENT_SECURITY_LEVEL)
+			context.cancel()
+			return
+		self.logger.info("Control request succeeded")
 		yield tracker_pb2.ControlResponse(\
 					message = "This client has control", \
 					success = tracker_pb2.SUCCESS)
 		self.count += 1
 		for request in request_iterator:
-			self.logger.info("Count {}".format(self.count))
+			self.logger.info("Request count {}".format(self.count))
 			if tracker_id != self.controlling_client.client_id:
+				self.logger.info("Client {} lost control, but it is still sending messages".format(tracker_id))
 				yield tracker_pb2.ControlResponse(\
 					message = "Failure. This client no longer has control, but it may be returned", \
 					success = tracker_pb2.FAILURE)
 			elif not self._is_ok_():
 				self.count -= 1
-				return tracker_pb2.ControlResponse(message="Server is definitely not ok", \
+				self.logger.info("Server detected an issue and is canceling this connection")
+				yield tracker_pb2.ControlResponse(message="Server is definitely not ok", \
 					success=tracker_pb2.FAILURE)
+				context.cancel()
 			else:
 				yield self._process_move_request_(request)
 		self.count -= 1
@@ -122,10 +131,12 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 	def _request_control_change_(self, request):
 		self.logger.info("Access control request initiated")
 		if self.controlling_client is None:
+			self.logger.info("No controlling client, this should be easy")
 			new_id = self._process_control_change_(request)
 			self.logger.info("Access control granted to {}".format(new_id))
 			return new_id
 		elif request.authority_level < self.controlling_client.authority_level:
+			self.logger.info("There already exists a controlling client, stealing control")
 			prev_id = self.controlling_client.client_id
 			new_id = self._process_control_change_(request)
 			self.logger.info("Access control granted to {}. Taken from {}".format(new_id, prev_id))
