@@ -304,16 +304,20 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 
 	def _add_update_to_energy_ledger(self):
 		self.energy_ledger.to_csv("/home/brawner/ledger.csv")
-		self.controlling_client.collected = self.energy_collected_at_current_time - self.energy_collected_at_start
-		self.controlling_client.expended = self.energy_expended
+		client_info = {}
+		if self.controlling_client:
+			self.controlling_client.collected = \
+				self.energy_collected_at_current_time - self.energy_collected_at_start
+			self.controlling_client.expended = self.energy_expended
 		
-		client_info = {
-			"ID": self.controlling_client.client_id,
-			"Timestamp": str(datetime.datetime.now()),
-			"Collected": self.controlling_client.collected,
-			"Expended": self.controlling_client.expended}
+			client_info = {
+				"ID": self.controlling_client.client_id,
+				"Timestamp": str(datetime.datetime.now()),
+				"Collected": self.controlling_client.collected,
+				"Expended": self.controlling_client.expended}
 
-		self.energy_ledger = self.energy_ledger.append( {**client_info, **self.charge_data}, ignore_index=True)
+		self.energy_ledger = \
+			self.energy_ledger.append( {**client_info, **self.charge_data}, ignore_index=True)
 
 	def _process_control_change_(self, request):
 		self.logger.info("Processing control change")
