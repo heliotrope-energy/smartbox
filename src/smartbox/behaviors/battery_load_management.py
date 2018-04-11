@@ -6,7 +6,7 @@ def process_for_state(client, logger):
 	charge_state = client.tracker.get_charge_status()
 	is_light_on = client.light.get_light_status()
 	batt_voltage = client.tracker.get_battery_voltage()
-	logger.info("Battery {} State {} Light {}".format(batt_voltage, charge_state, is_light_on))
+	logger.info("Battery {} Charge State {} Light on?{}".format(batt_voltage, charge_state, is_light_on))
 	if charge_state == tracker_pb2.FLOAT and not is_light_on:
 		logger.info("Charging state has reached floating, turning on light")
 		client.light.set_light_status(True)
