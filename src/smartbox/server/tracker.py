@@ -65,6 +65,9 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.charge_controller_poller.start()
 		self.count = 0
 
+	def termination_cb(self):
+		self.logger.info("Termination!")
+
 	def echo(self, request_iterator, context):
 		self.logger.info("Chat beginning")
 		for request in request_iterator:
