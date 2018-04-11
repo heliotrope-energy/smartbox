@@ -94,6 +94,8 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			Also, I don't think the iterators are exiting properly.
 		"""
 		self.logger.info("Tracker control initiated")
+		context.add_callback(self._process_relinquish_request_)
+
 		initial_request = next(request_iterator)
 		tracker_id = self._request_control_change_(initial_request)
 		if tracker_id is None:
@@ -116,7 +118,6 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			else:
 				yield self._process_move_request_(request)
 		self.count -= 1
-		self._process_relinquish_request_()
 
 	def _request_control_change_(self, request):
 		self.logger.info("Access control request initiated")
