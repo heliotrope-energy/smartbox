@@ -24,7 +24,7 @@ class SmartBoxTracker:
 			self.NS_PIN: [-1.335, 6.917],
 			self.EW_PIN: [-2.67, 13.83]}
 		self.actuator_directions = {
-			self.NS_PIN: ["North", "South"], 
+			self.NS_PIN: ["South", "North"], 
 			self.EW_PIN: ["East", "West"]}
 
 		self.ew_thread = None
@@ -134,7 +134,7 @@ class SmartBoxTracker:
 			Moves the panel to face north. Call stop_ns() or stop() to stop 
 			the movement
 		"""
-		self._move_axis_(self.NS_PIN, True)
+		self._move_axis_(self.NS_PIN, False)
 
 	def move_south(self):
 		"""
@@ -142,7 +142,7 @@ class SmartBoxTracker:
 			the movement
 		"""
 
-		self._move_axis_(self.NS_PIN, False)
+		self._move_axis_(self.NS_PIN, True)
 
 	def move_east(self):
 		"""
