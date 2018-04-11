@@ -36,6 +36,7 @@ class ControllingClient:
 		self.authority_level = authority_level
 		self.collected = collected
 		self.expended = expended
+		self.count = 0
 
 LEDGER_PATH = "/home/brawner/ledger.csv"
 
@@ -90,16 +91,20 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		yield tracker_pb2.ControlResponse(\
 					message = "This client has control", \
 					success = tracker_pb2.SUCCESS)
+		self.count += 1
 		for request in request_iterator:
+			self.logger.info("Count {}".format(self.count))
 			if tracker_id != self.controlling_client.client_id:
 				yield tracker_pb2.ControlResponse(\
 					message = "Failure. This client no longer has control, but it may be returned", \
 					success = tracker_pb2.FAILURE)
 			elif not self._is_ok_():
-				tracker_pb2.ControlResponse(message="Server is definitely not ok", \
+				self.count -= 1
+				return tracker_pb2.ControlResponse(message="Server is definitely not ok", \
 					success=tracker_pb2.FAILURE)
 			else:
 				yield self._process_move_request_(request)
+		self.count -= 1
 		self._process_relinquish_request_()
 
 	def _request_control_change_(self, request):
