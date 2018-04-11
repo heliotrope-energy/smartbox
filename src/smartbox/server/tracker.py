@@ -228,7 +228,8 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		if self.controlling_client is not None:
 			response.tracker.controlling_client = self.controlling_client.description
 			response.tracker.controlling_authority = self.controlling_client.authority_level
-
+		else:
+			response.tracker.controlling_authority = -1
 		with self.charge_controller_lock:
 			if len(self.charge_data) == 0:
 				return response
