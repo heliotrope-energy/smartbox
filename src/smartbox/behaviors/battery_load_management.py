@@ -13,7 +13,7 @@ def get_tracker_data(client):
 
 def process_for_state(client, logger):
 	batt_voltage, charge_current, charge_state = get_tracker_data(client)
-	charge_state_name = tracker_pb2.Name(charge_state)
+	charge_state_name = tracker_pb2.ChargeState.Name(charge_state)
 	is_light_on = client.light.get_light_status()
 	logger.info("Battery {:.3f} Charge Current {:.3f} Charge State {} Light on? {}".format(\
 		batt_voltage, charge_current, charge_state_name, is_light_on))
