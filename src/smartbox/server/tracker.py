@@ -213,6 +213,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		while unique_id in self.control_ids:
 			count += 1
 			description + "_{}".format(count)
+			unique_id = description + "_{}".format(count)
 		self.control_ids.add(unique_id)
 		return description
 
@@ -316,6 +317,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 
 	def _process_control_change_(self, request):
 		self.logger.info("Processing control change")
+		self.logger.info("Number unique ids {}".format(len(self.control_ids)))
 		new_id = self._get_unique_id_(request.description)
 		self.logger.info("Creating new ControllingClient")
 		controlling_client = \
