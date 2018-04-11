@@ -6,7 +6,7 @@ LIGHT_OFF_VOLTAGE = 12.5
 LIGHT_ON_VOLTAGE = 13.5
 
 def get_tracker_data(client):
-	data = client.get_tracker_data()
+	data = client.tracker.get_tracker_data()
 	return data.charge_controller.battery_voltage, data.charge_controller.charge_current, data.charge_state, 
 
 def process_for_state(client, logger):
