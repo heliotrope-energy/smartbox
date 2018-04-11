@@ -66,9 +66,11 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.count = 0
 
 	def echo(self, request_iterator, context):
+		self.logger.info("Chat beginning")
 		for request in request_iterator:
 			self.logger.info("Received {}".format(request.message))
 			yield tracker_pb2.ChatMessageResponse(message = request.message)
+		self.logger.info("Chat all done!")
 
 	def get_tracker_status(self, request, context):
 		return self._get_tracker_status_message_()
