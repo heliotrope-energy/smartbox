@@ -32,15 +32,13 @@ if __name__ == "__main__":
 	# print(client.tracker.is_ns_moving())
 	if not client.tracker.is_control_possible():
 		print("Control is not currently feasible")
-		return
-	
-	with client.tracker.request_control() as control:
-		print(control.does_client_have_control())
-		print(control.move_panel_to_linear_position(4.4, 1))
-		print(control.move_panel_to_angular_position(0.0, 0.0))
-		print(control.stow())
-		print(control.stop())
-		print(control.does_client_have_control())
+	else:
+		with client.tracker.request_control() as control:
+			print(control.move_panel_to_linear_position(4.4, 1))
+			print(control.move_panel_to_angular_position(0.0, 0.0))
+			print(control.stow())
+			print(control.stop())
+			print(control.move_west())
 	print("All done")
 	#client.tracker.relinquish_control()
 	# print(client.tracker.does_client_have_control())
