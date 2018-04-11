@@ -219,17 +219,17 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 
 	def _get_tracker_status_message_(self):
 		response = tracker_pb2.TrackerSystemStatusResponse()
-		with self.charge_controller_lock:
-			response.tracker.position.ns = self.tracker_controller.get_ns_position()
-			response.tracker.position.ew = self.tracker_controller.get_ew_position()
-			response.tracker.angle.ns = self.tracker_controller.get_ns_angle()
-			response.tracker.angle.ew = self.tracker_controller.get_ew_angle()
-			response.tracker.move_status.ns= self.tracker_controller.is_ns_moving()
-			response.tracker.move_status.ns = self.tracker_controller.is_ew_moving()
-			if self.controlling_client is not None:
-				response.tracker.controlling_client = self.controlling_client.description
-				response.tracker.controlling_authority = self.controlling_client.authority_level
+		response.tracker.position.ns = self.tracker_controller.get_ns_position()
+		response.tracker.position.ew = self.tracker_controller.get_ew_position()
+		response.tracker.angle.ns = self.tracker_controller.get_ns_angle()
+		response.tracker.angle.ew = self.tracker_controller.get_ew_angle()
+		response.tracker.move_status.ns= self.tracker_controller.is_ns_moving()
+		response.tracker.move_status.ns = self.tracker_controller.is_ew_moving()
+		if self.controlling_client is not None:
+			response.tracker.controlling_client = self.controlling_client.description
+			response.tracker.controlling_authority = self.controlling_client.authority_level
 
+		with self.charge_controller_lock:
 			if len(self.charge_data) == 0:
 				return response
 
@@ -322,13 +322,16 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		controlling_client = \
 			ControllingClient(description=request.description, \
 				client_id=new_id, authority_level = request.authority_level)
+		
+		if self.controlling_client is not None:
+			self.authority_queue.put((self.controlling_client.authority_level, self.controlling_client))
+		self.controlling_client = controlling_client
+		self.logger.info("Setting new controlling client")
+
 		self.logger.info("Acquiring lock")
 		with self.charge_controller_lock:
 			self.logger.info("Lock acquired")
-			if self.controlling_client is not None:
-				self.authority_queue.put((self.controlling_client.authority_level, self.controlling_client))
-			self.controlling_client = controlling_client
-			self.logger.info("Setting new controlling client")
+		
 			if "AHL_T" in self.charge_data:
 				self.load_amphours_at_start = self.charge_data["AHL_T"][1]
 			if "KWHC" in self.charge_data:
@@ -380,17 +383,19 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		previous = self.controlling_client
 		self.logger.info("Control was relinquished by {} Collected {:.3f} Expended {:.3f}".format(\
 			previous.description, previous.collected, previous.expended))
-		with self.charge_controller_lock:
-			if not self.authority_queue.empty():
-				self.controlling_client = self.authority_queue.get()
-				self.energy_collected_at_start = \
-					self.energy_collected_at_current_time - self.controlling_client.collected
-				self.energy_expended = 0.0
+		
+		if self.authority_queue.empty():
+			self.controlling_client = None
+		else:
+			self.controlling_client = self.authority_queue.get()
+			self.energy_collected_at_start = \
+				self.energy_collected_at_current_time - self.controlling_client.collected
+			self.energy_expended = 0.0
+			
+			with self.charge_controller_lock:
 				if "AHL_T" in self.charge_data:
 					self.load_amphours_at_previous = self.charge_data["AHL_T"][1]
-				self.logger.info("Control was returned to {}".format(self.controlling_client.description))
-			else:
-				self.controlling_client = None
+			self.logger.info("Control was returned to {}".format(self.controlling_client.description))
 		return energy_collected, energy_expended
 	
 
