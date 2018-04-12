@@ -30,11 +30,15 @@ class TrackerRunner():
         logging.basicConfig(filename=log_path, format='[%(asctime)s] %(name)s %(levelname)s: %(message)s', level=logging.INFO)
         print("Logging data to {}".format(log_path))
         self.logger = logging.getLogger(__name__)
-
+        self.logger.info("Initializing tracker runner")
         self.trackers = trackers
+        self.logger.info("Saving data to {}"format(data_dir))
         self.data_dir = data_dir
+        self.logger.info("Saving models to {}".format(model_dir))
         self.model_dir = model_dir
+        self.logger.info("Tracker eval duration {}".format(tracker_eval_duration))
         self.time_per_tracker = tracker_eval_duration
+        self.logger.info("Randomize? {}".format(randomize))
         self.randomize = randomize
         
         self.data = Queue()
