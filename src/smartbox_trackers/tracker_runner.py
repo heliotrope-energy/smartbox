@@ -132,10 +132,12 @@ class TrackerRunner():
         return tracker, sleep_time, tracker_start
 
     def check_at_night(self):
+        latitude=41.8240
+        longitude=-71.4128
         now = pd.to_datetime('now').tz_localize('UTC')
         tommorow = pd.Timedelta(days=1) + now
-        sunrise_set_today = pvlib.solarposition.get_sun_rise_set_transit(now, self.latitude, self.longitude)
-        sunrise_set_tomorrow = pvlib.solarposition.get_sun_rise_set_transit(tomorrow, self.latitude, self.longitude)
+        sunrise_set_today = pvlib.solarposition.get_sun_rise_set_transit(now, latitude, longitude)
+        sunrise_set_tomorrow = pvlib.solarposition.get_sun_rise_set_transit(tomorrow, latitude, longitude)
 
         if now > sunrise_set_today['sunset'] - pd.Timedelta(minutes=10) or \
             now < sunrise_set_today['sunrise'] + pd.Timedelta(minutes=10):
@@ -143,6 +145,9 @@ class TrackerRunner():
         return False, 0
 
     def run_nighttime_procedure(self):
+        latitude=41.8240
+        longitude=-71.4128
+
         if self.current_tracker is not None:
             tracker = self.trackers[self.current_tracker]
             self.logger.info("Cleaning up tracker {}".format(self.current_tracker))
@@ -163,7 +168,7 @@ class TrackerRunner():
         
         now = pd.to_datetime('now').tz_localize('UTC')
         tommorow = pd.Timedelta(days=1) + now
-        sunrise_set_tomorrow = pvlib.solarposition.get_sun_rise_set_transit(tomorrow, self.latitude, self.longitude)
+        sunrise_set_tomorrow = pvlib.solarposition.get_sun_rise_set_transit(tomorrow, latitude, longitude)
 
         self.logger.info("Sunset detected, going to sleep until {}".format(sunrise_set_tomorrow['sunrise']))
         time_til_sunrise = sunrise_set_tomorrow['sunrise'] - now + pd.Timedelta(minutes=20)
