@@ -39,11 +39,10 @@ class AstronomicalTrackerSingleAxis(Tracker):
         #get current date_time
         pos_data = pvlib.solarposition.get_solarposition(now, self.latitude, self.longitude)
 
-        self.logger.info(pos_data)
-        self.logger.info("Sun position is: Azimuth {azimuth} Elevation {elevation}".format(pos_data))
+        self.logger.info("Sun position is: Azimuth {} Elevation {}".format(pos_data['azimuth'], pos_data['elevation']))
         angle_pos = pvlib.tracking.singleaxis(pos_data['apparent_zenith'], pos_data['azimuth'], backtrack=False)
 
-        self.logger.info("Moving panel to: {tracker_theta}".format(angle_pos))
+        self.logger.info("Moving panel to: {}".format(angle_pos['tracker_theta']))
         self.control.move_panel_to_angular_position(0.0, float(angle_pos['tracker_theta']))
 
         #testing
