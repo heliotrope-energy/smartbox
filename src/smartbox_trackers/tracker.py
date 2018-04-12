@@ -2,7 +2,7 @@
 
 
 class Tracker():
-        def __init__(self, latitude, longitude, interval):
+        def __init__(self, client, latitude, longitude, interval):
             self.client = client
             self.longitude = longitude
             self.latitude = latitude
