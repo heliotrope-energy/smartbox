@@ -28,6 +28,7 @@ class TrackerRunner():
 
         log_path = os.path.join(log_dir, "tracker_runner.log")
         logging.basicConfig(filename=log_path, format='[%(asctime)s] %(name)s %(levelname)s: %(message)s', level=logging.INFO)
+        print("Logging data to {}".format(log_path))
         self.logger = logging.getLogger(__name__)
 
         self.trackers = trackers
