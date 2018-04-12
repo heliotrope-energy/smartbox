@@ -130,7 +130,18 @@ class TrackerRunner():
         sleep_time = tracker.interval * 60.0
         tracker_start = pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York")
         return tracker, sleep_time, tracker_start
-    
+
+    def check_at_night(self):
+        now = pd.to_datetime('now').tz_localize('UTC')
+        tommorow = pd.Timedelta(days=1) + now
+        sunrise_set_today = pvlib.solarposition.get_sun_rise_set_transit(now, self.latitude, self.longitude)
+        sunrise_set_tomorrow = pvlib.solarposition.get_sun_rise_set_transit(tomorrow, self.latitude, self.longitude)
+
+        if now > sunrise_set_today['sunset'] - pd.Timedelta(minutes=10) or \
+            now < sunrise_set_today['sunrise'] + pd.Timedelta(minutes=10):
+            return True, sunrise_set_tomorrow['sunrise'] - now + pd.Timedelta(minutes=15)
+        return False, 0
+
     def start(self):
         #loops collecting data, moves, saving, etc when neccessary
         self.logger.info("Subscribing to tracker status messages")
@@ -145,6 +156,10 @@ class TrackerRunner():
         loop_counter = 0
 
         while True:
+            at_night, time_til_sunrise = self.check_at_night():
+            if at_night:
+                self.logger.info("Sunset detected, going to sleep until {}".format(time_til_sunrise))
+                time.sleep(time_til_sunrise.total_seconds())
             loop_counter += 1
             self.save_and_flush()
             self.logger.info("Running tracker step {} for tracker {}".format(loop_counter, self.current_tracker))
