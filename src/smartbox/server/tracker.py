@@ -83,7 +83,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 
 		rate = 10.0 if request.message_rate <= 0.0 else request.message_rate
 		sleep_duration = 1.0 / rate
-		while self.is_ok():
+		while self._is_ok_():
 			yield self._get_tracker_status_message_()
 			time.sleep(sleep_duration)
 
