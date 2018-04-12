@@ -61,7 +61,7 @@ class TrackerRunner():
         data = []
         while not self.data.empty():
             data.append(self.data.get())
-        df = pd.DataFrame(self.data).set_index('time')
+        df = pd.DataFrame(data).set_index('time')
         path = os.path.join(self.data_dir, "data.csv")
         self.logger.info("Saving data to {}".format(path))
         if os.path.exists(path):
