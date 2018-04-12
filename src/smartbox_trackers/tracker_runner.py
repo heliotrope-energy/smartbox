@@ -27,9 +27,12 @@ class TrackerRunner():
             raise Exception("Not sure what you wanted me to do without any trackers")
 
         log_path = os.path.join(log_dir, "tracker_runner.log")
-        logging.basicConfig(filename=log_path, format='[%(asctime)s] %(name)s %(levelname)s: %(message)s', level=logging.INFO)
-        print("Logging data to {}".format(log_path))
+        logging.basicConfig(format='[%(asctime)s] %(name)s %(levelname)s: %(message)s', level=logging.INFO)
+        handler = logging.handlers.RotatingFileHandler(
+              log_path, maxBytes=20000000, backupCount=5)
         self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(handler)
+        print("Logging data to {}".format(log_path))
         self.logger.info("Initializing tracker runner")
         self.trackers = trackers
         self.logger.info("Saving data to {}".format(data_dir))
