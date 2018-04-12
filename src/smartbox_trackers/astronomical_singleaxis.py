@@ -39,6 +39,7 @@ class AstronomicalTrackerSingleAxis(Tracker):
         #get current date_time
         pos_data = pvlib.solarposition.get_solarposition(now, self.latitude, self.longitude)
 
+        self.logger.info(pos_data)
         self.logger.info("Sun position is: Azimuth {azimuth} Elevation {elevation}".format(pos_data))
         angle_pos = pvlib.tracking.singleaxis(pos_data['apparent_zenith'], pos_data['azimuth'], backtrack=False)
 
