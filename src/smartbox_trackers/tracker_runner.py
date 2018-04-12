@@ -156,7 +156,7 @@ class TrackerRunner():
         loop_counter = 0
 
         while True:
-            at_night, time_til_sunrise = self.check_at_night():
+            at_night, time_til_sunrise = self.check_at_night()
             if at_night:
                 self.logger.info("Sunset detected, going to sleep until {}".format(time_til_sunrise))
                 time.sleep(time_til_sunrise.total_seconds())
