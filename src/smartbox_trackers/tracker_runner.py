@@ -157,8 +157,8 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser(description='Tracker Runner')
     parser.add_argument('--log_dir', metavar='-l', type=str, default="$HOME",
                     help='Logging directory, defaults to $HOME')
-    parser.add_argument('--model_dir', metavar='-m', type=str, help="Directory for saving models")
-    parser.add_argument('--data_dir', metavar='-d', type=str, help="Directory containing data files")
+    parser.add_argument('--model_dir', metavar='-m', type=str, help="Directory for saving models", required=True)
+    parser.add_argument('--data_dir', metavar='-d', type=str, help="Directory containing data files", required=True)
     parser.add_argument('--eval_duration', metavar='-e', type=float, default = 1.0, help="Duration for the evaluation of each tracker (hours)")
     parser.add_argument('--randomize', action='store_true')
     
