@@ -55,7 +55,7 @@ if __name__ == '__main__':
 					help='Logging directory, defaults to $HOME')
 
 	args = parser.parse_args()
-	log_dir = os.path.expandvars(args.log_dir)
+	log_dir = os.path.expanduser(args.log_dir)
 	log_dir = os.path.expandvars(log_dir)
 	if not os.path.exists(log_dir):
 		os.makedirs(log_dir)

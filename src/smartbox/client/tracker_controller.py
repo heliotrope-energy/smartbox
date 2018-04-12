@@ -1,47 +1,53 @@
 from smartbox_msgs import tracker_pb2
-import time
+import time, logging
 from threading import Thread
 from queue import Queue
 
 class ControlDisruption(Exception):
 	pass
 
-class ControlContextManager:
+class TrackerController:
 	def __init__(self, server, authority_level, description, client_response_cb = None, timeout = 10.0):
-		self.retain_control = False
 		self.authority_level = authority_level
 		self.description = description
 		self.stub = server
 		self.have_tracker_control = False
 		self._move_response_callback_ = None
-		self.control_thread = None
-		self.timeout = timeout
 		self.client_response_cb = client_response_cb
+		self.logger = logging.getLogger(__name__)
 
-
-	def __enter__(self):
 		self.retain_control = True
 		self.control_thread = Thread(target = self._tracker_control_, \
 			args=(self.on_response,))
 		self.control_requests_queue = Queue()
 		self.control_thread.start()
 		count = 0.0
-		while not self.have_tracker_control and count < self.timeout:
+		while not self.have_tracker_control and count < timeout:
 			count += 1
 			request = tracker_pb2.ControlRequest(authority_level = self.authority_level, description = self.description)
 			self.control_requests_queue.put(request)
 			time.sleep(1.0)
 		if not self.have_tracker_control:
 			raise ControlDisruption("Getting tracker control failed")
-		print("Tracker control succeeded")
+		self.logger.info("Tracker control succeeded")
+		
+	def __enter__(self):
 		return self
 
 	def __exit__(self, *args):
 		self.retain_control = False
 
-
 	def _is_ok_(self):
 		return True
+
+	def in_control(self):
+		request = tracker_pb2.ControlRequest(\
+			authority_level = self.authority_level, description = self.description)
+		self._request_move_and_block_(request)
+		return self.have_tracker_control
+
+	def release(self):
+		self.retain_control = False
 
 	def on_response(self, response):
 		if self._move_response_callback_:
@@ -50,7 +56,7 @@ class ControlContextManager:
 			self.client_response_cb(response)
 
 	def _control_iterator_(self):
-		print("Sending initial control request")
+		self.logger.info("Sending initial control request")
 		yield tracker_pb2.ControlRequest(authority_level = self.authority_level, description = self.description)
 		while self._is_ok_() and self.retain_control:
 			if self.control_requests_queue.empty():
@@ -60,7 +66,7 @@ class ControlContextManager:
 				yield request
 
 	def _tracker_control_(self, response_cb):
-		print("Beginning tracker control")
+		self.logger.info("Beginning tracker control")
 		self.retain_control = True
 		control_iterator = self._control_iterator_()
 		count = 0
@@ -69,11 +75,11 @@ class ControlContextManager:
 				response_cb(response)
 			self.have_tracker_control = (response.success == tracker_pb2.SUCCESS)
 			if not self.have_tracker_control:
-				raise ControlDisruption("Control was relinquished by the server")
+				break
 			if not self.retain_control:
 				break
 
-		print("Ending tracker control")
+		self.logger.info("Ending tracker control")
 		self.retain_control = False
 
 	def move_panel_to_linear_position(self, ns_pos, ew_pos):

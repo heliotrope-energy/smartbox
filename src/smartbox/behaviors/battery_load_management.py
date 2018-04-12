@@ -36,7 +36,7 @@ def main():
 					help='Logging directory, defaults to $HOME')
 
 	args = parser.parse_args()
-	log_dir = os.path.expandvars(args.log_dir)
+	log_dir = os.path.expanduser(args.log_dir)
 	log_dir = os.path.expandvars(log_dir)
 	log_path = os.path.join(log_dir, "battery_manager.log")
 	

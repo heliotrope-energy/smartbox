@@ -3,6 +3,7 @@ package smartbox_msgs;
 
 service WeatherController {
 	rpc weather_report (WeatherRequest) returns (WeatherResponse) {}
+	rpc weather (WeatherRequest) returns (stream WeatherResponse) {}
 }
 
 
@@ -48,6 +49,7 @@ message SolarReport {
 
 message WeatherRequest {
 	string message = 1;
+	double report_interval = 2;
 }
 
 message WeatherResponse {

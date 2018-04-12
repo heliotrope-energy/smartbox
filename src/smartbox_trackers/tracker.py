@@ -2,7 +2,7 @@
 
 
 class Tracker():
-        def __init__(self, client, latitude, longitude, interval):
+        def __init__(self, latitude, longitude, interval):
             self.client = client
             self.longitude = longitude
             self.latitude = latitude
@@ -12,6 +12,12 @@ class Tracker():
         def run_step(self, state):
             '''
             Abstract method for running step
+            '''
+            return False
+
+        def cleanup(self):
+            '''
+            If the tracker needs to do any cleanup at the end of a trial
             '''
             return False
 

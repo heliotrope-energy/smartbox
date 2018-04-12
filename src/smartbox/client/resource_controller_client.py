@@ -2,7 +2,7 @@
 import grpc, time
 
 from smartbox.client.tracker_client import TrackerClient
-from smartbox.client.tracker_control_cm import ControlDisruption
+from smartbox.client.tracker_controller import ControlDisruption
 from smartbox.client.weather_client import WeatherClient
 from smartbox.client.light_client import LightClient
 from smartbox.client.panel_temperature_client import PanelTemperatureClient
@@ -33,12 +33,24 @@ if __name__ == "__main__":
 	if not client.tracker.is_control_possible():
 		print("Control is not currently feasible")
 	else:
-		with client.tracker.request_control() as control:
+		try:
+			control = client.tracker.request_control()
 			print(control.move_panel_to_linear_position(4.4, 1))
 			print(control.move_panel_to_angular_position(0.0, 0.0))
 			print(control.stow())
 			print(control.stop())
 			print(control.move_west())
+			control.release()
+
+		except ControlDisruption:
+			print("Control takeover failed")
+
+	# with client.tracker.request_control() as control:
+	# 	print(control.move_panel_to_linear_position(4.4, 1))
+	# 	print(control.move_panel_to_angular_position(0.0, 0.0))
+	# 	print(control.stow())
+	# 	print(control.stop())
+	# 	print(control.move_west())
 	print("All done")
 	#client.tracker.relinquish_control()
 	# print(client.tracker.does_client_have_control())

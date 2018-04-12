@@ -1,4 +1,4 @@
-import logging
+import logging, time
 
 from smartbox_msgs import weather_pb2
 from smartbox_msgs import weather_pb2_grpc
@@ -10,8 +10,22 @@ class SmartBoxWeatherController(weather_pb2_grpc.WeatherControllerServicer):
 		self.weather = SmartBoxWeatherStation()
 		self.logger = logging.getLogger(__name__)
 
+	def weather(self, request, context):
+		keep_reporting = True
+		sleep_interval = 1.0 if request.sleep_interval == 0.0 else request.sleep_interval
+		def termination_cb():
+			keep_reporting = False
+
+		context.add_callback(termination_cb)
+		while keep_reporting:
+			yield self._weather_response_()
+			time.sleep(sleep_interval)
+
 	def weather_report(self, request, context):
 		self.logger.info("Weather request received")
+		return self._weather_response_
+
+	def _weather_response_(self):
 		response = weather_pb2.WeatherResponse()
 		
 		try:

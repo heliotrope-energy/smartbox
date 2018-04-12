@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from smartbox_msgs import tracker_pb2
 from smartbox_msgs import tracker_pb2_grpc
-from smartbox.client.tracker_control_cm import ControlContextManager
+from smartbox.client.tracker_controller import TrackerController
 
 import time
 from threading import Thread
@@ -31,16 +31,16 @@ class TrackerClient:
 
 		"""
 
-		return ControlContextManager(self.stub, self.authority_level, self.description)
+		return TrackerController(self.stub, self.authority_level, self.description)
 
 	def is_control_possible(self):
 		"""
 			This will check the server to see if there is a controlling client with more authority than your client
 		"""
-		status = self.get_tracker_status()
-		if status.controlling_authority == -1:
+		status = self._request_status_()
+		if status.tracker.controlling_authority == -1:
 			return True
-		if status.controlling_authority > self.authority_level:
+		if status.tracker.controlling_authority > self.authority_level:
 			return True
 		return False
 
@@ -151,6 +151,11 @@ class TrackerClient:
 		"""
 		status = self._request_status_()
 		return status.charge_controller.charge_state
+
+	def get_charge_state_name(self):
+		status = self._request_status_()
+		state = status.charge_controller.charge_state
+		return tracker_pb2.Name(state)
 
 	def get_tracker_data(self):
 		"""
