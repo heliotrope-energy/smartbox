@@ -160,7 +160,7 @@ if __name__=="__main__":
     parser.add_argument('--model_dir', metavar='-m', type=str, help="Directory for saving models")
     parser.add_argument('--data_dir', metavar='-d', type=str, help="Directory containing data files")
     parser.add_argument('--eval_duration', metavar='-e', type=float, default = 1.0, help="Duration for the evaluation of each tracker (hours)")
-    parser.add_argument('--randomize', metavar='-r', action='store_true')
+    parser.add_argument('--randomize', action='store_true')
     
     args = parser.parse_args()
     log_dir = expand_directory(args.log_dir)
