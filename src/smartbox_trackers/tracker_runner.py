@@ -155,12 +155,12 @@ class TrackerRunner():
             self.current_tracker = None
 
         count = 0
-        while not self.client.is_control_possible() and count < 10:
+        while not self.client.tracker.is_control_possible() and count < 10:
             count += 1
             self.logger.info("Waiting for tracker to relinquish control")
             time.sleep(1.0)
 
-        if not self.client.is_control_possible():
+        if not self.client.tracker.is_control_possible():
             self.logger.info("I lost patience, taking control")
 
         with self.client.tracker.request_control() as control:
