@@ -8,7 +8,7 @@ import pandas as pd
 from tracker import Tracker
 
 class AstronomicalTrackerSingleAxis(Tracker):
-    def __init__(self, latitude=41.8240, longitude=-71.4128, interval=10, method='nrel_numpy'):
+    def __init__(self, latitude=41.8240, longitude=-71.4128, interval=10, method='nrel_numpy', *args, **kwargs):
         '''
         Initialize the client
         longitude: current longitude of panel
