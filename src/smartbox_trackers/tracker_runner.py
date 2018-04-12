@@ -64,7 +64,7 @@ class TrackerRunner():
             print(data[-1])
         if len(data) == 0:
             return
-            
+
         df = pd.DataFrame(data).set_index('time')
         path = os.path.join(self.data_dir, "data.csv")
         self.logger.info("Saving data to {}".format(path))
@@ -106,7 +106,8 @@ class TrackerRunner():
 
     def should_switch_trackers(self, start_time):
         duration = self.time_per_tracker * 60.0 * 60.0
-        return pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York") - start_time > duration
+        time_delta = pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York") - start_time
+        return time_delta.total_seconds() > duration
 
     def switch_current_tracker(self):
         self.logger.info("Saving remaining data")
