@@ -167,6 +167,7 @@ class TrackerRunner():
 
         self.logger.info("Sunset detected, going to sleep until {}".format(sunrise_set_tomorrow['sunrise']))
         time_til_sunrise = sunrise_set_tomorrow['sunrise'] - now + pd.Timedelta(minutes=20)
+
         time.sleep(time_til_sunrise.total_seconds())
 
     def start(self):
