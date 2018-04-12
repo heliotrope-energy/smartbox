@@ -44,7 +44,7 @@ class TrackerClient:
 			return True
 		return False
 
-	def tracker_status(callback):
+	def tracker_status(self, callback):
 		for status in self.stub.TrackerStatus(tracker_pb2.TrackerSystemStatusRequest()):
 			callback(status)
 
