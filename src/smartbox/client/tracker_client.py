@@ -45,6 +45,10 @@ class TrackerClient:
 		return False
 
 	def tracker_status(self, callback):
+		self.tracker_status_thread = Thread(target = self._tracker_status_, \
+			args=(callback,))
+
+	def _tracker_status_(self, callback):
 		for status in self.stub.tracker_status(tracker_pb2.TrackerSystemStatusRequest()):
 			callback(status)
 

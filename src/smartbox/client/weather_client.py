@@ -2,6 +2,8 @@
 from smartbox_msgs import weather_pb2
 from smartbox_msgs import weather_pb2_grpc
 
+from threading import Thread
+
 class WeatherClient:
 	def __init__(self, channel):
 		self.channel = channel
@@ -15,9 +17,12 @@ class WeatherClient:
 		return self._request_weather_()
 
 	def subscribe_weather(self, callback):
+		self.weather_thread = Thread(target=self._weather_, args=(callback,))
+
+	def _weather_(self, callback):
 		request = weather_pb2.WeatherRequest()
 		for response in self.stub.weather(request):
-			callback(request)
+			callback(request)		
 
 	def _request_weather_(self):
 		request = weather_pb2.WeatherRequest()
