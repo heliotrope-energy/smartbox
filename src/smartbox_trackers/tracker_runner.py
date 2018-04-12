@@ -135,7 +135,7 @@ class TrackerRunner():
         latitude=41.8240
         longitude=-71.4128
         now = pd.to_datetime('now').tz_localize('UTC')
-        tommorow = pd.Timedelta(days=1) + now
+        tomorrow = pd.Timedelta(days=1) + now
         sunrise_set_today = pvlib.solarposition.get_sun_rise_set_transit(now, latitude, longitude)
         sunrise_set_tomorrow = pvlib.solarposition.get_sun_rise_set_transit(tomorrow, latitude, longitude)
 
@@ -167,7 +167,7 @@ class TrackerRunner():
             control.stow()
         
         now = pd.to_datetime('now').tz_localize('UTC')
-        tommorow = pd.Timedelta(days=1) + now
+        tomorrow = pd.Timedelta(days=1) + now
         sunrise_set_tomorrow = pvlib.solarposition.get_sun_rise_set_transit(tomorrow, latitude, longitude)
 
         self.logger.info("Sunset detected, going to sleep until {}".format(sunrise_set_tomorrow['sunrise']))
