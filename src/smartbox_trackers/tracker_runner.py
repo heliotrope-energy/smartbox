@@ -139,8 +139,8 @@ class TrackerRunner():
         sunrise_set_today = pvlib.solarposition.get_sun_rise_set_transit(now, latitude, longitude)
         sunrise_set_tomorrow = pvlib.solarposition.get_sun_rise_set_transit(tomorrow, latitude, longitude)
 
-        if now > sunrise_set_today['sunset'] - pd.Timedelta(minutes=10) or \
-            now < sunrise_set_today['sunrise'] + pd.Timedelta(minutes=10):
+        if (now > sunrise_set_today['sunset'] - pd.Timedelta(minutes=10))[0] or \
+            (now < sunrise_set_today['sunrise'] + pd.Timedelta(minutes=10))[0]:
             return True, sunrise_set_tomorrow['sunrise'] - now + pd.Timedelta(minutes=15)
         return False, 0
 
