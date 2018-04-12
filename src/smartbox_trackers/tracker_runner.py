@@ -64,7 +64,10 @@ class TrackerRunner():
         df = pd.DataFrame(self.data).set_index('time')
         path = os.path.join(self.data_dir, "data.csv")
         self.logger.info("Saving data to {}".format(path))
-        df.to_csv(path, mode='a', header = False)
+        if os.path.exists(path):
+            df.to_csv(path, mode='a', header = False)
+        else:
+            df.to_csv(path)
 
     def on_weather(self, weather):
         with self.weather_lock:
@@ -73,7 +76,7 @@ class TrackerRunner():
     def on_tracker_status(self, tracker_data):
         with self.tracker_status_lock:
             self.current_tracker_status = tracker_data
-        data = {'time':pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York")}
+        data = pd.Series({'time':pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York")})
 
         #getting charge controller data
         data['energy_collected'] = tracker_data.charge_controller.energy_collected
