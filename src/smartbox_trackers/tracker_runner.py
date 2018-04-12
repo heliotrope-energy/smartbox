@@ -174,7 +174,7 @@ if __name__=="__main__":
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
     if not os.path.exists(data_dir):
-        raise Exception("Data directory {} does not exist".format(data_dir))
+        os.makedirs(data_dir)
 
     trackers = {'astro_single': AstronomicalTrackerSingleAxis}
     runner = TrackerRunner(trackers, log_dir, data_dir, model_dir, eval_duration, randomize)
