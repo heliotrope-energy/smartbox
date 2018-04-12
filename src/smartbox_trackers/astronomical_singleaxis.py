@@ -3,7 +3,7 @@
 #NOTE: move to Dave's Grena code for dual-axis
 from smartbox.client.resource_controller_client import SmartBoxResourceControllerClient
 from smartbox.client.tracker_controller import ControlDisruption
-import cv2, time, pvlib
+import cv2, time, pvlib, logging
 import pandas as pd
 from tracker import Tracker
 
