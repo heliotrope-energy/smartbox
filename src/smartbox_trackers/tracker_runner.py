@@ -163,7 +163,7 @@ class TrackerRunner():
         if not self.client.is_control_possible():
             self.logger.info("I lost patience, taking control")
 
-        with self.client.tracker.request_control() as control():
+        with self.client.tracker.request_control() as control:
             control.stow()
         
         now = pd.to_datetime('now').tz_localize('UTC')
