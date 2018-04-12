@@ -32,7 +32,7 @@ class TrackerRunner():
         self.logger = logging.getLogger(__name__)
         self.logger.info("Initializing tracker runner")
         self.trackers = trackers
-        self.logger.info("Saving data to {}"format(data_dir))
+        self.logger.info("Saving data to {}".format(data_dir))
         self.data_dir = data_dir
         self.logger.info("Saving models to {}".format(model_dir))
         self.model_dir = model_dir
