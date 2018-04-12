@@ -15,6 +15,8 @@ def serve(log_dir):
 	logging.basicConfig(format='[%(asctime)s] %(name)s %(levelname)s: %(message)s', level=logging.INFO)
 	handler = logging.handlers.RotatingFileHandler(log_path, maxBytes=20000000, backupCount=5)
 	logger = logging.getLogger(__name__)
+	logger.setLevel(logging.INFO)
+	handler.setFormatter(logging.Formatter('[%(asctime)s] %(name)s %(levelname)s: %(message)s'))
 	logger.addHandler(handler)
 	gm = TlsSMTPHandler(("smtp.gmail.com", 587), 'heliotrope.bugger@gmail.com', ['brawner@gmail.com'], 'Server is not having a good day', ('heliotrope.bugger@gmail.com', 's6u#jW^8gMYUV^bf'))
 	gm.setLevel(logging.ERROR)
