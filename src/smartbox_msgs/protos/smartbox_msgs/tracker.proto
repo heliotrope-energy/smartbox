@@ -49,6 +49,7 @@ enum ControlRequestSuccessFlag {
 
 message TrackerSystemStatusRequest {
 	string control_id = 1;
+	double message_rate = 2;
 }
 
 message Position {

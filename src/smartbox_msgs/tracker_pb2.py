@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='tracker.proto',
   package='smartbox_msgs',
   syntax='proto3',
-  serialized_pb=_b('\n\rtracker.proto\x12\rsmartbox_msgs\"%\n\x12\x43hatMessageRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"&\n\x13\x43hatMessageResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"0\n\x1aTrackerSystemStatusRequest\x12\x12\n\ncontrol_id\x18\x01 \x01(\t\"\"\n\x08Position\x12\n\n\x02ns\x18\x01 \x01(\x01\x12\n\n\x02\x65w\x18\x02 \x01(\x01\"$\n\nMoveStatus\x12\n\n\x02ns\x18\x01 \x01(\x08\x12\n\n\x02\x65w\x18\x02 \x01(\x08\"\xec\x01\n\rTrackerStatus\x12)\n\x08position\x18\x01 \x01(\x0b\x32\x17.smartbox_msgs.Position\x12&\n\x05\x61ngle\x18\x02 \x01(\x0b\x32\x17.smartbox_msgs.Position\x12.\n\x0bmove_status\x18\x03 \x01(\x0b\x32\x19.smartbox_msgs.MoveStatus\x12\x1d\n\x15\x63ontrolling_authority\x18\x04 \x01(\x03\x12\x1a\n\x12\x63ontrolling_client\x18\x05 \x01(\t\x12\x1d\n\x15is_controlling_client\x18\x06 \x01(\x08\"\xaa\x05\n\x17\x43hargeControllerDetails\x12\x0c\n\x04t_hs\x18\x01 \x01(\x01\x12\x0e\n\x06t_batt\x18\x02 \x01(\x01\x12\r\n\x05t_amb\x18\x03 \x01(\x01\x12\r\n\x05t_rts\x18\x04 \x01(\x01\x12\x13\n\x0b\x61rray_fault\x18\x05 \x01(\r\x12\x0c\n\x04vb_f\x18\x06 \x01(\x01\x12\x0e\n\x06vb_ref\x18\x07 \x01(\x01\x12\r\n\x05\x61hc_r\x18\x08 \x01(\x01\x12\r\n\x05\x61hc_t\x18\t \x01(\x01\x12\x0c\n\x04kwhc\x18\n \x01(\x01\x12\x12\n\nload_state\x18\x0b \x01(\x01\x12\x12\n\nload_fault\x18\x0c \x01(\r\x12\r\n\x05v_lvd\x18\r \x01(\x01\x12\r\n\x05\x61hl_r\x18\x0e \x01(\x01\x12\r\n\x05\x61hl_t\x18\x0f \x01(\x01\x12\x11\n\thourmeter\x18\x10 \x01(\x01\x12\r\n\x05\x61larm\x18\x11 \x01(\r\x12\x12\n\ndip_switch\x18\x12 \x01(\r\x12\x11\n\tled_state\x18\x13 \x01(\r\x12\x11\n\tpower_out\x18\x14 \x01(\x01\x12\x11\n\tsweep_vmp\x18\x15 \x01(\x01\x12\x12\n\nsweep_pmax\x18\x16 \x01(\x01\x12\x11\n\tsweep_voc\x18\x17 \x01(\x01\x12\x14\n\x0cvb_min_daily\x18\x18 \x01(\x01\x12\x14\n\x0cvb_max_daily\x18\x19 \x01(\x01\x12\x11\n\tahc_daily\x18\x1a \x01(\x01\x12\x11\n\tahl_daily\x18\x1b \x01(\x01\x12\x19\n\x11\x61rray_fault_daily\x18\x1c \x01(\r\x12\x18\n\x10load_fault_daily\x18\x1d \x01(\r\x12\x13\n\x0b\x61larm_daily\x18\x1e \x01(\r\x12\x0e\n\x06vb_min\x18\x1f \x01(\x01\x12\x0e\n\x06vb_max\x18  \x01(\x01\x12\x1d\n\x15lighting_should_be_on\x18! \x01(\r\x12\x14\n\x0cva_ref_fixed\x18\" \x01(\x01\x12\x18\n\x10va_ref_fixed_ptc\x18# \x01(\x01\"\xaa\x02\n\x16\x43hargeControllerStatus\x12\x17\n\x0f\x62\x61ttery_voltage\x18\x01 \x01(\x01\x12\x15\n\rarray_voltage\x18\x02 \x01(\x01\x12\x14\n\x0cload_voltage\x18\x03 \x01(\x01\x12\x16\n\x0e\x63harge_current\x18\x04 \x01(\x01\x12\x14\n\x0cload_current\x18\x05 \x01(\x01\x12\x30\n\x0c\x63harge_state\x18\x06 \x01(\x0e\x32\x1a.smartbox_msgs.ChargeState\x12\x18\n\x10\x65nergy_collected\x18\x07 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x08 \x01(\x01\x12\x37\n\x07\x64\x65tails\x18\t \x01(\x0b\x32&.smartbox_msgs.ChargeControllerDetails\"D\n\x15RequestControlRequest\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\x16\n\x0esecurity_level\x18\x02 \x01(\x04\"x\n\x16RequestControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x39\n\x07success\x18\x02 \x01(\x0e\x32(.smartbox_msgs.ControlRequestSuccessFlag\x12\x12\n\ncontrol_id\x18\x03 \x01(\t\".\n\x18RelinquishControlRequest\x12\x12\n\ncontrol_id\x18\x01 \x01(\t\"\x9a\x01\n\x19RelinquishControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x18\n\x10\x65nergy_collected\x18\x02 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x03 \x01(\x01\x12\x39\n\x07success\x18\x04 \x01(\x0e\x32(.smartbox_msgs.ControlRequestSuccessFlag\"\xe2\x02\n\x0e\x43ontrolRequest\x12\x17\n\x0f\x61uthority_level\x18\x01 \x01(\x04\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x39\n\tmove_type\x18\x03 \x01(\x0e\x32&.smartbox_msgs.ControlRequest.MoveType\x12+\n\tdirection\x18\x04 \x01(\x0e\x32\x18.smartbox_msgs.DIRECTION\x12\x15\n\rmove_duration\x18\x05 \x01(\x01\x12)\n\x08position\x18\x06 \x01(\x0b\x32\x17.smartbox_msgs.Position\x12&\n\x05\x61ngle\x18\x07 \x01(\x0b\x32\x17.smartbox_msgs.Position\"P\n\x08MoveType\x12\t\n\x05UNSET\x10\x00\x12\x0c\n\x08\x44URATION\x10\x01\x12\x0c\n\x08POSITION\x10\x02\x12\t\n\x05\x41NGLE\x10\x03\x12\x08\n\x04STOW\x10\x04\x12\x08\n\x04STOP\x10\x05\"]\n\x0f\x43ontrolResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x39\n\x07success\x18\x02 \x01(\x0e\x32(.smartbox_msgs.ControlRequestSuccessFlag\"\x8e\x01\n\x1bTrackerSystemStatusResponse\x12-\n\x07tracker\x18\x01 \x01(\x0b\x32\x1c.smartbox_msgs.TrackerStatus\x12@\n\x11\x63harge_controller\x18\x02 \x01(\x0b\x32%.smartbox_msgs.ChargeControllerStatus*5\n\tDIRECTION\x12\t\n\x05NORTH\x10\x00\x12\x08\n\x04\x45\x41ST\x10\x01\x12\t\n\x05SOUTH\x10\x02\x12\x08\n\x04WEST\x10\x03*\x89\x01\n\x0b\x43hargeState\x12\t\n\x05START\x10\x00\x12\x0f\n\x0bNIGHT_CHECK\x10\x01\x12\x0e\n\nDISCONNECT\x10\x02\x12\t\n\x05NIGHT\x10\x03\x12\t\n\x05\x46\x41ULT\x10\x04\x12\x0f\n\x0b\x42ULK_CHARGE\x10\x05\x12\x0e\n\nABSORBTION\x10\x06\x12\t\n\x05\x46LOAT\x10\x07\x12\x0c\n\x08\x45QUALIZE\x10\x08*V\n\x19\x43ontrolRequestSuccessFlag\x12\x0b\n\x07SUCCESS\x10\x00\x12\x1f\n\x1bINSUFFICIENT_SECURITY_LEVEL\x10\x01\x12\x0b\n\x07\x46\x41ILURE\x10\x02\x32\x9c\x03\n\x11TrackerController\x12m\n\x12get_tracker_status\x12).smartbox_msgs.TrackerSystemStatusRequest\x1a*.smartbox_msgs.TrackerSystemStatusResponse\"\x00\x12V\n\x0ftracker_control\x12\x1d.smartbox_msgs.ControlRequest\x1a\x1e.smartbox_msgs.ControlResponse\"\x00(\x01\x30\x01\x12k\n\x0etracker_status\x12).smartbox_msgs.TrackerSystemStatusRequest\x1a*.smartbox_msgs.TrackerSystemStatusResponse\"\x00\x30\x01\x12S\n\x04\x65\x63ho\x12!.smartbox_msgs.ChatMessageRequest\x1a\".smartbox_msgs.ChatMessageResponse\"\x00(\x01\x30\x01\x62\x06proto3')
+  serialized_pb=_b('\n\rtracker.proto\x12\rsmartbox_msgs\"%\n\x12\x43hatMessageRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"&\n\x13\x43hatMessageResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"F\n\x1aTrackerSystemStatusRequest\x12\x12\n\ncontrol_id\x18\x01 \x01(\t\x12\x14\n\x0cmessage_rate\x18\x02 \x01(\x01\"\"\n\x08Position\x12\n\n\x02ns\x18\x01 \x01(\x01\x12\n\n\x02\x65w\x18\x02 \x01(\x01\"$\n\nMoveStatus\x12\n\n\x02ns\x18\x01 \x01(\x08\x12\n\n\x02\x65w\x18\x02 \x01(\x08\"\xec\x01\n\rTrackerStatus\x12)\n\x08position\x18\x01 \x01(\x0b\x32\x17.smartbox_msgs.Position\x12&\n\x05\x61ngle\x18\x02 \x01(\x0b\x32\x17.smartbox_msgs.Position\x12.\n\x0bmove_status\x18\x03 \x01(\x0b\x32\x19.smartbox_msgs.MoveStatus\x12\x1d\n\x15\x63ontrolling_authority\x18\x04 \x01(\x03\x12\x1a\n\x12\x63ontrolling_client\x18\x05 \x01(\t\x12\x1d\n\x15is_controlling_client\x18\x06 \x01(\x08\"\xaa\x05\n\x17\x43hargeControllerDetails\x12\x0c\n\x04t_hs\x18\x01 \x01(\x01\x12\x0e\n\x06t_batt\x18\x02 \x01(\x01\x12\r\n\x05t_amb\x18\x03 \x01(\x01\x12\r\n\x05t_rts\x18\x04 \x01(\x01\x12\x13\n\x0b\x61rray_fault\x18\x05 \x01(\r\x12\x0c\n\x04vb_f\x18\x06 \x01(\x01\x12\x0e\n\x06vb_ref\x18\x07 \x01(\x01\x12\r\n\x05\x61hc_r\x18\x08 \x01(\x01\x12\r\n\x05\x61hc_t\x18\t \x01(\x01\x12\x0c\n\x04kwhc\x18\n \x01(\x01\x12\x12\n\nload_state\x18\x0b \x01(\x01\x12\x12\n\nload_fault\x18\x0c \x01(\r\x12\r\n\x05v_lvd\x18\r \x01(\x01\x12\r\n\x05\x61hl_r\x18\x0e \x01(\x01\x12\r\n\x05\x61hl_t\x18\x0f \x01(\x01\x12\x11\n\thourmeter\x18\x10 \x01(\x01\x12\r\n\x05\x61larm\x18\x11 \x01(\r\x12\x12\n\ndip_switch\x18\x12 \x01(\r\x12\x11\n\tled_state\x18\x13 \x01(\r\x12\x11\n\tpower_out\x18\x14 \x01(\x01\x12\x11\n\tsweep_vmp\x18\x15 \x01(\x01\x12\x12\n\nsweep_pmax\x18\x16 \x01(\x01\x12\x11\n\tsweep_voc\x18\x17 \x01(\x01\x12\x14\n\x0cvb_min_daily\x18\x18 \x01(\x01\x12\x14\n\x0cvb_max_daily\x18\x19 \x01(\x01\x12\x11\n\tahc_daily\x18\x1a \x01(\x01\x12\x11\n\tahl_daily\x18\x1b \x01(\x01\x12\x19\n\x11\x61rray_fault_daily\x18\x1c \x01(\r\x12\x18\n\x10load_fault_daily\x18\x1d \x01(\r\x12\x13\n\x0b\x61larm_daily\x18\x1e \x01(\r\x12\x0e\n\x06vb_min\x18\x1f \x01(\x01\x12\x0e\n\x06vb_max\x18  \x01(\x01\x12\x1d\n\x15lighting_should_be_on\x18! \x01(\r\x12\x14\n\x0cva_ref_fixed\x18\" \x01(\x01\x12\x18\n\x10va_ref_fixed_ptc\x18# \x01(\x01\"\xaa\x02\n\x16\x43hargeControllerStatus\x12\x17\n\x0f\x62\x61ttery_voltage\x18\x01 \x01(\x01\x12\x15\n\rarray_voltage\x18\x02 \x01(\x01\x12\x14\n\x0cload_voltage\x18\x03 \x01(\x01\x12\x16\n\x0e\x63harge_current\x18\x04 \x01(\x01\x12\x14\n\x0cload_current\x18\x05 \x01(\x01\x12\x30\n\x0c\x63harge_state\x18\x06 \x01(\x0e\x32\x1a.smartbox_msgs.ChargeState\x12\x18\n\x10\x65nergy_collected\x18\x07 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x08 \x01(\x01\x12\x37\n\x07\x64\x65tails\x18\t \x01(\x0b\x32&.smartbox_msgs.ChargeControllerDetails\"D\n\x15RequestControlRequest\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\x16\n\x0esecurity_level\x18\x02 \x01(\x04\"x\n\x16RequestControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x39\n\x07success\x18\x02 \x01(\x0e\x32(.smartbox_msgs.ControlRequestSuccessFlag\x12\x12\n\ncontrol_id\x18\x03 \x01(\t\".\n\x18RelinquishControlRequest\x12\x12\n\ncontrol_id\x18\x01 \x01(\t\"\x9a\x01\n\x19RelinquishControlResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x18\n\x10\x65nergy_collected\x18\x02 \x01(\x01\x12\x17\n\x0f\x65nergy_expended\x18\x03 \x01(\x01\x12\x39\n\x07success\x18\x04 \x01(\x0e\x32(.smartbox_msgs.ControlRequestSuccessFlag\"\xe2\x02\n\x0e\x43ontrolRequest\x12\x17\n\x0f\x61uthority_level\x18\x01 \x01(\x04\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x39\n\tmove_type\x18\x03 \x01(\x0e\x32&.smartbox_msgs.ControlRequest.MoveType\x12+\n\tdirection\x18\x04 \x01(\x0e\x32\x18.smartbox_msgs.DIRECTION\x12\x15\n\rmove_duration\x18\x05 \x01(\x01\x12)\n\x08position\x18\x06 \x01(\x0b\x32\x17.smartbox_msgs.Position\x12&\n\x05\x61ngle\x18\x07 \x01(\x0b\x32\x17.smartbox_msgs.Position\"P\n\x08MoveType\x12\t\n\x05UNSET\x10\x00\x12\x0c\n\x08\x44URATION\x10\x01\x12\x0c\n\x08POSITION\x10\x02\x12\t\n\x05\x41NGLE\x10\x03\x12\x08\n\x04STOW\x10\x04\x12\x08\n\x04STOP\x10\x05\"]\n\x0f\x43ontrolResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x39\n\x07success\x18\x02 \x01(\x0e\x32(.smartbox_msgs.ControlRequestSuccessFlag\"\x8e\x01\n\x1bTrackerSystemStatusResponse\x12-\n\x07tracker\x18\x01 \x01(\x0b\x32\x1c.smartbox_msgs.TrackerStatus\x12@\n\x11\x63harge_controller\x18\x02 \x01(\x0b\x32%.smartbox_msgs.ChargeControllerStatus*5\n\tDIRECTION\x12\t\n\x05NORTH\x10\x00\x12\x08\n\x04\x45\x41ST\x10\x01\x12\t\n\x05SOUTH\x10\x02\x12\x08\n\x04WEST\x10\x03*\x89\x01\n\x0b\x43hargeState\x12\t\n\x05START\x10\x00\x12\x0f\n\x0bNIGHT_CHECK\x10\x01\x12\x0e\n\nDISCONNECT\x10\x02\x12\t\n\x05NIGHT\x10\x03\x12\t\n\x05\x46\x41ULT\x10\x04\x12\x0f\n\x0b\x42ULK_CHARGE\x10\x05\x12\x0e\n\nABSORBTION\x10\x06\x12\t\n\x05\x46LOAT\x10\x07\x12\x0c\n\x08\x45QUALIZE\x10\x08*V\n\x19\x43ontrolRequestSuccessFlag\x12\x0b\n\x07SUCCESS\x10\x00\x12\x1f\n\x1bINSUFFICIENT_SECURITY_LEVEL\x10\x01\x12\x0b\n\x07\x46\x41ILURE\x10\x02\x32\x9c\x03\n\x11TrackerController\x12m\n\x12get_tracker_status\x12).smartbox_msgs.TrackerSystemStatusRequest\x1a*.smartbox_msgs.TrackerSystemStatusResponse\"\x00\x12V\n\x0ftracker_control\x12\x1d.smartbox_msgs.ControlRequest\x1a\x1e.smartbox_msgs.ControlResponse\"\x00(\x01\x30\x01\x12k\n\x0etracker_status\x12).smartbox_msgs.TrackerSystemStatusRequest\x1a*.smartbox_msgs.TrackerSystemStatusResponse\"\x00\x30\x01\x12S\n\x04\x65\x63ho\x12!.smartbox_msgs.ChatMessageRequest\x1a\".smartbox_msgs.ChatMessageResponse\"\x00(\x01\x30\x01\x62\x06proto3')
 )
 
 _DIRECTION = _descriptor.EnumDescriptor(
@@ -48,8 +48,8 @@ _DIRECTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2454,
-  serialized_end=2507,
+  serialized_start=2476,
+  serialized_end=2529,
 )
 _sym_db.RegisterEnumDescriptor(_DIRECTION)
 
@@ -99,8 +99,8 @@ _CHARGESTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2510,
-  serialized_end=2647,
+  serialized_start=2532,
+  serialized_end=2669,
 )
 _sym_db.RegisterEnumDescriptor(_CHARGESTATE)
 
@@ -126,8 +126,8 @@ _CONTROLREQUESTSUCCESSFLAG = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2649,
-  serialized_end=2735,
+  serialized_start=2671,
+  serialized_end=2757,
 )
 _sym_db.RegisterEnumDescriptor(_CONTROLREQUESTSUCCESSFLAG)
 
@@ -183,8 +183,8 @@ _CONTROLREQUEST_MOVETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2132,
-  serialized_end=2212,
+  serialized_start=2154,
+  serialized_end=2234,
 )
 _sym_db.RegisterEnumDescriptor(_CONTROLREQUEST_MOVETYPE)
 
@@ -265,6 +265,13 @@ _TRACKERSYSTEMSTATUSREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='message_rate', full_name='smartbox_msgs.TrackerSystemStatusRequest.message_rate', index=1,
+      number=2, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -278,7 +285,7 @@ _TRACKERSYSTEMSTATUSREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=111,
-  serialized_end=159,
+  serialized_end=181,
 )
 
 
@@ -315,8 +322,8 @@ _POSITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=161,
-  serialized_end=195,
+  serialized_start=183,
+  serialized_end=217,
 )
 
 
@@ -353,8 +360,8 @@ _MOVESTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=197,
-  serialized_end=233,
+  serialized_start=219,
+  serialized_end=255,
 )
 
 
@@ -419,8 +426,8 @@ _TRACKERSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=236,
-  serialized_end=472,
+  serialized_start=258,
+  serialized_end=494,
 )
 
 
@@ -688,8 +695,8 @@ _CHARGECONTROLLERDETAILS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=475,
-  serialized_end=1157,
+  serialized_start=497,
+  serialized_end=1179,
 )
 
 
@@ -775,8 +782,8 @@ _CHARGECONTROLLERSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1160,
-  serialized_end=1458,
+  serialized_start=1182,
+  serialized_end=1480,
 )
 
 
@@ -813,8 +820,8 @@ _REQUESTCONTROLREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1460,
-  serialized_end=1528,
+  serialized_start=1482,
+  serialized_end=1550,
 )
 
 
@@ -858,8 +865,8 @@ _REQUESTCONTROLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1530,
-  serialized_end=1650,
+  serialized_start=1552,
+  serialized_end=1672,
 )
 
 
@@ -889,8 +896,8 @@ _RELINQUISHCONTROLREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1652,
-  serialized_end=1698,
+  serialized_start=1674,
+  serialized_end=1720,
 )
 
 
@@ -941,8 +948,8 @@ _RELINQUISHCONTROLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1701,
-  serialized_end=1855,
+  serialized_start=1723,
+  serialized_end=1877,
 )
 
 
@@ -1015,8 +1022,8 @@ _CONTROLREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1858,
-  serialized_end=2212,
+  serialized_start=1880,
+  serialized_end=2234,
 )
 
 
@@ -1053,8 +1060,8 @@ _CONTROLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2214,
-  serialized_end=2307,
+  serialized_start=2236,
+  serialized_end=2329,
 )
 
 
@@ -1091,8 +1098,8 @@ _TRACKERSYSTEMSTATUSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2310,
-  serialized_end=2452,
+  serialized_start=2332,
+  serialized_end=2474,
 )
 
 _TRACKERSTATUS.fields_by_name['position'].message_type = _POSITION
@@ -1243,8 +1250,8 @@ _TRACKERCONTROLLER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   options=None,
-  serialized_start=2738,
-  serialized_end=3150,
+  serialized_start=2760,
+  serialized_end=3172,
   methods=[
   _descriptor.MethodDescriptor(
     name='get_tracker_status',

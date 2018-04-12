@@ -80,7 +80,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		return self._get_tracker_status_message_()
 
 	def tracker_status(self, request, context):
-		sleep_duration = 1.0 / request.rate
+		sleep_duration = 1.0 / request.message_rate
 		while self.is_ok():
 			yield self._get_tracker_status_message_()
 			time.sleep(sleep_duration)
