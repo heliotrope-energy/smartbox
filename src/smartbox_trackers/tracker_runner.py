@@ -56,7 +56,7 @@ class TrackerRunner():
         for tracker_id, tracker in self.trackers.items():
             self.trackers[tracker_id] = tracker(model_dir = self.model_dir)
 
-        self.client = SmartBoxResourceControllerClient(1001, "Tracker Runner")
+        self.client = SmartBoxResourceControllerClient(11, "Tracker Runner")
 
     def save_and_flush(self):
         '''
@@ -142,6 +142,33 @@ class TrackerRunner():
             return True, sunrise_set_tomorrow['sunrise'] - now + pd.Timedelta(minutes=15)
         return False, 0
 
+    def run_nighttime_procedure(self):
+        if self.current_tracker is not None:
+            tracker = self.trackers[self.current_tracker]
+            self.logger.info("Cleaning up tracker {}".format(self.current_tracker))
+            tracker.cleanup()
+            self.current_tracker = None
+
+        count = 0
+        while not self.client.is_control_possible() and count < 10:
+            count += 1
+            self.logger.info("Waiting for tracker to relinquish control")
+            time.sleep(1.0)
+
+        if not self.client.is_control_possible():
+            self.logger.info("I lost patience, taking control")
+
+        with self.client.tracker.request_control() as control():
+            control.stow()
+        
+        now = pd.to_datetime('now').tz_localize('UTC')
+        tommorow = pd.Timedelta(days=1) + now
+        sunrise_set_tomorrow = pvlib.solarposition.get_sun_rise_set_transit(tomorrow, self.latitude, self.longitude)
+
+        self.logger.info("Sunset detected, going to sleep until {}".format(sunrise_set_tomorrow['sunrise']))
+        time_til_sunrise = sunrise_set_tomorrow['sunrise'] - now + pd.Timedelta(minutes=20)
+        time.sleep(time_til_sunrise.total_seconds())
+
     def start(self):
         #loops collecting data, moves, saving, etc when neccessary
         self.logger.info("Subscribing to tracker status messages")
@@ -158,8 +185,10 @@ class TrackerRunner():
         while True:
             at_night, time_til_sunrise = self.check_at_night()
             if at_night:
-                self.logger.info("Sunset detected, going to sleep until {}".format(time_til_sunrise))
-                time.sleep(time_til_sunrise.total_seconds())
+                self.run_nighttime_procedure()
+                self.logger.info("Waking up, starting with a new tracking algorithm")
+                tracker, sleep_time, tracker_start = self.switch_current_tracker()
+                continue
             loop_counter += 1
             self.save_and_flush()
             self.logger.info("Running tracker step {} for tracker {}".format(loop_counter, self.current_tracker))
