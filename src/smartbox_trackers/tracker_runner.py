@@ -2,7 +2,7 @@
 #one thread collecting data, one thread running trackers
 
 import multiprocessing as mp
-import random, argparse, logging, time, os
+import random, argparse, logging, logging.handlers, time, os
 import pandas as pd
 import pvlib #for weather forecast and modeling
 from threading import RLock
