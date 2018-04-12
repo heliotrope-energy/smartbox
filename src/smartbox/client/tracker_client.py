@@ -45,7 +45,7 @@ class TrackerClient:
 		return False
 
 	def tracker_status(self, callback):
-		for status in self.stub.TrackerStatus(tracker_pb2.TrackerSystemStatusRequest()):
+		for status in self.stub.tracker_status(tracker_pb2.TrackerSystemStatusRequest()):
 			callback(status)
 
 	def get_ns_position(self):
