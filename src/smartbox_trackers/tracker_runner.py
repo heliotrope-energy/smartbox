@@ -85,10 +85,12 @@ class TrackerRunner():
 
         with self.weather_lock:
             weather = self.current_weather
-        
-        data['wind_speed'] = weather.wind.speed
-        data['wind_direction'] = weather.wind.direction
-        data['weather_last_updated'] = weather.date
+        if weather is None:
+            self.logger.warn("No weather data is available")
+        else:
+            data['wind_speed'] = weather.wind.speed
+            data['wind_direction'] = weather.wind.direction
+            data['weather_last_updated'] = weather.date
 
         self.data.put(data)
 
