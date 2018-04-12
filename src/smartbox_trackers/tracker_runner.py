@@ -154,7 +154,7 @@ class TrackerRunner():
                 tracker.run_step(tracker_status, weather)
             except Exception as e:
                 self.logger.error("Tracker {} encountered an exception during operation".format(self.current_tracker))
-                self.logger.error(e)
+                self.logger.error(e, exc_info=True)
 
             if self.should_switch_trackers(tracker_start):
                 loop_counter = 0

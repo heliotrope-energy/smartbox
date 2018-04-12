@@ -25,7 +25,7 @@ class AstronomicalTrackerSingleAxis(Tracker):
     #NOTE: override
     def run_step(self, *args):
         if self.control is None or not self.control.in_control():
-            if not client.tracker.is_control_possible():
+            if not self.client.tracker.is_control_possible():
                 self.logger.info("Attempting to get control of tracker, but it's not possible")
                 return
             try:
