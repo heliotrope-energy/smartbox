@@ -26,14 +26,7 @@ class TrackerRunner():
         if trackers is None or len(trackers) == 0:
             raise Exception("Not sure what you wanted me to do without any trackers")
 
-        log_path = os.path.join(log_dir, "tracker_runner.log")
-        logging.basicConfig(format='[%(asctime)s] %(name)s line: %(lineno)s %(levelname)s: %(message)s', level=logging.INFO)
-        handler = logging.handlers.RotatingFileHandler(log_path, maxBytes=20000000, backupCount=5)
-        
         self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.INFO)
-        handler.setFormatter(logging.Formatter('[%(asctime)s] %(name)s line: %(lineno)s %(levelname)s: %(message)s'))
-        self.logger.addHandler(handler)
 
         print("Logging data to {}".format(log_path))
         self.logger.info("Initializing tracker runner")
@@ -245,6 +238,17 @@ if __name__=="__main__":
     if not os.path.exists(data_dir):
         os.makedirs(data_dir)
 
+    log_path = os.path.join(log_dir, "tracker_runner.log")
+    logging.basicConfig(format='[%(asctime)s] %(name)s line: %(lineno)s %(levelname)s: %(message)s', level=logging.INFO)
+    handler = logging.handlers.RotatingFileHandler(log_path, maxBytes=20000000, backupCount=5)
+    
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+    handler.setFormatter(logging.Formatter('[%(asctime)s] %(name)s line: %(lineno)s %(levelname)s: %(message)s'))
+    logger.addHandler(handler)
+
     trackers = {'astro_single': AstronomicalTrackerSingleAxis}
+    logger.info("Initializing runner")
     runner = TrackerRunner(trackers, log_dir, data_dir, model_dir, eval_duration, randomize)
+    logger.info("Starting it all")
     runner.start()
