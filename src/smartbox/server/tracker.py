@@ -53,7 +53,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 
 		ledger_path = os.path.join(log_dir, LEDGER_FILENAME)
 		if os.path.exists(ledger_path):
-			self.energy_ledger = pd.read_csv(LEDGER_PATH)
+			self.energy_ledger = pd.read_csv(ledger_path)
 		else:
 			columns = ["ID", "Timestamp", "Collected", "Expended"] + list(SmartBoxChargeController.registers.keys())
 			self.energy_ledger = pd.DataFrame(columns=columns)
