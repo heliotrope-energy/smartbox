@@ -43,6 +43,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.energy_collected_at_start = 0.0
 		self.energy_collected_at_current_time = 0.0
 		self.energy_expended = 0.0
+		self.energy_collected = 0.0
 		self.load_amphours_at_previous = 0.0
 		self.log_dir = log_dir
 		
