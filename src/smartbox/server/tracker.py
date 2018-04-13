@@ -391,7 +391,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 
 		self.load_voltage_prev = load_voltage_now
 		self.load_current_prev = load_current_now
-		return mean_batt_voltage * mean_charge_current * dt
+		return mean_load_voltage * mean_load_current * dt
 
 	def _calculate_incremental_energy_collected(self):
 		if len(self.charge_data) == 0:
