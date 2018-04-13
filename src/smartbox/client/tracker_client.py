@@ -47,6 +47,7 @@ class TrackerClient:
 	def tracker_status(self, callback):
 		self.tracker_status_thread = Thread(target = self._tracker_status_, \
 			args=(callback,))
+		self.tracker_status_thread.start()
 
 	def _tracker_status_(self, callback):
 		for status in self.stub.tracker_status(tracker_pb2.TrackerSystemStatusRequest()):

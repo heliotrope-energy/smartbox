@@ -18,6 +18,7 @@ class WeatherClient:
 
 	def subscribe_weather(self, callback):
 		self.weather_thread = Thread(target=self._weather_, args=(callback,))
+		self.weather_thread.start()
 
 	def _weather_(self, callback):
 		request = weather_pb2.WeatherRequest()
