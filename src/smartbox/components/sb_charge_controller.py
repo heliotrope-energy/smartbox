@@ -46,7 +46,7 @@ class SmartBoxChargeController:
         "VB_REF": Register(description = "Battery regulator reference voltage", units ="V", address=0x0014, conversion_func = lambda n: n*96.667*2**-15),
         "AHC_R": Register(description = "Ah charge resettable", units ="Ah", HI_address=0x0015, LO_address=0x0016, conversion_func = lambda hi, lo: ((hi << 16) + lo) * 0.1),
         "AHC_T": Register(description = "Ah charge total", units ="Ah", HI_address=0x0017, LO_address=0x0018, conversion_func = lambda hi, lo: ((hi << 16) + lo) * 0.1),
-        "KWHC": Register(description = "kWh charge (resetable?)", units ="KWh", address=0x0019, conversion_func = lambda n: n*96.667*2**-15),
+        "KWHC": Register(description = "kWh charge (resetable?)", units ="KWh", address=0x0019, conversion_func = lambda n: n*0.1),
         "LOAD_STATE": Register(description = "Load state",  address=0x001A, conversion_func = lambda n: n),
         "LOAD_FAULT": Register(description = "Load fault bitfield",  address=0x001B, conversion_func = lambda n: n),
         "V_LVD": Register(description = "Load current compensated LVD voltage", units ="V", address=0x001C, conversion_func = lambda n: n*100*2**-15),
