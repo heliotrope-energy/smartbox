@@ -145,70 +145,6 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.logger.info("Access control denied. {} has control".format(self.controlling_client.client_id))
 		return None
 			
-
-	# def request_control(self, request, context):
-	# 	if self.controlling_client is None:
-	# 		new_id = self._process_control_change_(request)
-	# 		self.logger.info("Access control granted to {}".format(new_id))
-	# 		return tracker_pb2.RequestControlResponse(message="Success", control_id=new_id, \
-	# 			success=tracker_pb2.SUCCESS)
-	# 	elif request.authority_level < self.controlling_client.authority_level:
-	# 		prev_id = self.controlling_client.id
-	# 		new_id = self._process_control_change_(request)
-	# 		self.logger.info("Access control granted to {}. Taken from {}".format(new_id, prev_id))
-	# 		return tracker_pb2.RequestControlResponse(message="Success", control_id=new_id, \
-	# 			success=tracker_pb2.SUCCESS)
-	# 	elif request.security_level >= self.controlling_authority:
-	# 		self.logger.info("Access control denied. {} has control".format(self.controlling_client.id))
-	# 		return tracker_pb2.RequestControlResponse(message="Failure", \
-	# 			success=tracker_pb2.INSUFFICIENT_SECURITY_LEVEL)
-
-		
-	# def relinquish_control(self, request, context):
-	# 	if self.controlling_client is None:
-	# 		self.logger.warn("A relinquish request was received but no one currently had control. Spooky")
-	# 		return tracker_pb2.RequestControlResponse(message="Error", success=tracker_pb2.ERROR)
-	# 	if request.control_id != self.controlling_client.id:
-	# 		self.logger.warn("A client requested to relinquish control but a different client had control. Bad robot")
-	# 		return tracker_pb2.RequestControlResponse(message="Error", success=tracker_pb2.ERROR)
-		
-	# 	collected, expended = self._process_relinquish_request_()
-	# 	return tracker_pb2.RequestControlResponse(message="Success",\
-	# 		energy_expended = expended, energy_collected = collected, success=tracker_pb2.SUCCESS)
-	
-	
-
-	# def move_panel(self, request, context):
-	# 	if self.controlling_client is None:
-	# 		self.logger.warn("A move request was received but no one currently had control. Bad robot")
-	# 		return tracker_pb2.MoveResponse(message="Error", success=tracker_pb2.ERROR)
-	# 	if request.control_id != self.controlling_client.id:
-	# 		self.logger.warn("A client requested to move the panel but a different client had control. Bad robot")
-	# 		return tracker_pb2.MoveResponse(message="Error", success=tracker_pb2.ERROR)	
-
-	# 	self._process_move_request_(request)
-	# 	return tracker_pb2.MoveResponse(message="Success")
-
-	# def stop(self, request, context):
-	# 	tracker_id = self._request_control_change_(request)
-	# 	if tracker_id is None:
-	# 		self.logger.warn("A client requested to stop the panel but a different client had control. Bad robot")
-	# 		return tracker_pb2.StopResponse(message="Error", success=tracker_pb2.ERROR)
-		
-	# 	self.tracker_controller.stop()
-	# 	self.logger.info("Stop called")
-	# 	return tracker_pb2.StopResponse(message="Success")
-
-	# def stow(self, request, context):
-	# 	tracker_id = self._request_control_change_(request)
-	# 	if tracker_id is None:
-	# 		self.logger.warn("A client requested to stow the panel but a different client had control. Bad robot")
-	# 		return tracker_pb2.StowResponse(message="Error", success=tracker_pb2.ERROR)
-		
-	# 	self.tracker_controller.stow()
-	# 	self.logger.info("Stow called")
-	# 	return tracker_pb2.StowResponse(message="Success")
-
 	def _get_unique_id_(self, description):
 		count = 1
 		unique_id = description + "_{}".format(count)
@@ -306,12 +242,17 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		return None
 
 	def _add_update_to_energy_ledger(self):
+		now = pd.to_datetime('now')
+		if self.last_update - now < pd.Timedelta(minutes=1):
+			return
+
 		filepath = os.path.join(self.log_dir, LEDGER_FILENAME)
 		if not os.path.exists(filepath):
 			self.energy_ledger.to_csv(filepath)
 		else:
 			self.energy_ledger.to_csv(filepath, mode='a', header=False)
 		client_info = {}
+		
 		if self.controlling_client:
 			self.controlling_client.collected = \
 				self.energy_collected_at_current_time - self.energy_collected_at_start
@@ -325,6 +266,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 
 		self.energy_ledger = \
 			self.energy_ledger.append( {**client_info, **self.charge_data}, ignore_index=True)
+		self.last_update = pd.to_datetime('now')
 
 	def _process_control_change_(self, request):
 		self.logger.info("Processing control change")
@@ -430,8 +372,6 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 					if self.controlling_client:
 						self.logger.info("Adding data to ledger")
 						self._add_update_to_energy_ledger()
-					else:
-						self.logger.info("No controlling client, so not writing data")
 			except Exception as e:
 				self.logger.error("Retrieving charge controller failed")
 				self.logger.error(e, exc_info = True)
