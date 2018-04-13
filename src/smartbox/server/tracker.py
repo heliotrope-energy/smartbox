@@ -245,7 +245,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 	def _add_update_to_energy_ledger(self, flush_now=False):
 		now = pd.to_datetime('now')
 		if not flush_now:
-			if self.last_update - now < pd.Timedelta(minutes=1):
+			if now - self.last_update < pd.Timedelta(minutes=1):
 				return
 
 		self.logger.info("Adding data to ledger")
