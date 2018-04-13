@@ -411,13 +411,11 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			try:
 				with self.charge_controller_lock:
 					self.charge_data = self.charge_controller.get_all_data()
-					if "KWHC" in self.charge_data:
-						self.energy_collected_at_current_time = self.charge_data["KWHC"][1]
+						
+					if self.controlling_client:
 						self.energy_expended += self._calculate_incremental_energy_expended_()
 						self.energy_collected += self._calculate_incremental_energy_collected()
 						self.last_measurement_time = pd.to_datetime('now').tz_localize('UTC')
-						
-					if self.controlling_client:
 						self._add_update_to_energy_ledger()
 			except Exception as e:
 				self.logger.error("Retrieving charge controller failed")
