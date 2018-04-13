@@ -298,6 +298,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 				self.load_amphours_at_start = self.charge_data["AHL_T"][1]
 			if "KWHC" in self.charge_data:
 				self.energy_collected_at_start = self.charge_data["KWHC"][1]
+			self.energy_expended = 0.0
 			self.logger.info("Ah at start {}".format(self.load_amphours_at_start))
 			self.logger.info("Energy collected at start {}".format(self.energy_collected_at_start))
 			self.logger.info("Adding initial data to ledger")
