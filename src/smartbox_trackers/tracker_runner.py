@@ -215,7 +215,7 @@ class TrackerRunner():
             if self.should_switch_trackers(tracker_start):
                 loop_counter = 0
                 tracker, sleep_time, tracker_start = self.switch_current_tracker()
-                
+            self.logger.info("Sleeping for {} seconds".format(sleep_time))
             time.sleep(sleep_time)
 
 def expand_directory(directory):
