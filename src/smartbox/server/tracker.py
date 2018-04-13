@@ -257,8 +257,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		client_info = {}
 		
 		if self.controlling_client:
-			self.controlling_client.collected = \
-				self.energy_collected_at_current_time - self.energy_collected_at_start
+			self.controlling_client.collected = self.energy_collected
 			self.controlling_client.expended = self.energy_expended
 			self.logger.info("Collected {} Expended {}".format(self.controlling_client.collected, self.controlling_client.expended))
 			self.logger.info("Collected at current time {}".format(self.energy_collected_at_current_time))
