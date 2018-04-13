@@ -81,7 +81,7 @@ class TrackerRunner():
         self.logger.info("Received tracker stetus", tracker_data)
         with self.tracker_status_lock:
             self.current_tracker_status = tracker_data
-        data = pd.Series({'time':pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York")})
+        data = {'time':pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York")}
 
         #getting charge controller data
         data['energy_collected'] = tracker_data.charge_controller.energy_collected
