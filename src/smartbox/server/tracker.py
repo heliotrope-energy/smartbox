@@ -386,7 +386,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		load_current_now = self.charge_data["ADC_IL_F"][1]
 		mean_load_voltage = 0.5 * (load_voltage_now + self.load_voltage_prev)
 		mean_load_current = 0.5 * (load_current_now + self.load_current_prev)
-		measurement_duration = pd.load_current_now('now').tz_localize('UTC') - self.last_measurement_time
+		measurement_duration = pd.to_datetime('now').tz_localize('UTC') - self.last_measurement_time
 		dt = measurement_duration.total_seconds()
 
 		self.load_voltage_prev = load_voltage_now
