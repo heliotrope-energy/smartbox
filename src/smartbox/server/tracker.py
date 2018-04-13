@@ -1,7 +1,6 @@
 import copy, time, logging, datetime, os
 from queue import PriorityQueue
 from threading import Thread, RLock
-from collections import namedtuple
 
 from smartbox_msgs import tracker_pb2
 from smartbox_msgs import tracker_pb2_grpc
@@ -26,8 +25,6 @@ handed back, or just reset?
 
 
 """
-
-#ControllingClient = namedtuple('ControllingClient', ['description', 'id', 'authority_level'])
 
 class ControllingClient:
 	def __init__(self, description, client_id, authority_level, collected = 0.0, expended = 0.0):
@@ -396,7 +393,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		if self.authority_queue.empty():
 			self.controlling_client = None
 		else:
-			self.controlling_client = self.authority_queue.get()
+			self.controlling_client = self.authority_queue.get()[1]
 			self.energy_collected_at_start = \
 				self.energy_collected_at_current_time - self.controlling_client.collected
 			self.energy_expended = 0.0
