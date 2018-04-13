@@ -290,10 +290,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.controlling_client = controlling_client
 		self.logger.info("Setting new controlling client")
 
-		with self.charge_controller_lock:
-			self.logger.info("Adding initial data to ledger")
-			self._add_update_to_energy_ledger(flush_now=True)
-
+		
 		self.logger.info("Acquiring lock")
 		with self.charge_controller_lock:
 			self.logger.info("Lock acquired")
@@ -303,6 +300,9 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 				self.energy_collected_at_start = self.charge_data["KWHC"][1]
 			self.logger.info("Ah at start {}".format(self.load_amphours_at_start))
 			self.logger.info("Energy collected at start {}".format(self.energy_collected_at_start))
+			self.logger.info("Adding initial data to ledger")
+			self._add_update_to_energy_ledger(flush_now=True)
+
 		self.logger.info("Control change processed")
 		return new_id
 
