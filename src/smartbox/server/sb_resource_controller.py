@@ -25,7 +25,7 @@ def serve(log_dir):
 	server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
 	logger.info("Adding TrackerControllerServicer")
-	tracker_pb2_grpc.add_TrackerControllerServicer_to_server(tracker.SmartBoxTrackerController(), server)
+	tracker_pb2_grpc.add_TrackerControllerServicer_to_server(tracker.SmartBoxTrackerController(log_dir), server)
 	
 	logger.info("Adding WeatherControllerServicer")
 	weather_pb2_grpc.add_WeatherControllerServicer_to_server(weather.SmartBoxWeatherController(), server)

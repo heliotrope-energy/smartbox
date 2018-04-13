@@ -34,16 +34,17 @@ class ControllingClient:
 		self.collected = collected
 		self.expended = expended
 
-LEDGER_PATH = "/home/brawner/ledger.csv"
+LEDGER_FILENAME = "ledger.csv"
 
 class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
-	def __init__(self):
+	def __init__(self, log_dir):
 		self.charge_controller = SmartBoxChargeController()
 		self.tracker_controller = SmartBoxTracker()
 		self.energy_collected_at_start = 0.0
 		self.energy_collected_at_current_time = 0.0
 		self.energy_expended = 0.0
 		self.load_amphours_at_previous = 0.0
+		self.log_dir = log_dir
 		
 		self.logger = logging.getLogger("server.tracker")
 		self.logger.propagate = True
@@ -304,7 +305,8 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		return None
 
 	def _add_update_to_energy_ledger(self):
-		self.energy_ledger.to_csv("/home/brawner/ledger.csv")
+		filepath = os.path.join(self.log_dir, LEDGER_FILENAME)
+		self.energy_ledger.to_csv(filepath)
 		client_info = {}
 		if self.controlling_client:
 			self.controlling_client.collected = \
@@ -421,8 +423,11 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 						self.energy_collected_at_current_time = self.charge_data["KWHC"][1]
 						self.energy_expended += self._calculate_incremental_energy_expended_()
 						
-					if self.controlling_client is not None:
+					if self.controlling_client:
+						self.logger.info("Adding data to ledger")
 						self._add_update_to_energy_ledger()
+					else:
+						self.logger.info("No controlling client, so not writing data")
 			except Exception as e:
 				self.logger.error("Retrieving charge controller failed")
 				self.logger.error(e, exc_info = True)
