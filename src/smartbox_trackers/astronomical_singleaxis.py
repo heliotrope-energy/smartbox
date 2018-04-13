@@ -21,6 +21,8 @@ class AstronomicalTrackerSingleAxis(Tracker):
         self.name = 'astronomical-single-axis'
         self.logger = logging.getLogger(__name__)
         self.logger.propagate = True
+        print(self.logger.name)
+        print(self.logger.parent.name)
         self.control = None
 
     #NOTE: override
