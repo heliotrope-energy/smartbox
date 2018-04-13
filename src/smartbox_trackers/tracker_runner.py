@@ -30,7 +30,6 @@ class TrackerRunner():
         logging.basicConfig(format='[%(asctime)s] %(name)s line: %(lineno)s %(levelname)s: %(message)s', level=logging.INFO)
         handler = logging.handlers.RotatingFileHandler(
               log_path, maxBytes=20000000, backupCount=5)
-        handler.setFormatter(logging.Formatter('[%(asctime)s] %(name)s line: %(lineno)s %(levelname)s: %(message)s'))
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(handler)
 
