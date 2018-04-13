@@ -29,7 +29,7 @@ class SmartBoxTracker:
 
 		self.ew_thread = None
 		self.ns_thread = None
-		self.logger = logging.getLogger(__name__)
+		self.logger = logging.getLogger("server.components.tracker")
 		self.logger.propagate = True
 
 	def get_ns_position(self):

@@ -8,7 +8,7 @@ from smartbox.components.sb_camera import SmartBoxCamera
 class SmartBoxCameraController(image_pb2_grpc.CameraControllerServicer):
 	def __init__(self):
 		self.camera = SmartBoxCamera()
-		self.logger = logging.getLogger(__name__)
+		self.logger = logging.getLogger("server.camera")
 		self.logger.propagate = True
 
 	def get_current_image(self, request, context):

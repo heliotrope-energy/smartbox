@@ -12,10 +12,10 @@ _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
 def serve(log_dir):
 	log_path = os.path.join(log_dir, "resource_controller.log")
-	logging.basicConfig(format='[%(asctime)s] %(name)s line: %(lineno)s %(levelname)s: %(message)s', level=logging.INFO)
+	logging.basicConfig(format='[%(asctime)s] %(pathname)s line: %(lineno)s %(levelname)s: %(message)s', level=logging.INFO)
 	handler = logging.handlers.RotatingFileHandler(log_path, maxBytes=20000000, backupCount=5)
 	
-	logger = logging.getLogger(__name__)
+	logger = logging.getLogger('server')
 	logger.setLevel(logging.INFO)
 	handler.setFormatter(logging.Formatter('[%(asctime)s] %(name)s line: %(lineno)s %(levelname)s: %(message)s'))
 	logger.addHandler(handler)
