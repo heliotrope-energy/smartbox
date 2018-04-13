@@ -59,11 +59,12 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			self.energy_ledger = pd.DataFrame(columns=columns)
 		self.controlling_client = None
 		self.authority_queue = PriorityQueue()
-
+		self.last_update = None
 		self.charge_controller_poller = \
 			Thread(target = self._get_charge_controller_data_)
 		self.charge_controller_poller.start()
 		self.count = 0
+
 
 	def termination_cb(self):
 		self.logger.info("Termination!")
