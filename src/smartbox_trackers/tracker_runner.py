@@ -62,6 +62,7 @@ class TrackerRunner():
             data.append(self.data.get())
             print(data[-1])
         if len(data) == 0:
+            self.logger.info("No data was collected, unusual")
             return
 
         df = pd.DataFrame(data).set_index('time')
@@ -77,6 +78,7 @@ class TrackerRunner():
             self.current_weather = weather
 
     def on_tracker_status(self, tracker_data):
+        self.logger.info("Received tracker stetus", tracker_data)
         with self.tracker_status_lock:
             self.current_tracker_status = tracker_data
         data = pd.Series({'time':pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York")})
@@ -191,6 +193,7 @@ class TrackerRunner():
                 tracker, sleep_time, tracker_start = self.switch_current_tracker()
                 continue
             loop_counter += 1
+            self.logger.info("Saving current data")
             self.save_and_flush()
             self.logger.info("Running tracker step {} for tracker {}".format(loop_counter, self.current_tracker))
 
