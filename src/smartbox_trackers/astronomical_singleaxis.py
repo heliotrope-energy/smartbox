@@ -19,7 +19,7 @@ class AstronomicalTrackerSingleAxis(Tracker):
         super().__init__(client, latitude, longitude, interval)
         self.method = method
         self.name = 'astronomical-single-axis'
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger("root.runner.astronomical-single-axis")
         self.logger.propagate = True
         print(self.logger.name)
         print(self.logger.parent.name)

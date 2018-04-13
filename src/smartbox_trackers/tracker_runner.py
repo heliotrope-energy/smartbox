@@ -26,7 +26,7 @@ class TrackerRunner():
         if trackers is None or len(trackers) == 0:
             raise Exception("Not sure what you wanted me to do without any trackers")
 
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger("root.runner")
 
         print("Logging data to {}".format(log_path))
         self.logger.info("Initializing tracker runner")
