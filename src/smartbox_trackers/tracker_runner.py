@@ -28,10 +28,12 @@ class TrackerRunner():
 
         log_path = os.path.join(log_dir, "tracker_runner.log")
         logging.basicConfig(format='[%(asctime)s] %(name)s line: %(lineno)s %(levelname)s: %(message)s', level=logging.INFO)
-        handler = logging.handlers.RotatingFileHandler(
-              log_path, maxBytes=20000000, backupCount=5)
-        self.logger = logging.getLogger(__name__)
-        self.logger.addHandler(handler)
+        handler = logging.handlers.RotatingFileHandler(log_path, maxBytes=20000000, backupCount=5)
+        
+        logger = logging.getLogger(__name__)
+        logger.setLevel(logging.INFO)
+        handler.setFormatter(logging.Formatter('[%(asctime)s] %(name)s line: %(lineno)s %(levelname)s: %(message)s'))
+        logger.addHandler(handler)
 
         print("Logging data to {}".format(log_path))
         self.logger.info("Initializing tracker runner")
