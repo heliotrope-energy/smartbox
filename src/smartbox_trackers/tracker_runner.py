@@ -91,7 +91,7 @@ class TrackerRunner():
         data['load_voltage'] = tracker_data.charge_controller.load_voltage
         data['load_current'] = tracker_data.charge_controller.load_current
         #trackers state data
-        data['current_tracker'] = self.current_tracker
+        data['tracker'] = self.current_tracker
         data['ew_angle'] = tracker_data.tracker.angle.ew
         data['ns_angle'] = tracker_data.tracker.angle.ns
 

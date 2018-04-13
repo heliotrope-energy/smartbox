@@ -230,8 +230,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 				self.charge_data["VA_REF_FIXED_PTC"][1]
 			
 	
-			response.charge_controller.energy_collected = self.energy_collected_at_current_time - \
-				self.energy_collected_at_start
+			response.charge_controller.energy_collected = self.energy_collected
 			response.charge_controller.energy_expended = self.energy_expended
 			
 		return response
