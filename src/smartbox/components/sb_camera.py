@@ -10,7 +10,7 @@ class SmartBoxCamera:
 				"to open it again, but this does not portend well.")
 		
 	def get_image(self):
-		if not selp.cap.isOpened() and not self.cap.open(0):
+		if not self.cap.isOpened() and not self.cap.open(0):
 			self.logger.error("Imaging camera could not be opened. Returning a NoneType")
 			return None
 		ok, fr = self.cap.read()

@@ -247,6 +247,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		if self.last_update and (self.last_update - now < pd.Timedelta(minutes=1)):
 			return
 
+		self.logger.info("Adding data to ledger")
 		filepath = os.path.join(self.log_dir, LEDGER_FILENAME)
 		if not os.path.exists(filepath):
 			self.energy_ledger.to_csv(filepath)
@@ -371,7 +372,6 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 						self.energy_expended += self._calculate_incremental_energy_expended_()
 						
 					if self.controlling_client:
-						self.logger.info("Adding data to ledger")
 						self._add_update_to_energy_ledger()
 			except Exception as e:
 				self.logger.error("Retrieving charge controller failed")
