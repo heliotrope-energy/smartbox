@@ -20,7 +20,7 @@ class TrackerRunner():
             trackers: dict containing tracker classes to be run.
             datafile: folder containing data files (CSV)
             modelfolder: folder for saving models - model will be in modelfolder/trackername/timestamp
-            time_per_tracker: interval for each tracker before switching
+            time_per_tracker: interval for each tracker before switching in seconds
             randomize: pick trackers randomly.
         '''
         if trackers is None or len(trackers) == 0:
@@ -111,7 +111,7 @@ class TrackerRunner():
         self.data.put(data)
 
     def should_switch_trackers(self, start_time):
-        duration = self.time_per_tracker * 60.0 * 60.0
+        duration = self.time_per_tracker
         time_delta = pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York") - start_time
         return time_delta.total_seconds() > duration
 
@@ -129,7 +129,7 @@ class TrackerRunner():
         self.logger.info("to new tracker: {}".format(self.current_tracker))
 
         tracker = self.trackers[self.current_tracker]
-        sleep_time = tracker.interval * 60.0
+        sleep_time = tracker.interval
         tracker_start = pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York")
         return tracker, sleep_time, tracker_start
 
@@ -228,7 +228,7 @@ if __name__=="__main__":
                     help='Logging directory, defaults to $HOME')
     parser.add_argument('--model_dir', metavar='-m', type=str, help="Directory for saving models", required=True)
     parser.add_argument('--data_dir', metavar='-d', type=str, help="Directory containing data files", required=True)
-    parser.add_argument('--eval_duration', metavar='-e', type=float, default = 1.0, help="Duration for the evaluation of each tracker (hours)")
+    parser.add_argument('--eval_duration', metavar='-e', type=float, default = 3600 , help="Duration for the evaluation of each tracker (seconds)")
     parser.add_argument('--randomize', action='store_true')
     
     args = parser.parse_args()
