@@ -178,6 +178,12 @@ class TrackerRunner():
 
         self.logger.info("Subscribing to weather messages")
         self.client.weather.subscribe_weather(self.on_weather)
+
+        with self.client.tracker.request_control() as control:
+            control.stow()
+            while self.client.tracker.is_panel_moving():
+                self.logger.info("Waiting for panel to move to stow position")
+                time.sleep(1.0)
         
         #tracker interval tracking for reward function calculation
         self.logger.info("Selecting first tracker")
