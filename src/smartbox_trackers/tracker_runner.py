@@ -78,7 +78,6 @@ class TrackerRunner():
             self.current_weather = weather
 
     def on_tracker_status(self, tracker_data):
-        self.logger.info("Received tracker stetus", tracker_data)
         with self.tracker_status_lock:
             self.current_tracker_status = tracker_data
         data = {'time':pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York")}
