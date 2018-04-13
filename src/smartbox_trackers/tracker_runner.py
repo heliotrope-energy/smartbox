@@ -242,7 +242,7 @@ if __name__=="__main__":
     logging.basicConfig(format='[%(asctime)s] %(name)s line: %(lineno)s %(levelname)s: %(message)s', level=logging.INFO)
     handler = logging.handlers.RotatingFileHandler(log_path, maxBytes=20000000, backupCount=5)
     
-    logger = logging.getLogger(__name__)
+    logger = logging.getLogger("root")
     logger.setLevel(logging.INFO)
     handler.setFormatter(logging.Formatter('[%(asctime)s] %(name)s line: %(lineno)s %(levelname)s: %(message)s'))
     logger.addHandler(handler)
