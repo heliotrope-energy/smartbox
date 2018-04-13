@@ -76,6 +76,7 @@ class SmartBoxChargeController:
 
     def __init__(self):
         self.logger = logging.getLogger(__name__)
+        self.logger.propagate = True
         try:
             self.server = modbus_rtu.RtuMaster(serial.Serial(port=PORT, baudrate=9600, bytesize=8, parity='N', stopbits=2, xonxoff=0))
             self.server.set_timeout(5.0)

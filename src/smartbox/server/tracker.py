@@ -49,6 +49,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 		self.load_amphours_at_previous = 0.0
 		
 		self.logger = logging.getLogger(__name__)
+		self.logger.propagate = True
 		self.charge_controller_lock = RLock()
 		self.control_ids = set()
 

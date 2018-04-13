@@ -20,6 +20,7 @@ class AstronomicalTrackerSingleAxis(Tracker):
         self.method = method
         self.name = 'astronomical-single-axis'
         self.logger = logging.getLogger(__name__)
+        self.logger.propagate = True
         self.control = None
 
     #NOTE: override

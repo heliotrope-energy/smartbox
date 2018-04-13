@@ -9,6 +9,7 @@ class SmartBoxCameraController(image_pb2_grpc.CameraControllerServicer):
 	def __init__(self):
 		self.camera = SmartBoxCamera()
 		self.logger = logging.getLogger(__name__)
+		self.logger.propagate = True
 
 	def get_current_image(self, request, context):
 		self.logger.info("Image request received")

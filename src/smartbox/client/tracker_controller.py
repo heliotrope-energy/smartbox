@@ -15,6 +15,7 @@ class TrackerController:
 		self._move_response_callback_ = None
 		self.client_response_cb = client_response_cb
 		self.logger = logging.getLogger(__name__)
+		self.logger.propagate = True
 
 		self.retain_control = True
 		self.control_thread = Thread(target = self._tracker_control_, \

@@ -2,15 +2,16 @@ import cv2, logging
 
 class SmartBoxCamera:
 	def __init__(self):
-		logger = logging.getLogger(__name__)
+		self.logger = logging.getLogger(__name__)
+		self.logger.propagate = True
 		self.cap = cv2.VideoCapture(0)
 		if not self.cap.isOpened():
-			logger.error("Imaging camera could not be opened. Calling get_image() will try " + \
+			self.logger.error("Imaging camera could not be opened. Calling get_image() will try " + \
 				"to open it again, but this does not portend well.")
 		
 	def get_image(self):
 		if not selp.cap.isOpened() and not self.cap.open(0):
-			logger.error("Imaging camera could not be opened. Returning a NoneType")
+			self.logger.error("Imaging camera could not be opened. Returning a NoneType")
 			return None
 		ok, fr = self.cap.read()
 		fr  = cv2.flip(fr, 1) 

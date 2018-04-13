@@ -9,6 +9,7 @@ class SmartBoxWeatherController(weather_pb2_grpc.WeatherControllerServicer):
 	def __init__(self):
 		self.weather = SmartBoxWeatherStation()
 		self.logger = logging.getLogger(__name__)
+		self.logger.propagate = True
 
 	def weather(self, request, context):
 		keep_reporting = True

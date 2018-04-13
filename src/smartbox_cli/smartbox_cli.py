@@ -112,7 +112,7 @@ def move_to_linear_position(stdscr):
 
 
 def move_to_angular_position(stdscr):
-	stdscr.addstr(19, 0, "Please type the NS angular position (-2 (N) - 38 (S))")
+	stdscr.addstr(19, 0, "Please type the NS angular position (-2 (N) <-> 38 (S))")
 	stdscr.refresh()
 	ns_pos = get_float_input(stdscr)
 
