@@ -269,8 +269,10 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 				"Collected": self.controlling_client.collected,
 				"Expended": self.controlling_client.expended}
 
+		charge_data = {key: value[1] for key, value in self.charge_data.items()}
+
 		self.energy_ledger = \
-			self.energy_ledger.append( {**client_info, **self.charge_data}, ignore_index=True)
+			self.energy_ledger.append( {**client_info, **charge_data}, ignore_index=True)
 		self.last_update = pd.to_datetime('now')
 
 	def _process_control_change_(self, request):
