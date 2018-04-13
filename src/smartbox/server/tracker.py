@@ -306,7 +306,10 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 
 	def _add_update_to_energy_ledger(self):
 		filepath = os.path.join(self.log_dir, LEDGER_FILENAME)
-		self.energy_ledger.to_csv(filepath)
+		if not os.path.exists(filepath):
+			self.energy_ledger.to_csv(filepath)
+		else:
+			self.energy_ledger.to_csv(filepath, mode='a', header=False)
 		client_info = {}
 		if self.controlling_client:
 			self.controlling_client.collected = \
