@@ -59,7 +59,7 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			self.energy_ledger = pd.DataFrame(columns=columns)
 		self.controlling_client = None
 		self.authority_queue = PriorityQueue()
-		self.last_update = None
+		self.last_update = pd.to_datetime('now')
 		self.charge_controller_poller = \
 			Thread(target = self._get_charge_controller_data_)
 		self.charge_controller_poller.start()
@@ -242,10 +242,11 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 				return self.charge_data[attr]
 		return None
 
-	def _add_update_to_energy_ledger(self):
+	def _add_update_to_energy_ledger(self, flush_now=False):
 		now = pd.to_datetime('now')
-		if self.last_update and (self.last_update - now < pd.Timedelta(minutes=1)):
-			return
+		if not flush_now:
+			if self.last_update - now < pd.Timedelta(minutes=1):
+				return
 
 		self.logger.info("Adding data to ledger")
 		filepath = os.path.join(self.log_dir, LEDGER_FILENAME)
@@ -280,14 +281,20 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 				client_id=new_id, authority_level = request.authority_level)
 		
 		if self.controlling_client is not None:
+			with self.charge_controller_lock:
+				self.logger.info("Adding the final data to ledger")
+				self._add_update_to_energy_ledger(flush_now=True)
 			self.authority_queue.put((self.controlling_client.authority_level, self.controlling_client))
 		self.controlling_client = controlling_client
 		self.logger.info("Setting new controlling client")
 
+		with self.charge_controller_lock:
+			self.logger.info("Adding initial data to ledger")
+			self._add_update_to_energy_ledger(flush_now=True)
+
 		self.logger.info("Acquiring lock")
 		with self.charge_controller_lock:
 			self.logger.info("Lock acquired")
-		
 			if "AHL_T" in self.charge_data:
 				self.load_amphours_at_start = self.charge_data["AHL_T"][1]
 			if "KWHC" in self.charge_data:
