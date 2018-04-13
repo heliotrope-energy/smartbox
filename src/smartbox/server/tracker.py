@@ -301,8 +301,17 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 			if "KWHC" in self.charge_data:
 				self.energy_collected_at_start = self.charge_data["KWHC"][1]
 			self.energy_expended = 0.0
-			self.logger.info("Ah at start {}".format(self.load_amphours_at_start))
-			self.logger.info("Energy collected at start {}".format(self.energy_collected_at_start))
+			self.energy_collected = 0.0
+			self.battery_voltage_prev = self.charge_data["ADC_VB_F"][1]
+			self.charge_current_prev = self.charge_data["ADC_IC_F"][1]
+			self.load_voltage_prev = self.charge_data["ADC_VL_F"][1]
+			self.load_current_prev = self.charge_data["ADC_IL_F"][1]
+			self.last_measurement_time = pd.to_datetime('now').tz_localize('UTC')
+			
+			self.logger.info("Batt voltage at start {}".format(self.battery_voltage_prev))
+			self.logger.info("Charge current at start {}".format(self.charge_current_prev))
+			self.logger.info("Load voltage at start {}".format(self.load_voltage_prev))
+			self.logger.info("Load current at start {}".format(self.load_current_prev))
 			self.logger.info("Adding initial data to ledger")
 			self._add_update_to_energy_ledger(flush_now=True)
 
@@ -370,11 +379,33 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 	
 
 	def _calculate_incremental_energy_expended_(self):
-		if len(self.charge_data) > 0:
-			increment = self.charge_data["ADC_VL_F"][1] * \
-				(self.charge_data["AHL_T"][1] - self.load_amphours_at_previous)
-			self.load_amphours_at_previous = self.charge_data["AHL_T"][1]
-		return increment
+		if len(self.charge_data) == 0:
+			return 0.0
+
+		load_voltage_now = self.charge_data["ADC_VL_F"][1]
+		load_current_now = self.charge_data["ADC_IL_F"][1]
+		mean_load_voltage = 0.5 * (load_voltage_now + self.load_voltage_prev)
+		mean_load_current = 0.5 * (load_current_now + self.load_current_prev)
+		measurement_duration = pd.load_current_now('now').tz_localize('UTC') - self.last_measurement_time
+		dt = measurement_duration.total_seconds()
+
+		self.load_voltage_prev = load_voltage_now
+		self.load_current_prev = load_current_now
+		return mean_batt_voltage * mean_charge_current * dt
+
+	def _calculate_incremental_energy_collected(self):
+		if len(self.charge_data) == 0:
+			return 0.0
+		batt_voltage_now = self.charge_data["ADC_VB_F"][1]
+		charge_current_now = self.charge_data["ADC_IC_F"][1]
+		mean_batt_voltage = 0.5 * (batt_voltage_now + self.battery_voltage_prev)
+		mean_charge_current = 0.5 * (charge_current_now + self.charge_current_prev)
+		measurement_duration = pd.to_datetime('now').tz_localize('UTC') - self.last_measurement_time
+		dt = measurement_duration.total_seconds()
+
+		self.battery_voltage_prev = batt_voltage_now
+		self.charge_current_prev = charge_current_now
+		return mean_batt_voltage * mean_charge_current * dt
 
 	def _get_charge_controller_data_(self):
 		while True:
@@ -384,6 +415,8 @@ class SmartBoxTrackerController(tracker_pb2_grpc.TrackerControllerServicer):
 					if "KWHC" in self.charge_data:
 						self.energy_collected_at_current_time = self.charge_data["KWHC"][1]
 						self.energy_expended += self._calculate_incremental_energy_expended_()
+						self.energy_collected += self._calculate_incremental_energy_collected()
+						self.last_measurement_time = pd.to_datetime('now').tz_localize('UTC')
 						
 					if self.controlling_client:
 						self._add_update_to_energy_ledger()
