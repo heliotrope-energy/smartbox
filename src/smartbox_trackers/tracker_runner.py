@@ -125,6 +125,7 @@ class TrackerRunner():
         tracker = self.trackers[self.current_tracker]
         sleep_time = tracker.interval
         tracker_start = pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York")
+        self.logger.info("Switching trackers completed")
         return tracker, sleep_time, tracker_start
 
     def check_at_night(self):
@@ -159,7 +160,9 @@ class TrackerRunner():
         if not self.client.tracker.is_control_possible():
             self.logger.info("I lost patience, taking control")
 
+        self.logger.info("Acquiring control")
         with self.client.tracker.request_control() as control:
+            self.logger.info("Stowing panel")
             control.stow()
         
         now = pd.to_datetime('now').tz_localize('UTC')
@@ -169,10 +172,11 @@ class TrackerRunner():
         self.logger.info("Sunset detected, going to sleep until {}".format(sunrise_set_tomorrow['sunrise']))
         time_til_sunrise = sunrise_set_tomorrow['sunrise'] - now + pd.Timedelta(minutes=20)
 
+        self.logger.info("Sleeping for {} seconds".format(time_til_sunrise[0].total_seconds()))
         time.sleep(time_til_sunrise[0].total_seconds())
 
     def start(self):
-        #loops collecting data, moves, saving, etc when neccessary
+        #loops collecting data, moves, saving, etc when necessary
         self.logger.info("Subscribing to tracker status messages")
         self.client.tracker.tracker_status(self.on_tracker_status)
 
@@ -191,12 +195,19 @@ class TrackerRunner():
         loop_counter = 0
 
         while True:
+            if self.should_switch_trackers(tracker_start):
+                self.logger.info("Switching current tracker")
+                loop_counter = 0
+                tracker, sleep_time, tracker_start = self.switch_current_tracker()
+
             at_night, time_til_sunrise = self.check_at_night()
             if at_night:
+                self.logger.info("Night time detected, starting nighttime procedures")
                 self.run_nighttime_procedure()
                 self.logger.info("Waking up, starting with a new tracking algorithm")
                 tracker, sleep_time, tracker_start = self.switch_current_tracker()
                 continue
+
             loop_counter += 1
             self.logger.info("Saving current data")
             self.save_and_flush()
@@ -213,9 +224,6 @@ class TrackerRunner():
                 self.logger.error("Tracker {} encountered an exception during operation".format(self.current_tracker))
                 self.logger.error(e, exc_info=True)
 
-            if self.should_switch_trackers(tracker_start):
-                loop_counter = 0
-                tracker, sleep_time, tracker_start = self.switch_current_tracker()
             self.logger.info("Sleeping for {} seconds".format(sleep_time))
             time.sleep(sleep_time)
 

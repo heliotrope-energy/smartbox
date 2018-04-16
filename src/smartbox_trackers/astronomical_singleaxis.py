@@ -46,7 +46,12 @@ class AstronomicalTrackerSingleAxis(Tracker):
         angle_pos = pvlib.tracking.singleaxis(pos_data['apparent_zenith'], pos_data['azimuth'], backtrack=False)
 
         self.logger.info("Moving panel to: {}".format(angle_pos['tracker_theta']))
-        self.control.move_panel_to_angular_position(0.0, float(angle_pos['tracker_theta']))
+        try:
+            self.control.move_panel_to_angular_position(0.0, float(angle_pos['tracker_theta']))
+        except Exception as e:
+            self.logger.error("Moving exception encountered")
+            self.logger.error(e, exc_info=True)
+        self.logger.info("Run step completed")
 
         #testing
         # test = pd.to_datetime('2018-03-27 12:31:38-04:00').tz_localize('UTC').tz_convert("America/New_York")
