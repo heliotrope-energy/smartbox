@@ -19,30 +19,20 @@ class TrackerControllerStub(object):
         request_serializer=tracker__pb2.TrackerSystemStatusRequest.SerializeToString,
         response_deserializer=tracker__pb2.TrackerSystemStatusResponse.FromString,
         )
-    self.request_control = channel.unary_unary(
-        '/smartbox_msgs.TrackerController/request_control',
-        request_serializer=tracker__pb2.RequestControlRequest.SerializeToString,
-        response_deserializer=tracker__pb2.RequestControlResponse.FromString,
+    self.tracker_control = channel.stream_stream(
+        '/smartbox_msgs.TrackerController/tracker_control',
+        request_serializer=tracker__pb2.ControlRequest.SerializeToString,
+        response_deserializer=tracker__pb2.ControlResponse.FromString,
         )
-    self.relinquish_control = channel.unary_unary(
-        '/smartbox_msgs.TrackerController/relinquish_control',
-        request_serializer=tracker__pb2.RelinquishControlRequest.SerializeToString,
-        response_deserializer=tracker__pb2.RelinquishControlResponse.FromString,
+    self.tracker_status = channel.unary_stream(
+        '/smartbox_msgs.TrackerController/tracker_status',
+        request_serializer=tracker__pb2.TrackerSystemStatusRequest.SerializeToString,
+        response_deserializer=tracker__pb2.TrackerSystemStatusResponse.FromString,
         )
-    self.move_panel = channel.unary_unary(
-        '/smartbox_msgs.TrackerController/move_panel',
-        request_serializer=tracker__pb2.MoveRequest.SerializeToString,
-        response_deserializer=tracker__pb2.MoveResponse.FromString,
-        )
-    self.stop = channel.unary_unary(
-        '/smartbox_msgs.TrackerController/stop',
-        request_serializer=tracker__pb2.StopRequest.SerializeToString,
-        response_deserializer=tracker__pb2.StopResponse.FromString,
-        )
-    self.stow = channel.unary_unary(
-        '/smartbox_msgs.TrackerController/stow',
-        request_serializer=tracker__pb2.StowRequest.SerializeToString,
-        response_deserializer=tracker__pb2.StowResponse.FromString,
+    self.echo = channel.stream_stream(
+        '/smartbox_msgs.TrackerController/echo',
+        request_serializer=tracker__pb2.ChatMessageRequest.SerializeToString,
+        response_deserializer=tracker__pb2.ChatMessageResponse.FromString,
         )
 
 
@@ -57,35 +47,21 @@ class TrackerControllerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def request_control(self, request, context):
+  def tracker_control(self, request_iterator, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def relinquish_control(self, request, context):
+  def tracker_status(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def move_panel(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def stop(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def stow(self, request, context):
+  def echo(self, request_iterator, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -100,30 +76,20 @@ def add_TrackerControllerServicer_to_server(servicer, server):
           request_deserializer=tracker__pb2.TrackerSystemStatusRequest.FromString,
           response_serializer=tracker__pb2.TrackerSystemStatusResponse.SerializeToString,
       ),
-      'request_control': grpc.unary_unary_rpc_method_handler(
-          servicer.request_control,
-          request_deserializer=tracker__pb2.RequestControlRequest.FromString,
-          response_serializer=tracker__pb2.RequestControlResponse.SerializeToString,
+      'tracker_control': grpc.stream_stream_rpc_method_handler(
+          servicer.tracker_control,
+          request_deserializer=tracker__pb2.ControlRequest.FromString,
+          response_serializer=tracker__pb2.ControlResponse.SerializeToString,
       ),
-      'relinquish_control': grpc.unary_unary_rpc_method_handler(
-          servicer.relinquish_control,
-          request_deserializer=tracker__pb2.RelinquishControlRequest.FromString,
-          response_serializer=tracker__pb2.RelinquishControlResponse.SerializeToString,
+      'tracker_status': grpc.unary_stream_rpc_method_handler(
+          servicer.tracker_status,
+          request_deserializer=tracker__pb2.TrackerSystemStatusRequest.FromString,
+          response_serializer=tracker__pb2.TrackerSystemStatusResponse.SerializeToString,
       ),
-      'move_panel': grpc.unary_unary_rpc_method_handler(
-          servicer.move_panel,
-          request_deserializer=tracker__pb2.MoveRequest.FromString,
-          response_serializer=tracker__pb2.MoveResponse.SerializeToString,
-      ),
-      'stop': grpc.unary_unary_rpc_method_handler(
-          servicer.stop,
-          request_deserializer=tracker__pb2.StopRequest.FromString,
-          response_serializer=tracker__pb2.StopResponse.SerializeToString,
-      ),
-      'stow': grpc.unary_unary_rpc_method_handler(
-          servicer.stow,
-          request_deserializer=tracker__pb2.StowRequest.FromString,
-          response_serializer=tracker__pb2.StowResponse.SerializeToString,
+      'echo': grpc.stream_stream_rpc_method_handler(
+          servicer.echo,
+          request_deserializer=tracker__pb2.ChatMessageRequest.FromString,
+          response_serializer=tracker__pb2.ChatMessageResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

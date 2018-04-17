@@ -3,11 +3,22 @@ package smartbox_msgs;
 
 service TrackerController {
 	rpc get_tracker_status (TrackerSystemStatusRequest) returns (TrackerSystemStatusResponse) {}
-	rpc request_control (RequestControlRequest) returns (RequestControlResponse) {}
-	rpc relinquish_control (RelinquishControlRequest) returns (RelinquishControlResponse) {}
-	rpc move_panel (MoveRequest) returns (MoveResponse) {}
-	rpc stop (StopRequest) returns (StopResponse) {}
-	rpc stow (StowRequest) returns (StowResponse) {}
+	rpc tracker_control (stream ControlRequest) returns (stream ControlResponse) {}
+	rpc tracker_status (TrackerSystemStatusRequest) returns (stream TrackerSystemStatusResponse) {}
+	rpc echo (stream ChatMessageRequest) returns (stream ChatMessageResponse) {}
+	//rpc request_control (RequestControlRequest) returns (RequestControlResponse) {}
+	//rpc relinquish_control (RelinquishControlRequest) returns (RelinquishControlResponse) {}
+	//rpc move_panel (MoveRequest) returns (MoveResponse) {}
+	//rpc stop (StopRequest) returns (StopResponse) {}
+	//rpc stow (StowRequest) returns (StowResponse) {}
+}
+
+message ChatMessageRequest {
+	string message = 1;
+}
+
+message ChatMessageResponse {
+	string message = 1;
 }
 
 enum DIRECTION {
@@ -35,8 +46,10 @@ enum ControlRequestSuccessFlag {
 		FAILURE=2;
 	}
 
+
 message TrackerSystemStatusRequest {
-	string message = 1;
+	string control_id = 1;
+	double message_rate = 2;
 }
 
 message Position {
@@ -53,8 +66,59 @@ message TrackerStatus {
 	Position position = 1;
 	Position angle = 2;
 	MoveStatus move_status = 3;
-	int64 current_controlling_level = 4;
+	int64 controlling_authority = 4;
+	string controlling_client = 5;
+	bool is_controlling_client = 6;
 }	
+
+message ChargeControllerDetails {
+	double t_hs = 1;
+	double t_batt = 2;
+	double t_amb = 3;
+	double t_rts = 4;
+
+	uint32 array_fault = 5;
+	double vb_f = 6;
+	double vb_ref = 7;
+
+	double ahc_r = 8;
+	double ahc_t = 9;
+	double kwhc = 10;
+	double load_state = 11;
+	uint32 load_fault = 12;
+	double v_lvd = 13;
+
+	double ahl_r = 14;
+	double ahl_t = 15;
+
+	double hourmeter = 16;
+	uint32 alarm = 17;
+
+	uint32 dip_switch = 18;
+	uint32 led_state = 19;
+	double power_out = 20;
+
+	double sweep_vmp = 21;
+	double sweep_pmax = 22;
+	double sweep_voc = 23;
+
+	double vb_min_daily = 24;
+	double vb_max_daily = 25;
+
+	double ahc_daily = 26;
+	double ahl_daily = 27;
+
+	uint32 array_fault_daily = 28;
+	uint32 load_fault_daily = 29;
+
+	uint32 alarm_daily = 30;
+	double vb_min = 31;
+	double vb_max = 32;
+	uint32 lighting_should_be_on = 33;
+
+	double va_ref_fixed = 34;
+	double va_ref_fixed_ptc = 35;
+}
 
 message ChargeControllerStatus {
 	double battery_voltage = 1;
@@ -66,20 +130,23 @@ message ChargeControllerStatus {
 	ChargeState charge_state = 6;
 	double energy_collected = 7;
 	double energy_expended = 8;
+
+	ChargeControllerDetails details = 9;
 }
 
 message RequestControlRequest {
-	string message = 1;
+	string description = 1;
 	uint64 security_level = 2;
 }
 
 message RequestControlResponse {
 	string message = 1;
 	ControlRequestSuccessFlag success = 2;
+	string control_id = 3;
 }
 
 message RelinquishControlRequest {
-	string message = 1;
+	string control_id = 1;
 }
 
 message RelinquishControlResponse {
@@ -89,40 +156,26 @@ message RelinquishControlResponse {
 	ControlRequestSuccessFlag success = 4;
 }
 
-message MoveRequest {
+message ControlRequest {
 	enum MoveType {
 		UNSET = 0;
 		DURATION = 1;
 		POSITION = 2;
 		ANGLE = 3;
+		STOW = 4;
+		STOP = 5;
 	}
+	uint64 authority_level = 1;
+	string description = 2;
 
-	MoveType move_type = 1;
-	DIRECTION direction = 2;
-	double move_duration = 3;
-	Position position = 4;
-	Position angle = 5;
+	MoveType move_type = 3;
+	DIRECTION direction = 4;
+	double move_duration = 5;
+	Position position = 6;
+	Position angle = 7;
 }
 
-message MoveResponse {
-	string message = 1;
-	ControlRequestSuccessFlag success = 2;
-}
-
-message StopRequest {
-	string message = 1;	
-}
-
-message StopResponse {
-	string message = 1;
-	ControlRequestSuccessFlag success = 2;
-}
-
-message StowRequest {
-	string message = 1;
-}
-
-message StowResponse {
+message ControlResponse {
 	string message = 1;
 	ControlRequestSuccessFlag success = 2;
 }

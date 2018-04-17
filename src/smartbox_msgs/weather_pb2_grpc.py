@@ -19,6 +19,11 @@ class WeatherControllerStub(object):
         request_serializer=weather__pb2.WeatherRequest.SerializeToString,
         response_deserializer=weather__pb2.WeatherResponse.FromString,
         )
+    self.weather = channel.unary_stream(
+        '/smartbox_msgs.WeatherController/weather',
+        request_serializer=weather__pb2.WeatherRequest.SerializeToString,
+        response_deserializer=weather__pb2.WeatherResponse.FromString,
+        )
 
 
 class WeatherControllerServicer(object):
@@ -32,11 +37,23 @@ class WeatherControllerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def weather(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_WeatherControllerServicer_to_server(servicer, server):
   rpc_method_handlers = {
       'weather_report': grpc.unary_unary_rpc_method_handler(
           servicer.weather_report,
+          request_deserializer=weather__pb2.WeatherRequest.FromString,
+          response_serializer=weather__pb2.WeatherResponse.SerializeToString,
+      ),
+      'weather': grpc.unary_stream_rpc_method_handler(
+          servicer.weather,
           request_deserializer=weather__pb2.WeatherRequest.FromString,
           response_serializer=weather__pb2.WeatherResponse.SerializeToString,
       ),

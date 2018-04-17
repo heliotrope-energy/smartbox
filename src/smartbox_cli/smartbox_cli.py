@@ -1,7 +1,7 @@
 from smartbox.client.resource_controller_client import SmartBoxResourceControllerClient
 import curses
 
-client = SmartBoxResourceControllerClient(20)
+client = SmartBoxResourceControllerClient(20, "Command line client")
 
 def display_help(stdscr):
 	help_message = ""
@@ -46,30 +46,36 @@ def handle_key(stdscr, key_press):
 def move_north(stdscr):
 	stdscr.addstr(0, 70, "North")
 	stdscr.refresh()
-	client.tracker.move_north()
+	with client.tracker.request_control() as control:
+		control.move_north()
 
 def move_south(stdscr):
 	stdscr.addstr(0, 70, "South")
 	stdscr.refresh()
-	client.tracker.move_south()
+	with client.tracker.request_control() as control:
+		control.move_south()
 
 def move_east(stdscr):
 	stdscr.addstr(0, 70, "East")
 	stdscr.refresh()
-	client.tracker.move_east()
+	with client.tracker.request_control() as control:
+		control.move_east()
 
 def move_west(stdscr):
 	stdscr.addstr(0, 70, "West")
 	stdscr.refresh()
-	client.tracker.move_west()
+	with client.tracker.request_control() as control:
+		control.move_west()
 
 def stow(stdscr):
-	client.tracker.stow()
+	with client.tracker.request_control() as control:
+		control.stow()
 
 def stop(stdscr):
 	stdscr.addstr(0, 70, "Stop")
 	stdscr.refresh()
-	client.tracker.stop()
+	with client.tracker.request_control() as control:
+		control.stop()
 
 def toggle_light(stdscr):
 	client.light.toggle()
@@ -101,11 +107,12 @@ def move_to_linear_position(stdscr):
 	stdscr.addstr(5, 70, str(ns_pos))
 	stdscr.addstr(6, 70, str(ew_pos))
 	stdscr.refresh()
-	client.tracker.move_panel_to_linear_position(ns_pos, ew_pos)
+	with client.tracker.request_control() as control:
+		control.move_panel_to_linear_position(ns_pos, ew_pos)
 
 
 def move_to_angular_position(stdscr):
-	stdscr.addstr(19, 0, "Please type the NS angular position (0 - 180)")
+	stdscr.addstr(19, 0, "Please type the NS angular position (-2 (N) <-> 38 (S))")
 	stdscr.refresh()
 	ns_pos = get_float_input(stdscr)
 
@@ -118,7 +125,8 @@ def move_to_angular_position(stdscr):
 	stdscr.addstr(5, 70, str(ns_pos))
 	stdscr.addstr(6, 70, str(ew_pos))
 	stdscr.refresh()
-	client.tracker.move_panel_to_angular_position(ns_pos, ew_pos)
+	with client.tracker.request_control() as control:
+		control.move_panel_to_angular_position(ns_pos, ew_pos)
 
 def draw_screen(stdscr):
 	stdscr.clear()

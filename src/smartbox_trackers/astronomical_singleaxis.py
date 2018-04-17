@@ -2,27 +2,56 @@
 #NOTE: using PVLib functions for testing
 #NOTE: move to Dave's Grena code for dual-axis
 from smartbox.client.resource_controller_client import SmartBoxResourceControllerClient
-
-import cv2, time, pvlib
+from smartbox.client.tracker_controller import ControlDisruption
+import cv2, time, pvlib, logging
 import pandas as pd
 from tracker import Tracker
 
 class AstronomicalTrackerSingleAxis(Tracker):
-    def __init__(self, client, latitude=41.8240, longitude=-71.4128, interval=10, method='nrel_numpy'):
+    def __init__(self, latitude=41.8240, longitude=-71.4128, interval=60, method='nrel_numpy', *args, **kwargs):
         '''
         Initialize the client
         longitude: current longitude of panel
         latitude: current latitude of panels
-        interval: how often the client moves, in minutes
+        interval: how often the client moves, in seconds
         '''
+        client = SmartBoxResourceControllerClient(101, "AstronomicalTrackerSingleAxis")
         super().__init__(client, latitude, longitude, interval)
         self.method = method
         self.name = 'astronomical-single-axis'
+        self.logger = logging.getLogger("root.runner.astronomical-single-axis")
+        self.logger.propagate = True
+        print(self.logger.name)
+        print(self.logger.parent.name)
+        self.control = None
 
     #NOTE: override
-    def run_step(self, state=None):
-        #get current date_time
+    def run_step(self, *args):
+        if self.control is None or not self.control.in_control():
+            if not self.client.tracker.is_control_possible():
+                self.logger.info("Attempting to get control of tracker, but it's not possible")
+                return
+            try:
+                self.control = self.client.tracker.request_control()
+            except ControlDisruption as e:
+                self.logger.error("We tried to get control, but it failed")
+                return
+
         now = pd.to_datetime('now').tz_localize('UTC')
+        self.logger.info("Setting tracker position for UTC time {}".format(now))
+        #get current date_time
+        pos_data = pvlib.solarposition.get_solarposition(now, self.latitude, self.longitude)
+
+        self.logger.info("Sun position is: Azimuth {} Elevation {}".format(pos_data['azimuth'], pos_data['elevation']))
+        angle_pos = pvlib.tracking.singleaxis(pos_data['apparent_zenith'], pos_data['azimuth'], backtrack=False)
+
+        self.logger.info("Moving panel to: {}".format(angle_pos['tracker_theta']))
+        try:
+            self.control.move_panel_to_angular_position(0.0, float(angle_pos['tracker_theta']))
+        except Exception as e:
+            self.logger.error("Moving exception encountered")
+            self.logger.error(e, exc_info=True)
+        self.logger.info("Run step completed")
 
         #testing
         # test = pd.to_datetime('2018-03-27 12:31:38-04:00').tz_localize('UTC').tz_convert("America/New_York")
@@ -31,26 +60,23 @@ class AstronomicalTrackerSingleAxis(Tracker):
 
         #TODO: check sunrise or sunset times - avoid tracking when that's happening
         #calculate solar position
-        pos_data = pvlib.solarposition.get_solarposition(now, self.latitude, self.longitude)
         # print(pos_data)
         #calculate single-axis tracker position
         #TODO: figure out why it returns nans sometime
-        angle_pos = pvlib.tracking.singleaxis(pos_data['apparent_zenith'], pos_data['azimuth'], backtrack=False)
-
+        
         # print(angle_pos)
-        print ("Desired angle: {}".format(float(angle_pos['tracker_theta'])))
 
-        print("Moving to position")
-        self.client.tracker.move_panel_to_angular_position(0.0, float(angle_pos['tracker_theta']))
-
+    def cleanup(self):
+        if self.control:
+            self.control.release()
 
 
 
 
 if __name__ == "__main__":
-    client = SmartBoxResourceControllerClient(101)
+    client = SmartBoxResourceControllerClient(101, "AstronomicalTrackerSingleAxis")
     tracker = AstronomicalTrackerSingleAxis(client, interval=10)
     while True:
-        tracker.run_step(None, None)
+        tracker.run_step()
         print("step finished")
         time.sleep(tracker.interval*60)
