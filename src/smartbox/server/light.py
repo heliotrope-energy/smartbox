@@ -8,7 +8,8 @@ from smartbox.components.sb_light import SmartBoxLight
 class SmartBoxLightController(lights_pb2_grpc.LightControllerServicer):
 	def __init__(self):
 		self.light = SmartBoxLight()
-		self.logger = logging.getLogger(__name__)
+		self.logger = logging.getLogger("server.light")
+		self.logger.propagate = True
 
 	def set_light(self, request, context):
 		if request.light == lights_pb2.LightRequest.ON:

@@ -24,12 +24,13 @@ class SmartBoxTracker:
 			self.NS_PIN: [-1.335, 6.917],
 			self.EW_PIN: [-2.67, 13.83]}
 		self.actuator_directions = {
-			self.NS_PIN: ["North", "South"], 
+			self.NS_PIN: ["South", "North"], 
 			self.EW_PIN: ["East", "West"]}
 
 		self.ew_thread = None
 		self.ns_thread = None
-		self.logger = logging.getLogger(__name__)
+		self.logger = logging.getLogger("server.components.tracker")
+		self.logger.propagate = True
 
 	def get_ns_position(self):
 		"""
@@ -134,7 +135,7 @@ class SmartBoxTracker:
 			Moves the panel to face north. Call stop_ns() or stop() to stop 
 			the movement
 		"""
-		self._move_axis_(self.NS_PIN, True)
+		self._move_axis_(self.NS_PIN, False)
 
 	def move_south(self):
 		"""
@@ -142,7 +143,7 @@ class SmartBoxTracker:
 			the movement
 		"""
 
-		self._move_axis_(self.NS_PIN, False)
+		self._move_axis_(self.NS_PIN, True)
 
 	def move_east(self):
 		"""
@@ -187,11 +188,7 @@ class SmartBoxTracker:
 
 		v = math.sqrt(a ** 2.0 + b ** 2.0)
 		angle1 = math.atan(b / a)
-		try:
-			angle2 = math.acos((v**2.0 + c**2.0 - total_length_actuator ** 2.0) / (2 * v * c))
-		except:
-			self.logger.error("Domain issue I reckon a {}, b {}, c {} total length {}".format(a,b,c,total_length_actuator))
-			return 0.0
+		angle2 = math.acos((v**2.0 + c**2.0 - total_length_actuator ** 2.0) / (2 * v * c))
 		return 90.0 - 180.0 * (angle1 + angle2) / math.pi
 
 	def _calculate_ew_angle_from_position(self, extended_length):

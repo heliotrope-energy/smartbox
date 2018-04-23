@@ -15,6 +15,12 @@ class Tracker():
             '''
             return False
 
+        def cleanup(self):
+            '''
+            If the tracker needs to do any cleanup at the end of a trial
+            '''
+            return False
+
         def update_model(self, state, reward):
             '''
             updates model. .

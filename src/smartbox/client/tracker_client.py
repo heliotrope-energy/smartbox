@@ -1,31 +1,57 @@
 #!/usr/bin/env python
 from smartbox_msgs import tracker_pb2
 from smartbox_msgs import tracker_pb2_grpc
+from smartbox.client.tracker_controller import TrackerController
+
+import time
+from threading import Thread
+from queue import Queue
+from collections import namedtuple
 
 class TrackerClient:
-	def __init__(self, channel, authority_level):
+	def __init__(self, channel, authority_level, description):
 		self.channel = channel
 		self.authority_level = authority_level
+		self.description = description
 		self.stub = tracker_pb2_grpc.TrackerControllerStub(self.channel)
-
+		
 	def request_control(self):
 		"""
-			Request control of the tracker for movement. 
+			Request control of the tracker for movement. This returns a context manager for your pythonic convenience.
+			It throws an exception if your client can't get, or loses tracker control.
 
-			returns: True if request was successful, otherwise false
-		"""
-		resp = self._request_control_()
-		return resp.success == tracker_pb2.SUCCESS
+			with client.request_control() as control:
+				control.move_north()
 
-	def relinquish_control(self):
-		"""
-			Relinquishes control of the tracker. Be a polite user and please
-			relinquish.
+			params:
+				control_success_cb: A callback for your program to understand if control is gained.
+				control_termination_cb: A callback for your program to understand when control is lost, 
+					which might be immediately.
+				cb_args: Arguments provided to both callbacks
 
-			returns: True if request was success, which it should always be
 		"""
-		resp = self._relinquish_control_()
-		return resp.success == tracker_pb2.SUCCESS
+
+		return TrackerController(self.stub, self.authority_level, self.description)
+
+	def is_control_possible(self):
+		"""
+			This will check the server to see if there is a controlling client with more authority than your client
+		"""
+		status = self._request_status_()
+		if status.tracker.controlling_authority == -1:
+			return True
+		if status.tracker.controlling_authority > self.authority_level:
+			return True
+		return False
+
+	def tracker_status(self, callback):
+		self.tracker_status_thread = Thread(target = self._tracker_status_, \
+			args=(callback,))
+		self.tracker_status_thread.start()
+
+	def _tracker_status_(self, callback):
+		for status in self.stub.tracker_status(tracker_pb2.TrackerSystemStatusRequest()):
+			callback(status)
 
 	def get_ns_position(self):
 		"""
@@ -88,71 +114,6 @@ class TrackerClient:
 		msg = self._request_status_()
 		return msg.tracker.move_status.ew
 
-	def move_panel_to_linear_position(self, ns_pos, ew_pos):
-		"""
-			Moves the panel to given linear actuator positions
-			Params:
-				ns_pos: The north-south position in inches from full-retraction
-				ew_pos: The east-west position in inches from full-retraction
-		"""
-		self._request_position_move_(ns_pos, ew_pos)
-
-	def move_panel_to_angular_position(self, ns_angle, ew_angle):
-		"""
-			TODO
-			Moves the panel to the given North-South and East-West angles
-			Params:
-				ns_angle: The angle to move the panel from the north-south axis.
-						  North is positive
-				ew_angle: The angle to move the panel from the east-west axis.
-						  West is positive
-		"""
-		self._request_angular_move_(ns_angle, ew_angle)
-
-	def stow(self):
-		"""
-			Moves the panel to a safe wind-stow position
-		"""
-		request = tracker_pb2.StowRequest(message="Flat please")
-		self.stub.stow(request)
-
-	def move_north(self):
-		"""
-			Moves the panel to face north. Call stop_ns() or stop() to stop 
-			the movement
-		"""
-		self._request_direction_move_(direction=tracker_pb2.NORTH)
-		
-
-	def move_south(self):
-		"""
-			Moves the panel to face south. Call stop_ns() or stop() to stop 
-			the movement
-		"""
-
-		self._request_direction_move_(direction=tracker_pb2.SOUTH)
-		
-	def move_east(self):
-		"""
-			Moves the panel to face east. Call stop_ew() or stop() to stop 
-			the movement
-		"""
-		self._request_direction_move_(direction=tracker_pb2.EAST)
-		
-	def move_west(self):
-		"""
-			Moves the panel to face west. Call stop_ew() or stop() to stop 
-			the movement
-		"""
-		self._request_direction_move_(direction=tracker_pb2.WEST)
-
-	def stop(self):
-		"""
-			Stops the movement of both axes
-		"""
-		request = tracker_pb2.StopRequest(message="stop")
-		self.stub.stop(request)
-
 	def get_battery_voltage(self):
 		"""
 			Gets the current battery voltage as measured by the charge controller
@@ -196,6 +157,11 @@ class TrackerClient:
 		status = self._request_status_()
 		return status.charge_controller.charge_state
 
+	def get_charge_state_name(self):
+		status = self._request_status_()
+		state = status.charge_controller.charge_state
+		return tracker_pb2.Name(state)
+
 	def get_tracker_data(self):
 		"""
 			Returns the complete status message of the tracker. Check the smartbox_msgs
@@ -204,30 +170,7 @@ class TrackerClient:
 		return self._request_status_()
 
 	def _request_status_(self):
-		request = tracker_pb2.TrackerSystemStatusRequest(message = "hello")
+		request = tracker_pb2.TrackerSystemStatusRequest()
 		return self.stub.get_tracker_status(request)
 
-	def _request_control_(self):
-		request = tracker_pb2.RequestControlRequest(message="Control please", security_level = self.security_level)
-		return self.stub.request_control(request)
-
-	def _relinquish_control_(self):
-		request = tracker_pb2.RelinquishControl(message="All done")
-		return self.stub.request_control(request)
-
-	def _request_direction_move_(self, direction):
-		request = tracker_pb2.MoveRequest(move_type = tracker_pb2.MoveRequest.DURATION)
-		request.direction = direction
-		return self.stub.move_panel(request)
-
-	def _request_position_move_(self, pos_ns, pos_ew):
-		request = tracker_pb2.MoveRequest(move_type = tracker_pb2.MoveRequest.POSITION)
-		request.position.ns = pos_ns
-		request.position.ew = pos_ew
-		return self.stub.move_panel(request)
-
-	def _request_angular_move_(self, angle_ns, angle_ew):
-		request = tracker_pb2.MoveRequest(move_type = tracker_pb2.MoveRequest.ANGLE)
-		request.angle.ns = angle_ns
-		request.angle.ew = angle_ew
-		return self.stub.move_panel(request)
+	

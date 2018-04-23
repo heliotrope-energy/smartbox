@@ -66,7 +66,7 @@ class LinUCBSingleAxis(Tracker):
         return False
 
 if __name__=="__main__":
-    client = SmartBoxResourceControllerClient(101)
+    client = SmartBoxResourceControllerClient(101, "LinUCBSingleAxis")
     tracker = LinUCBSingleAxis(client, 10, interval=3)
     #TODO: observation to state interface
     # while True:

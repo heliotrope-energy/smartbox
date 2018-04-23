@@ -2,189 +2,269 @@
 #one thread collecting data, one thread running trackers
 
 import multiprocessing as mp
-import random
-from astronomical_singleaxis import AstronomicalTrackerSingleAxis
-import time
+import random, argparse, logging, logging.handlers, time, os
 import pandas as pd
-from smartbox.client.resource_controller_client import SmartBoxResourceControllerClient
-import os
 import pvlib #for weather forecast and modeling
+from threading import RLock
+from queue import Queue
+from astronomical_singleaxis import AstronomicalTrackerSingleAxis
+from smartbox.client.resource_controller_client import SmartBoxResourceControllerClient
 
 os.environ['GRPC_ENABLE_FORK_SUPPORT'] = "false"
 
 
 class TrackerRunner():
-    def __init__(self, trackers, datafolder, modelfolder, time_per_tracker=2, data_collection_interval = 0.05, save_interval=1, randomize=True):
+    #def __init__(self, trackers, log_dir, datafolder, modelfolder, time_per_tracker=2, data_collection_interval = 0.05, save_interval=1, randomize=True):
+    def __init__(self, trackers, log_dir, data_dir, model_dir, tracker_eval_duration, randomize):
         '''
             trackers: dict containing tracker classes to be run.
             datafile: folder containing data files (CSV)
             modelfolder: folder for saving models - model will be in modelfolder/trackername/timestamp
-            time_per_tracker: interval for each tracker before switching
-            data_collection_interval: interval for data collection, minutes
+            time_per_tracker: interval for each tracker before switching in seconds
             randomize: pick trackers randomly.
         '''
+        if trackers is None or len(trackers) == 0:
+            raise Exception("Not sure what you wanted me to do without any trackers")
 
+        self.logger = logging.getLogger("root.runner")
 
+        print("Logging data to {}".format(log_path))
+        self.logger.info("Initializing tracker runner")
         self.trackers = trackers
-        self.datafolder = datafolder
-        self.modelfolder = modelfolder
-        self.time_per_tracker = time_per_tracker
-        self.data_collection_interval = data_collection_interval
+        self.logger.info("Saving data to {}".format(data_dir))
+        self.data_dir = data_dir
+        self.logger.info("Saving models to {}".format(model_dir))
+        self.model_dir = model_dir
+        self.logger.info("Tracker eval duration {}".format(tracker_eval_duration))
+        self.time_per_tracker = tracker_eval_duration
+        self.logger.info("Randomize? {}".format(randomize))
         self.randomize = randomize
-        # self.save_interval = save_interval
+        
+        self.data = Queue()
+        self.weather_lock = RLock()
+        self.tracker_status_lock = RLock()
+        self.current_weather = None
+        self.current_tracker_status = None
 
-        #list of saved dicts
-        self.data = []
+        self.current_tracker = None
 
-
-        self.client = SmartBoxResourceControllerClient(101)
-        self.current_tracker = random.choice(list(self.trackers.keys()))
-
-        #initialize trackers:
         for tracker_id, tracker in self.trackers.items():
-            self.trackers[tracker_id] = tracker(client=self.client)
+            self.trackers[tracker_id] = tracker(model_dir = self.model_dir)
 
-
-        #use this to determine when to flush data
-        self.max_interval = max([self.trackers[tracker].interval for tracker in trackers.keys()])
-        #
-        self.save_interval = 1 # self.max_interval*2
-
-
-
-
-
-
-    def compute_reward(self, start, end):
-        '''
-        Computes the net energy production for the given interval.
-        '''
-        print("computing reward from {} to {}".format(start, end))
-
-
-    def collect_data(self, save_interval=60):
-
-
-        data = {'time':pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York")}
-
-        #getting charge controller data
-        data['panel_voltage'] = [self.client.tracker.get_solar_panel_voltage()]
-        data['charging_current'] = [self.client.tracker.get_charging_current()]
-        data['battery_voltage'] = [self.client.tracker.get_battery_voltage()]
-        data['load_voltage'] = [self.client.tracker.get_load_voltage()]
-        data['load_current'] = [self.client.tracker.get_load_current()]
-        #trackers state data
-        data['current_tracker'] = [self.current_tracker]
-        data['ew_angle'] = [self.client.tracker.get_ew_angle()]
-        data['ns_angle'] = [self.client.tracker.get_ns_angle()]
-        #TODO: weather data
-
-        print(self.client.weather.get_weather())
-
-        data['wind_speed'] = None
-        data['wind_direction'] = None
-        data['weather_last_updated'] = None
-
-        #TODO: weather forecast + satellite data
-
-
-        #TODO: panel temperature 
-
-        return data
-
+        self.client = SmartBoxResourceControllerClient(11, "Tracker Runner")
 
     def save_and_flush(self):
         '''
         Saves data to disk, flushes records.
         '''
+        data = []
+        while not self.data.empty():
+            data.append(self.data.get())
+            print(data[-1])
+        if len(data) == 0:
+            self.logger.info("No data was collected, unusual")
+            return
 
-        df = pd.DataFrame(self.data).set_index('time')
-        outfile = "{}/{}.csv".format(self.datafolder, loop_counter)
-        #appending
-        with open(outfile, 'a') as f:
-            df.to_csv(f, header=f.tell()==0)
+        df = pd.DataFrame(data).set_index('time')
+        path = os.path.join(self.data_dir, "data.csv")
+        self.logger.info("Saving data to {}".format(path))
+        if os.path.exists(path):
+            df.to_csv(path, mode='a', header = False)
+        else:
+            df.to_csv(path)
 
-        self.data = []
+    def on_weather(self, weather):
+        with self.weather_lock:
+            self.current_weather = weather
+
+    def on_tracker_status(self, tracker_data):
+        with self.tracker_status_lock:
+            self.current_tracker_status = tracker_data
+        data = {'time':pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York")}
+
+        #getting charge controller data
+        data['energy_collected'] = tracker_data.charge_controller.energy_collected
+        data['energy_expended'] = tracker_data.charge_controller.energy_expended
+        data['panel_voltage'] = tracker_data.charge_controller.array_voltage
+        data['charging_current'] = tracker_data.charge_controller.charge_current
+        data['battery_voltage'] = tracker_data.charge_controller.battery_voltage
+        data['load_voltage'] = tracker_data.charge_controller.load_voltage
+        data['load_current'] = tracker_data.charge_controller.load_current
+        #trackers state data
+        data['tracker'] = self.current_tracker
+        data['ew_angle'] = tracker_data.tracker.angle.ew
+        data['ns_angle'] = tracker_data.tracker.angle.ns
+
+        with self.weather_lock:
+            weather = self.current_weather
+        if weather is not None:
+            data['wind_speed'] = weather.wind.speed
+            data['wind_direction'] = weather.wind.direction
+            data['weather_last_updated'] = weather.date
+
+        self.data.put(data)
+
+    def should_switch_trackers(self, start_time):
+        duration = self.time_per_tracker
+        time_delta = pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York") - start_time
+        return time_delta.total_seconds() > duration
+
+    def switch_current_tracker(self):
+        self.logger.info("Saving remaining data")
+        self.save_and_flush()
+        
+        if self.current_tracker:
+            self.logger.info("Cleaning up previous tracker")
+            old_tracker = self.trackers[self.current_tracker]
+            old_tracker.cleanup()
+
+        self.logger.info("Switching tracker from {}".format(self.current_tracker))
+        self.current_tracker = random.choice(list(self.trackers.keys()))
+        self.logger.info("to new tracker: {}".format(self.current_tracker))
+
+        tracker = self.trackers[self.current_tracker]
+        sleep_time = tracker.interval
+        tracker_start = pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York")
+        self.logger.info("Switching trackers completed")
+        return tracker, sleep_time, tracker_start
+
+    def check_at_night(self):
+        latitude=41.8240
+        longitude=-71.4128
+        now = pd.to_datetime('now').tz_localize('UTC')
+        tomorrow = pd.Timedelta(days=1) + now
+        sunrise_set_today = pvlib.solarposition.get_sun_rise_set_transit(now, latitude, longitude)
+        sunrise_set_tomorrow = pvlib.solarposition.get_sun_rise_set_transit(tomorrow, latitude, longitude)
+
+        if (now > sunrise_set_today['sunset'] - pd.Timedelta(minutes=10))[0] or \
+            (now < sunrise_set_today['sunrise'] + pd.Timedelta(minutes=10))[0]:
+            return True, sunrise_set_tomorrow['sunrise'] - now + pd.Timedelta(minutes=15)
+        return False, 0
+
+    def run_nighttime_procedure(self):
+        latitude=41.8240
+        longitude=-71.4128
+
+        if self.current_tracker is not None:
+            tracker = self.trackers[self.current_tracker]
+            self.logger.info("Cleaning up tracker {}".format(self.current_tracker))
+            tracker.cleanup()
+            self.current_tracker = None
+
+        count = 0
+        while not self.client.tracker.is_control_possible() and count < 10:
+            count += 1
+            self.logger.info("Waiting for tracker to relinquish control")
+            time.sleep(1.0)
+
+        if not self.client.tracker.is_control_possible():
+            self.logger.info("I lost patience, taking control")
+
+        self.logger.info("Acquiring control")
+        with self.client.tracker.request_control() as control:
+            self.logger.info("Stowing panel")
+            control.stow()
+        
+        now = pd.to_datetime('now').tz_localize('UTC')
+        tomorrow = pd.Timedelta(days=1) + now
+        sunrise_set_tomorrow = pvlib.solarposition.get_sun_rise_set_transit(tomorrow, latitude, longitude)
+
+        self.logger.info("Sunset detected, going to sleep until {}".format(sunrise_set_tomorrow['sunrise']))
+        time_til_sunrise = sunrise_set_tomorrow['sunrise'] - now + pd.Timedelta(minutes=20)
+
+        self.logger.info("Sleeping for {} seconds".format(time_til_sunrise[0].total_seconds()))
+        time.sleep(time_til_sunrise[0].total_seconds())
 
     def start(self):
+        #loops collecting data, moves, saving, etc when necessary
+        self.logger.info("Subscribing to tracker status messages")
+        self.client.tracker.tracker_status(self.on_tracker_status)
 
+        self.logger.info("Subscribing to weather messages")
+        self.client.weather.subscribe_weather(self.on_weather)
 
-        #loops collecting data, moves, saving, etc when neccessary
-
+        with self.client.tracker.request_control() as control:
+            control.stow()
+            while self.client.tracker.is_panel_moving():
+                self.logger.info("Waiting for panel to move to stow position")
+                time.sleep(1.0)
+        
+        #tracker interval tracking for reward function calculation
+        self.logger.info("Selecting first tracker")
+        tracker, sleep_time, tracker_start = self.switch_current_tracker()
         loop_counter = 0
 
-        save_interval = int(self.save_interval/self.data_collection_interval)
-
-        #TODO: update this when tracker shifts
-        tracker_interval = int(self.trackers[self.current_tracker].interval/self.data_collection_interval)
-
-        tracker_switch_interval = int(self.time_per_tracker/self.data_collection_interval)
-
-        #tracker interval tracking for reward function calculation
-
-        start = pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York")
-
-        end =  pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York")
-
-
-
         while True:
-            dat = self.collect_data()
-            self.data.append(dat)
-            print(self.data)
+            if self.should_switch_trackers(tracker_start):
+                self.logger.info("Switching current tracker")
+                loop_counter = 0
+                tracker, sleep_time, tracker_start = self.switch_current_tracker()
 
-            if loop_counter % save_interval == 0:
-                print("saving data and flushing")
-                self.save_and_flush()
-
-            if loop_counter % tracker_interval == 0:
-                print("doing tracker things")
-
-                # reward = self.compute_reward(start, end)
-                #
-                # #update model
-                # #need to save more states for SARSA?
-                # # self.trackers[self.current_tracker].update_model(state, reward)
-                # end = pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York")
-                #
-                #
-                # #get environmental data from dataframe + camera archive
-                # #create state object
-                # state = None
-                #
-                # #record start time
-                # start = pd.to_datetime('now').tz_localize('UTC').tz_convert("America/New_York")
-                #
-                # #run tracker
-                # self.trackers[self.current_tracker].run_step(state)
-
-
-            if loop_counter % tracker_switch_interval == 0:
-                print("switching trackers")
-                self.current_tracker = random.choice(list(self.trackers.keys()))
-                print("new tracker: {}".format(self.current_tracker))
-
-
+            at_night, time_til_sunrise = self.check_at_night()
+            if at_night:
+                self.logger.info("Night time detected, starting nighttime procedures")
+                self.run_nighttime_procedure()
+                self.logger.info("Waking up, starting with a new tracking algorithm")
+                tracker, sleep_time, tracker_start = self.switch_current_tracker()
+                continue
 
             loop_counter += 1
-            time.sleep(self.data_collection_interval*60)
+            self.logger.info("Saving current data")
+            self.save_and_flush()
+            self.logger.info("Running tracker step {} for tracker {}".format(loop_counter, self.current_tracker))
 
+            with self.tracker_status_lock:
+                tracker_status = self.current_tracker_status
+            with self.weather_lock:
+                weather = self.current_weather
 
+            try:
+                tracker.run_step(tracker_status, weather)
+            except Exception as e:
+                self.logger.error("Tracker {} encountered an exception during operation".format(self.current_tracker))
+                self.logger.error(e, exc_info=True)
 
+            self.logger.info("Sleeping for {} seconds".format(sleep_time))
+            time.sleep(sleep_time)
 
-
-
-
-
-
-
-
-
-
-
-
+def expand_directory(directory):
+    directory = os.path.expanduser(directory)
+    return os.path.expandvars(directory)
 
 if __name__=="__main__":
+    parser = argparse.ArgumentParser(description='Tracker Runner')
+    parser.add_argument('--log_dir', metavar='-l', type=str, default="$HOME",
+                    help='Logging directory, defaults to $HOME')
+    parser.add_argument('--model_dir', metavar='-m', type=str, help="Directory for saving models", required=True)
+    parser.add_argument('--data_dir', metavar='-d', type=str, help="Directory containing data files", required=True)
+    parser.add_argument('--eval_duration', metavar='-e', type=float, default = 3600 , help="Duration for the evaluation of each tracker (seconds)")
+    parser.add_argument('--randomize', action='store_true')
+    
+    args = parser.parse_args()
+    log_dir = expand_directory(args.log_dir)
+    model_dir = expand_directory(args.model_dir)
+    data_dir = expand_directory(args.data_dir)
+    eval_duration = args.eval_duration
+    randomize = args.randomize
+
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    if not os.path.exists(model_dir):
+        os.makedirs(model_dir)
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+
+    log_path = os.path.join(log_dir, "tracker_runner.log")
+    logging.basicConfig(format='[%(asctime)s] %(name)s line: %(lineno)s %(levelname)s: %(message)s', level=logging.INFO)
+    handler = logging.handlers.RotatingFileHandler(log_path, maxBytes=20000000, backupCount=5)
+    
+    logger = logging.getLogger("root")
+    logger.setLevel(logging.INFO)
+    handler.setFormatter(logging.Formatter('[%(asctime)s] %(name)s line: %(lineno)s %(levelname)s: %(message)s'))
+    logger.addHandler(handler)
+
     trackers = {'astro_single': AstronomicalTrackerSingleAxis}
-    runner = TrackerRunner(trackers, "data", "")
+    logger.info("Initializing runner")
+    runner = TrackerRunner(trackers, log_dir, data_dir, model_dir, eval_duration, randomize)
+    logger.info("Starting it all")
     runner.start()

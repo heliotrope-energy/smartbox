@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='weather.proto',
   package='smartbox_msgs',
   syntax='proto3',
-  serialized_pb=_b('\n\rweather.proto\x12\rsmartbox_msgs\"[\n\x11TemperatureReport\x12\x0f\n\x07outdoor\x18\x01 \x01(\x01\x12\x0e\n\x06indoor\x18\x02 \x01(\x01\x12\x12\n\nfeels_like\x18\x03 \x01(\x01\x12\x11\n\tdew_point\x18\x04 \x01(\x01\"4\n\x0ePressureReport\x12\x10\n\x08relative\x18\x01 \x01(\x01\x12\x10\n\x08\x61\x62solute\x18\x02 \x01(\x01\"T\n\nWindReport\x12\x11\n\tdirection\x18\x01 \x01(\x01\x12\r\n\x05speed\x18\x02 \x01(\x01\x12\x0c\n\x04gust\x18\x03 \x01(\x01\x12\x16\n\x0emax_daily_gust\x18\x04 \x01(\x01\"C\n\x0eHumidityReport\x12\x18\n\x10humidity_percent\x18\x01 \x01(\x01\x12\x17\n\x0fhumidity_indoor\x18\x02 \x01(\x01\"i\n\nRainReport\x12\x0e\n\x06hourly\x18\x01 \x01(\x01\x12\r\n\x05\x64\x61ily\x18\x02 \x01(\x01\x12\x0e\n\x06weekly\x18\x03 \x01(\x01\x12\x0f\n\x07monthly\x18\x04 \x01(\x01\x12\r\n\x05total\x18\x05 \x01(\x01\x12\x0c\n\x04last\x18\x06 \x01(\t\",\n\x0bSolarReport\x12\n\n\x02uv\x18\x01 \x01(\x01\x12\x11\n\tradiation\x18\x02 \x01(\x01\"!\n\x0eWeatherRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"\xc7\x02\n\x0fWeatherResponse\x12\x0c\n\x04\x64\x61te\x18\x01 \x01(\t\x12\x10\n\x08\x64\x61te_utc\x18\x02 \x01(\x05\x12\x35\n\x0btemperature\x18\x03 \x01(\x0b\x32 .smartbox_msgs.TemperatureReport\x12\'\n\x04wind\x18\x04 \x01(\x0b\x32\x19.smartbox_msgs.WindReport\x12/\n\x08pressure\x18\x05 \x01(\x0b\x32\x1d.smartbox_msgs.PressureReport\x12/\n\x08humidity\x18\x06 \x01(\x0b\x32\x1d.smartbox_msgs.HumidityReport\x12\'\n\x04rain\x18\x07 \x01(\x0b\x32\x19.smartbox_msgs.RainReport\x12)\n\x05solar\x18\x08 \x01(\x0b\x32\x1a.smartbox_msgs.SolarReport2f\n\x11WeatherController\x12Q\n\x0eweather_report\x12\x1d.smartbox_msgs.WeatherRequest\x1a\x1e.smartbox_msgs.WeatherResponse\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\rweather.proto\x12\rsmartbox_msgs\"[\n\x11TemperatureReport\x12\x0f\n\x07outdoor\x18\x01 \x01(\x01\x12\x0e\n\x06indoor\x18\x02 \x01(\x01\x12\x12\n\nfeels_like\x18\x03 \x01(\x01\x12\x11\n\tdew_point\x18\x04 \x01(\x01\"4\n\x0ePressureReport\x12\x10\n\x08relative\x18\x01 \x01(\x01\x12\x10\n\x08\x61\x62solute\x18\x02 \x01(\x01\"T\n\nWindReport\x12\x11\n\tdirection\x18\x01 \x01(\x01\x12\r\n\x05speed\x18\x02 \x01(\x01\x12\x0c\n\x04gust\x18\x03 \x01(\x01\x12\x16\n\x0emax_daily_gust\x18\x04 \x01(\x01\"C\n\x0eHumidityReport\x12\x18\n\x10humidity_percent\x18\x01 \x01(\x01\x12\x17\n\x0fhumidity_indoor\x18\x02 \x01(\x01\"i\n\nRainReport\x12\x0e\n\x06hourly\x18\x01 \x01(\x01\x12\r\n\x05\x64\x61ily\x18\x02 \x01(\x01\x12\x0e\n\x06weekly\x18\x03 \x01(\x01\x12\x0f\n\x07monthly\x18\x04 \x01(\x01\x12\r\n\x05total\x18\x05 \x01(\x01\x12\x0c\n\x04last\x18\x06 \x01(\t\",\n\x0bSolarReport\x12\n\n\x02uv\x18\x01 \x01(\x01\x12\x11\n\tradiation\x18\x02 \x01(\x01\":\n\x0eWeatherRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x17\n\x0freport_interval\x18\x02 \x01(\x01\"\xc7\x02\n\x0fWeatherResponse\x12\x0c\n\x04\x64\x61te\x18\x01 \x01(\t\x12\x10\n\x08\x64\x61te_utc\x18\x02 \x01(\x05\x12\x35\n\x0btemperature\x18\x03 \x01(\x0b\x32 .smartbox_msgs.TemperatureReport\x12\'\n\x04wind\x18\x04 \x01(\x0b\x32\x19.smartbox_msgs.WindReport\x12/\n\x08pressure\x18\x05 \x01(\x0b\x32\x1d.smartbox_msgs.PressureReport\x12/\n\x08humidity\x18\x06 \x01(\x0b\x32\x1d.smartbox_msgs.HumidityReport\x12\'\n\x04rain\x18\x07 \x01(\x0b\x32\x19.smartbox_msgs.RainReport\x12)\n\x05solar\x18\x08 \x01(\x0b\x32\x1a.smartbox_msgs.SolarReport2\xb4\x01\n\x11WeatherController\x12Q\n\x0eweather_report\x12\x1d.smartbox_msgs.WeatherRequest\x1a\x1e.smartbox_msgs.WeatherResponse\"\x00\x12L\n\x07weather\x12\x1d.smartbox_msgs.WeatherRequest\x1a\x1e.smartbox_msgs.WeatherResponse\"\x00\x30\x01\x62\x06proto3')
 )
 
 
@@ -323,6 +323,13 @@ _WEATHERREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='report_interval', full_name='smartbox_msgs.WeatherRequest.report_interval', index=1,
+      number=2, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -336,7 +343,7 @@ _WEATHERREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=487,
-  serialized_end=520,
+  serialized_end=545,
 )
 
 
@@ -415,8 +422,8 @@ _WEATHERRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=523,
-  serialized_end=850,
+  serialized_start=548,
+  serialized_end=875,
 )
 
 _WEATHERRESPONSE.fields_by_name['temperature'].message_type = _TEMPERATUREREPORT
@@ -499,13 +506,22 @@ _WEATHERCONTROLLER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   options=None,
-  serialized_start=852,
-  serialized_end=954,
+  serialized_start=878,
+  serialized_end=1058,
   methods=[
   _descriptor.MethodDescriptor(
     name='weather_report',
     full_name='smartbox_msgs.WeatherController.weather_report',
     index=0,
+    containing_service=None,
+    input_type=_WEATHERREQUEST,
+    output_type=_WEATHERRESPONSE,
+    options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='weather',
+    full_name='smartbox_msgs.WeatherController.weather',
+    index=1,
     containing_service=None,
     input_type=_WEATHERREQUEST,
     output_type=_WEATHERRESPONSE,

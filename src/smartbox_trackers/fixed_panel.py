@@ -33,7 +33,7 @@ class FixedPanel(Tracker):
 
 
 if __name__=="__main__":
-    client = SmartBoxResourceControllerClient(101)
+    client = SmartBoxResourceControllerClient(101, "Fixed Panel")
     tracker = FixedPanel(client, angle = 30, interval=10)
     while True:
         tracker.run_step(None, None)
