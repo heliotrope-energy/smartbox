@@ -1,9 +1,5 @@
 #!/usr/bin/python
-
 from smartbox.client.resource_controller_client import SmartBoxResourceControllerClient
-
-
-from tkinter import *
 from tkinter import ttk
 import time
 from PIL import Image, ImageTk
@@ -11,8 +7,6 @@ import numpy as np
 import datetime, os, math, pvlib
 import os
 import pandas as pd
-
-
 
 class App:
     def __init__(self, root):
@@ -33,7 +27,6 @@ class App:
         self.create_goto_angle_tab()
         
         self.update_all_functions()
-
 
     def create_control_tab(self):
         """
@@ -528,7 +521,7 @@ class App:
             row +=1
             
 if __name__ == "__main__":
-    main = Tk()
+    main = ttk.Tk()
     main.title("Python GUI")
     main.geometry('800x420')
 
